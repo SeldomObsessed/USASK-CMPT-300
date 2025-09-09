@@ -4,13 +4,14 @@
 
 CC = gcc
 CFLAGS = -g -O0
-CPPFLAGS = -std=gnu90 -Wall -Werror -Wextra -Wsign-conversion -pedantic -I.
+CPPFLAGS = -std=gnu90 -Wall -Werror -Wextra -Wsign-conversion -pedantic -I. \
+	-I/student/cmpt332/pthreads
 
 BUILD_DIR = ./build/$(shell uname -s)-$(shell uname -m)
 LIB_DIR = ./lib/$(shell uname -s)-$(shell uname -m)
 BIN_DIR = ./bin/$(shell uname -s)-$(shell uname -m)
 
-LDFLAGS = -L$(LIB_DIR)
+LDFLAGS = -L$(LIB_DIR) -L/student/cmpt332/pthreads/lib/Linuxx86_64
 
 LIB_OBJS = ########
 
@@ -31,6 +32,16 @@ clean-hard :
 	rm -rf build/ lib/ bin/ sample-linux
 	echo "Hard cleaned up"
 
+# Path building
+$(BUILD_DIR) :
+	mkdir -p $(BUILD_DIR)
+
+$(LIB_DIR) :
+	mkdir -p $(LIB_DIR)
+
+$(BIN_DIR) :
+	mkdir -p $(BIN_DIR)
+
 # Create object files
 $(BUILD_DIR)/linux-lib.o : linux-lib.c | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) \
@@ -49,7 +60,7 @@ $(BIN_DIR)/sample-linux : \
 	$(LIB_DIR)/linux-lib.a $(BUILD_DIR)/sample-linux.o | $(BIN_DIR)
 	$(CC) $(CFLAGS) \
 		$(BUILD_DIR)/sample-linux.o \
-		$(LDFLAGS) -l:linux-lib.a \
+		$(LDFLAGS) -l:linux-lib.a -l:libpthreads.a \
 			-o $(BIN_DIR)/sample-linux
 
 # Soft link to the main dir
