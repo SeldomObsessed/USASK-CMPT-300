@@ -2,7 +2,9 @@
 #  NSID: hzv143
 #  Student Number: 11343891
 
-CC = gcc
+CROSS_COMPILE=arm-linux-gnueabihf-.
+
+CC = arm-linux-gnueabihf-gcc
 CFLAGS = -g -O0
 CPPFLAGS = -std=gnu90 -Wall -Werror -Wextra -Wsign-conversion -pedantic -I. \
 	-I/student/cmpt332/pthreads
@@ -11,7 +13,7 @@ BUILD_DIR = ./build/$(shell uname -s)-$(shell uname -m)
 LIB_DIR = ./lib/$(shell uname -s)-$(shell uname -m)
 BIN_DIR = ./bin/$(shell uname -s)-$(shell uname -m)
 
-LDFLAGS = -L$(LIB_DIR) -L/student/cmpt332/pthreads/lib/Linuxx86_64
+LDFLAGS = -L$(LIB_DIR) -L/student/cmpt332/pthreads/lib/Linuxarmv7l
 
 LIB_OBJS = ########
 
@@ -52,8 +54,8 @@ $(BUILD_DIR)/sample-linux.o : sample-linux.c | $(BUILD_DIR)
 		sample-linux.c -o $(BUILD_DIR)/sample-linux.o
 
 # Create library
-$(LIB_DIR)/linux-lib.a : linux-lib.o | $(LIB_DIR)
-	ar -rcs $(LIB_DIR)/linux-lib.a linux-lib.o
+$(LIB_DIR)/linux-lib.a : $(BUILD_DIR)/linux-lib.o | $(LIB_DIR)
+	arm-linux-gnueabihf-ar -rcs $(LIB_DIR)/linux-lib.a $(BUILD_DIR)/linux-lib.o
 
 # Link binary
 $(BIN_DIR)/sample-linux : \
