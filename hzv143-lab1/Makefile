@@ -2,23 +2,23 @@
 #  NSID: hzv143
 #  Student Number: 11343891
 
-ARM=arm-linux-gnueabihf-
-PPC=powerpc-linux-gnu-
+ARM_CC = arm-linux-gnueabihf-
+PPC_CC =powerpc-linux-gnu-
 
 CC = gcc
 CFLAGS = -g -O0
 CPPFLAGS = -std=gnu90 -Wall -Werror -Wextra -Wsign-conversion -pedantic -I. \
 	-I/student/cmpt332/pthreads
 
-AMD_ARCH = Linux-x86_64
-ARM_ARCH = Linux-armv7l
-PPC_ARCH = Linux-ppc
+AMD = Linux-x86_64a
+ARM = Linux-armv7l
+PPC = Linux-ppc
 
-BUILD_DIR = ./build/obj
+OBJ_DIR = ./build/obj
 LIB_DIR = ./build/lib
 BIN_DIR = ./build/bin
 
-LDFLAGS = -L/student/cmpt332/pthreads/lib/Linuxarmv7l
+LDFLAGS = -l:linux-lib.a -l:libpthreads.a
 
 # My make targets
 .PHONY : all clean
@@ -26,51 +26,45 @@ LDFLAGS = -L/student/cmpt332/pthreads/lib/Linuxarmv7l
 # Make the executable
 all : sample-linux sample-linux-arm sample-linux-ppc
 
-# Delete everything for this system
+# Delete everything
 clean :
-	rm -rf $(BUILD_DIR) $(LIB_DIR) $(BIN_DIR) sample-linux
-	rmdir build/ lib/ bin/
+	rm -rf ./build $(ALL)
 	echo "All cleaned up"
 
-# Full wipe all systems (for a hand-in, say)
-clean-hard :
-	rm -rf build/ lib/ bin/ sample-linux
-	echo "Hard cleaned up"
-
 # Path building
-$(BUILD_DIR) :
-	mkdir -p $(BUILD_DIR)
+$(BIN_DIR)/$(AMD) :
+	mkdir -p $(BIN_DIR)/$(AMD)
 
-$(LIB_DIR) :
-	mkdir -p $(LIB_DIR)
+$(LIB_DIR)/$(AMD) :
+	mkdir -p $(LIB_DIR)/$(AMD)
 
-$(BIN_DIR) :
-	mkdir -p $(BIN_DIR)
+$(OBJ_DIR)/$(AMD) :
+	mkdir -p $(OBJ_DIR)/$(AMD)
 
-# Create object files
-$(BUILD_DIR)/linux-lib.o : linux-lib.c | $(BUILD_DIR)
+# Make objects
+$(OBJ_DIR)/$(AMD)/sample-linux.o : sample-linux.c | $(OBJ_DIR)/$(AMD)
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) \
-		linux-lib.c -o $(BUILD_DIR)/linux-lib.o
+		linux-lib.c -o $(OBJ_DIR)/$(AMD)/sample-linux.o
 
-$(BUILD_DIR)/sample-linux.o : sample-linux.c | $(BUILD_DIR)
+$(OBJ_DIR)/$(AMD)/linux-lib.o : linux-lib.c | $(OBJ_DIR)/$(AMD)
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) \
-		sample-linux.c -o $(BUILD_DIR)/sample-linux.o
+		linux-lib.c -o  $(OBJ_DIR)/$(AMD)/linux-lib.o
 
-# Create library
-$(LIB_DIR)/linux-lib.a : $(BUILD_DIR)/linux-lib.o | $(LIB_DIR)
-	arm-linux-gnueabihf-ar -rcs $(LIB_DIR)/linux-lib.a $(BUILD_DIR)/linux-lib.o
+# Make libraries
+$(LIB_DIR)/$(AMD)/linux-lib.a : \
+	 $(OBJ_DIR)/$(AMD)/linux-lib.o | $(LIB_DIR)/$(AMD)
+	$(CC) -rcs $(LIB_DIR)/$(AMD)/linux-lib.a $(OBJ_DIR)/$(AMD)/linux-lib.o
 
-# Link binary
-$(BIN_DIR)/sample-linux : \
-	$(LIB_DIR)/linux-lib.a $(BUILD_DIR)/sample-linux.o | $(BIN_DIR)
-	$(CC) $(CFLAGS) \
-		$(BUILD_DIR)/sample-linux.o \
-		$(LDFLAGS) -l:linux-lib.a -l:libpthreads.a \
-			-o $(BIN_DIR)/sample-linux
+# Link binaries
+$(BIN_DIR)/$(AMD)/sample-linux : \
+	$(LIB_DIR)/$(AMD)/linux-lib.a $(OBJ_DIR)/$(AMD)/sample-linux.o \
+	| $(BIN_DIR)/$(AMD)
+	$(CC) $(CFLAGS) $(BUILD_DIR)/sample-linux.o \
+		-L/student/cmpt332/pthreads/lib/Linuxx86_64 \
+		-L$(LIB_DIR)/$(AMD) $(LDFLAGS) \
+			-o $(BIN_DIR)/$(AMD)/sample-linux
 
-# Soft link to the main dir
-sample-linux : $(BIN_DIR)/sample-linux
-	ln -sf $(BIN_DIR)/sample-linux sample-linux
-
-
+# Soft link to ./
+sample-linux : $(BIN_DIR)/$(AMD)/sample-linux
+	ln -sf $(BIN_DIR)/$(AMD)/sample-linux sample-linux
 
