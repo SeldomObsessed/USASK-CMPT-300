@@ -25,7 +25,7 @@ LDFLAGS = -l:libpthreads.a
 
 # Make the executable
 # sample-linux sample-linux-ppc
-all :  sample-linux-arm
+all : sample-linux sample-linux-arm
 
 # Delete everything
 clean :
