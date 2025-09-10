@@ -83,23 +83,45 @@ if (very_long_expression && another_long_expression &&
 
   Block / inline comments: /* .... */            
 
-  Header comments: Follow "File Team Names" conventions, below are optional:
+  Header comments: Follow "File Team Names" conventions, below "CMPT 332 Fall
+                   2025" an optional description and notes may be added. The
+                   description is all lowercase unless multiple sentences long
+                   and the notes start with "-". e.g.
 
- * Purpose: This file implements functions for handling complex numbers,
- *          including addition, subtraction, multiplication, and division.
+/*
+ * complexComp.c
+ * Logan Fossenier & William Morris
+ * hzv143 & wjm625
+ * 11343891 & 11278140
+ * CMPT332 Fall 2025
+ *
+ * this file implements functions for handling complex numbers, including
+ * addition, subtraction, multiplication, and division
+ *
+ * - uses double precision for calculations
+ * - error checking is minimal; caller is responsible for input validation.
+ */
 
- * Notes:
- *   - Uses double precision for calculations.
- *   - Error checking is minimal; caller is responsible for input validation.
 
+  Function comments: Will optionally contain a description of purpose,
+                     explanation of functionality, description of params, and
+                     description of returns. e.g.
 
+/*
+ * compares two complex numbers to determine which is larger
+ *
+ * only accepts strings with the real and imaginary components being written
+ * as two space separated doubles
+ *
+ * void *first: a string of the first number to be compared
+ * void *second: a string of the second number to be compared
+ *
+ * returns -1 if first < second
+ * returns 1 if first > second
+ * returns 0 if first == second
+ */
 
-  Function comments: outlines param requires simple pre/post conditions, parameter/
-                               return explanations, 
-
-            Inline comments: FORBIDDEN
-
-**** Code Layout ****
+***** Code Layout *****
 
     Line length: 80 Character limit *For all filetypes*
 
