@@ -24,11 +24,12 @@ LDFLAGS = -l:libpthreads.a
 .PHONY : all clean
 
 # Make the executable
-all : sample-linux sample-linux-arm sample-linux-ppc
+EXECS = sample-linux sample-linux-arm sample-linux-ppc
+all : $(EXECS)
 
 # Delete everything
 clean :
-	rm -rf ./build $(ALL)
+	rm -rf ./build $(EXECS)
 	echo "All cleaned up"
 
 # Path building
