@@ -2,26 +2,29 @@
 #  NSID: hzv143
 #  Student Number: 11343891
 
-CROSS_COMPILE=arm-linux-gnueabihf-.
+ARM=arm-linux-gnueabihf-
+PPC=powerpc-linux-gnu-
 
-CC = arm-linux-gnueabihf-gcc
+CC = gcc
 CFLAGS = -g -O0
 CPPFLAGS = -std=gnu90 -Wall -Werror -Wextra -Wsign-conversion -pedantic -I. \
 	-I/student/cmpt332/pthreads
 
-BUILD_DIR = ./build/$(shell uname -s)-$(shell uname -m)
-LIB_DIR = ./lib/$(shell uname -s)-$(shell uname -m)
-BIN_DIR = ./bin/$(shell uname -s)-$(shell uname -m)
+AMD_ARCH = Linux-x86_64
+ARM_ARCH = Linux-armv7l
+PPC_ARCH = Linux-ppc
 
-LDFLAGS = -L$(LIB_DIR) -L/student/cmpt332/pthreads/lib/Linuxarmv7l
+BUILD_DIR = ./build/obj
+LIB_DIR = ./build/lib
+BIN_DIR = ./build/bin
 
-LIB_OBJS = ########
+LDFLAGS = -L/student/cmpt332/pthreads/lib/Linuxarmv7l
 
 # My make targets
-.PHONY : all clean clean-hard
+.PHONY : all clean
 
 # Make the executable
-all : sample-linux
+all : sample-linux sample-linux-arm sample-linux-ppc
 
 # Delete everything for this system
 clean :
