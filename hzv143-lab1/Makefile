@@ -24,8 +24,7 @@ LDFLAGS = -l:libpthreads.a
 .PHONY : all clean
 
 # Make the executable
-# sample-linux sample-linux-ppc
-all : sample-linux sample-linux-arm
+all : sample-linux sample-linux-arm sample-linux-ppc
 
 # Delete everything
 clean :
@@ -47,6 +46,13 @@ $(LIB_DIR)/$(ARM) :
 $(OBJ_DIR)/$(ARM) :
 	mkdir -p $(OBJ_DIR)/$(ARM)
 
+$(BIN_DIR)/$(PPC) :
+	mkdir -p $(BIN_DIR)/$(PPC)
+$(LIB_DIR)/$(PPC) :
+	mkdir -p $(LIB_DIR)/$(PPC)
+$(OBJ_DIR)/$(PPC) :
+	mkdir -p $(OBJ_DIR)/$(PPC)
+
 # Make objects
 $(OBJ_DIR)/$(AMD)/sample-linux.o : sample-linux.c | $(OBJ_DIR)/$(AMD)
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) \
@@ -64,6 +70,14 @@ $(OBJ_DIR)/$(ARM)/raspi-lib.o : linux-lib.c | $(OBJ_DIR)/$(ARM)
 	$(ARM_CC)$(CC) -c $(CFLAGS) $(CPPFLAGS) \
 		linux-lib.c -o $(OBJ_DIR)/$(ARM)/raspi-lib.o
 
+$(OBJ_DIR)/$(PPC)/sample-ppc.o : sample-linux.c | $(OBJ_DIR)/$(PPC)
+	$(PPC_CC)$(CC) -c $(CFLAGS) $(CPPFLAGS) \
+		sample-linux.c -o $(OBJ_DIR)/$(PPC)/sample-ppc.o
+
+$(OBJ_DIR)/$(PPC)/ppc-lib.o : linux-lib.c | $(OBJ_DIR)/$(PPC)
+	$(PPC_CC)$(CC) -c $(CFLAGS) $(CPPFLAGS) \
+		linux-lib.c -o $(OBJ_DIR)/$(PPC)/ppc-lib.o
+
 # Make libraries
 $(LIB_DIR)/$(AMD)/linux-lib.a : \
 	$(OBJ_DIR)/$(AMD)/linux-lib.o | $(LIB_DIR)/$(AMD)
@@ -73,6 +87,11 @@ $(LIB_DIR)/$(ARM)/raspi-lib.a : \
 	$(OBJ_DIR)/$(ARM)/raspi-lib.o | $(LIB_DIR)/$(ARM)
 	$(ARM_CC)ar -rcs $(LIB_DIR)/$(ARM)/raspi-lib.a \
 		$(OBJ_DIR)/$(ARM)/raspi-lib.o
+
+$(LIB_DIR)/$(PPC)/ppc-lib.a : \
+	$(OBJ_DIR)/$(PPC)/ppc-lib.o | $(LIB_DIR)/$(PPC)
+	$(PPC_CC)ar -rcs $(LIB_DIR)/$(PPC)/ppc-lib.a \
+		$(OBJ_DIR)/$(PPC)/ppc-lib.o
 
 # Link binaries
 $(BIN_DIR)/$(AMD)/sample-linux : \
@@ -91,6 +110,14 @@ $(BIN_DIR)/$(ARM)/sample-linux-arm : \
 		-L$(LIB_DIR)/$(ARM) $(LDFLAGS) -l:raspi-lib.a \
 			-o $(BIN_DIR)/$(ARM)/sample-linux-arm
 
+$(BIN_DIR)/$(PPC)/sample-linux-ppc : \
+	$(LIB_DIR)/$(PPC)/ppc-lib.a $(OBJ_DIR)/$(PPC)/sample-ppc.o \
+	| $(BIN_DIR)/$(PPC)
+	$(PPC_CC)$(CC) $(CFLAGS) $(OBJ_DIR)/$(PPC)/sample-ppc.o \
+		-L/student/cmpt332/pthreads/lib/Linuxppc64 \
+		-L$(LIB_DIR)/$(PPC) $(LDFLAGS) -l:ppc-lib.a \
+			-o $(BIN_DIR)/$(PPC)/sample-linux-ppc
+
 # Soft link to ./
 sample-linux : $(BIN_DIR)/$(AMD)/sample-linux
 	ln -sf $(BIN_DIR)/$(AMD)/sample-linux sample-linux
@@ -98,3 +125,5 @@ sample-linux : $(BIN_DIR)/$(AMD)/sample-linux
 sample-linux-arm : $(BIN_DIR)/$(ARM)/sample-linux-arm
 	ln -sf $(BIN_DIR)/$(ARM)/sample-linux-arm sample-linux-arm
 
+sample-linux-ppc : $(BIN_DIR)/$(PPC)/sample-linux-ppc
+	ln -sf $(BIN_DIR)/$(PPC)/sample-linux-ppc sample-linux-ppc
