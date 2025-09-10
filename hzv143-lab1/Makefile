@@ -7,10 +7,10 @@ PPC_CC =powerpc-linux-gnu-
 
 CC = gcc
 CFLAGS = -g -O0
-CPPFLAGS = -std=gnu90 -Wall -Werror -Wextra -Wsign-conversion -pedantic -I. \
-	-I/student/cmpt332/pthreads
+CPPFLAGS = -std=gnu90 -Wall -Werror -Wextra -Wsign-conversion -pedantic \
+	-I/student/cmpt332/pthreads -I.
 
-AMD = Linux-x86_64a
+AMD = Linux-x86_64
 ARM = Linux-armv7l
 PPC = Linux-ppc
 
@@ -52,16 +52,16 @@ $(OBJ_DIR)/$(AMD)/linux-lib.o : linux-lib.c | $(OBJ_DIR)/$(AMD)
 
 # Make libraries
 $(LIB_DIR)/$(AMD)/linux-lib.a : \
-	 $(OBJ_DIR)/$(AMD)/linux-lib.o | $(LIB_DIR)/$(AMD)
-	$(CC) -rcs $(LIB_DIR)/$(AMD)/linux-lib.a $(OBJ_DIR)/$(AMD)/linux-lib.o
+	$(OBJ_DIR)/$(AMD)/linux-lib.o | $(LIB_DIR)/$(AMD)
+	ar -rcs $(LIB_DIR)/$(AMD)/linux-lib.a $(OBJ_DIR)/$(AMD)/linux-lib.o
 
 # Link binaries
 $(BIN_DIR)/$(AMD)/sample-linux : \
 	$(LIB_DIR)/$(AMD)/linux-lib.a $(OBJ_DIR)/$(AMD)/sample-linux.o \
 	| $(BIN_DIR)/$(AMD)
-	$(CC) $(CFLAGS) $(BUILD_DIR)/sample-linux.o \
+	$(CC) $(CFLAGS) $(OBJ_DIR)/$(AMD)/sample-linux.o \
 		-L/student/cmpt332/pthreads/lib/Linuxx86_64 \
-		-L$(LIB_DIR)/$(AMD) $(LDFLAGS) \
+		$(LDFLAGS) -L$(LIB_DIR)/$(AMD) \
 			-o $(BIN_DIR)/$(AMD)/sample-linux
 
 # Soft link to ./
