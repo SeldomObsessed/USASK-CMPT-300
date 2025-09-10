@@ -1,0 +1,135 @@
+Logan Fossenier & William Morris
+hzv143 & wjm625
+________ & 11278140
+
+***** Braces and Indentation ****
+
+Allman style eg.
+if (x) 
+{
+    ...
+}
+
+            Indentation size: 4 spaces
+
+            Alignment of continued lines...:
+
+int do_something_with_data(
+    int first_arg,
+    int second_arg,
+    int third_arg,
+    int fourth_arg);
+
+            ... and long conditionals:
+
+if (very_long_expression && another_long_expression &&
+    yet_another_long_expression && final_expression) {
+    ...
+}
+
+
+**** Naming Conventions ****
+
+            Variable and Functions:
+
+            snake case: my_var , x_var , y_var
+
+            Constants/macros: ALL_CAPS
+
+            Structs, enums, typdefs: Point_t, as opposed to struct Point
+
+            Filenames: MyModule.c
+
+**** Commenting Style ****
+
+            Comment Style: /* .... */            
+
+            Header comments: Author, Date, Purpose eg.
+                             
+/*
+ * File:    mymodule.c
+ * Author:  William Morris OR Logan Fossenier
+ * Date:    September 10, 2025
+ *
+ * Purpose: This file implements functions for handling complex numbers,
+ *          including addition, subtraction, multiplication, and division.
+ *
+ * Notes:
+ *   - Uses double precision for calculations.
+ *   - Error checking is minimal; caller is responsible for input validation.
+ */
+ 
+
+            Function comments: requires simple pre/post conditions, parameter/
+                               return explanations, 
+
+            Inline comments: FORBIDDEN
+
+**** Code Layout ****
+
+    Line length: 80 Character limit *For all filetypes*
+
+    Blank Lines: No blank lines after variable declarations, but 2 between
+                 functions.
+    
+    Grouping: In order: includes, globals, function defs eg.
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "mymodule.h"
+
+/* Global variables */
+static int counter = 0;
+
+/* Function definitions */
+void do_something(void) {
+    counter++;
+    helper();
+}
+
+static void helper(void) {
+    printf("Helper called!\n");
+}
+
+
+            Global Variables: _____________ are we allowed to use these logan?
+
+            Parameter passing: By pointer, reference and value, when needed/
+
+            Magic numbers: FORBIDDEN
+
+**** Error Handling ****
+
+            Return codes: standard approach eg 0 = success, nonzero = error
+
+            Assertions: Assertions will be used only to validate programmer 
+                        assumptions eg.
+       
+assert(ptr != NULL); /* We promised this function never gets NULL */
+        
+            Error: Expected runtime errors must be handled with error messages
+                   and proper return codes eg.
+
+variable = malloc(sizeof(structure))
+if (variable == NULL)
+{
+    fprintf(stderr, "Error: malloc failed\n);
+    return -1;        
+}
+
+**** Preprocessor Directives ****
+            
+            Include guards: #ifndef FILE_H #endif
+    
+            Order of includes: stdlib first, then project headers
+
+**** Team Agreements ****
+    
+            Responsibility of style: Both partners should follow the same style.
+        
+            Merging of code: If one person commits in different style, other can
+                             reformat.
+
+            Tooling: Manual formatting should suffice.
+            
