@@ -123,69 +123,70 @@ if (very_long_expression && another_long_expression &&
 
 ***** Code Layout *****
 
-    Line length: 80 Character limit *For all filetypes*
+  Line length: 80 Character limit *for all filetypes*
 
-    Blank Lines: No blank lines after variable declarations, but 2 between
-                 functions.
-    
-    Grouping: In order: includes, globals, function defs eg.
+  Blank Lines: Blank lines are not required after variable declarations, but two
+               between function definitions
+
+  Grouping: C .h #includes first, custom .h #includes second, globals, main()
+            when present, other functions. ORDER INCLUDES alphabetically. No ""
+            includes.
 
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "mymodule.h"
+#include <mymodule.h>
 
-/* Global variables */
+/* Global variables */a
+#define MAGIC_NUMBER 42
+
 static int counter = 0;
 
 /* Function definitions */
-void do_something(void) {
-    counter++;
-    helper();
+int main(void)
+{
+  return 0;
 }
 
-static void helper(void) {
-    printf("Helper called!\n");
+void do_something(void)
+{
+  counter += MAGIC_NUMBER;
+  helper();
 }
 
+static void helper(void)
+{
+  printf("Helper called!\n");
+}
 
-            Global Variables: _____________ are we allowed to use these logan?
+***** Error Handling *****
 
-            Parameter passing: By pointer, reference and value, when needed/
+  Return codes: standard approach e.g. 0 = success, nonzero = error
+  
+  Assertions: Assertions will only be used in test files, not the actual program
 
-            Magic numbers: FORBIDDEN
-
-**** Error Handling ****
-
-            Return codes: standard approach eg 0 = success, nonzero = error
-
-            Assertions: Assertions will be used only to validate programmer 
-                        assumptions eg.
-       
 assert(ptr != NULL); /* We promised this function never gets NULL */
         
-            Error: Expected runtime errors must be handled with error messages
-                   and proper return codes eg.
+  Errors: Potential runtime errors must be handled with error messages and
+          proper return codes. We will always use fprintf e.g.
 
-variable = malloc(sizeof(structure))
+variable = malloc(sizeof(structure));
 if (variable == NULL)
 {
-    fprintf(stderr, "Error: malloc failed\n);
-    return -1;        
+  fprintf(stderr, "Error: malloc failed\n);
+  return -1;        
 }
 
-**** Preprocessor Directives ****
-            
-            Include guards: #ifndef FILE_H #endif
-    
-            Order of includes: stdlib first, then project headers
+***** Preprocessor Directives *****
+
+  Include guards: #ifndef FILE_H #endif
 
 **** Team Agreements ****
-    
-            Responsibility of style: Both partners should follow the same style.
-        
-            Merging of code: If one person commits in different style, other can
-                             reformat.
 
-            Tooling: Manual formatting should suffice.
-            
+  Responsibility of style: Both partners should follow the same style.
+
+  Merging of code: If one person commits in a different style, the other can
+                   reformat.
+
+  Tooling: Manual formatting should suffice.
+
