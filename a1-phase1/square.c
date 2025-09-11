@@ -4,11 +4,19 @@
  * hzv143 & wjm625
  * 11343891 & 11278140
  * CMPT332 Fall 2025
- */
+ *
+ * This file implements the Square function and the is_valid function. 
+ * Square is the recursive procedure to keep the CPU busy. 
+ *
+ * is_valid is a parsing check that verifies if the argument passed
+ * is a valid number: >0 and not a string or float.
+ * /
 
 #include <stdlib.h>
 
-
+/*
+ *
+ */
 int Square(int N)
 {
   if (N==0)
@@ -25,5 +33,20 @@ int Square(int N)
 /**/
 int is_valid(char *argv)
 {
-  return (strtol (argv, NULL, 10));
+  
+  int num;
+  /*string check*/
+  if (!(strtol (argv, NULL, 10)))
+  {
+    return 1;
+  }
+  
+  num = strtol(argv,NULL,10);
+  /*negative number check*/
+  if (num<0)
+  {
+    return 1;
+  }
+
+  return 0;
 }
