@@ -22,7 +22,6 @@ Summary and Goals
 File Layout
   |- square.c
   |- square.h
-  |- common.c
   |- partA1.c
   |- partA2.c
   |- partA3.c
