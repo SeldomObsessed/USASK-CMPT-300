@@ -6,6 +6,8 @@
  * CMPT332 Fall 2025
  */
 
+#include <stdlib.h>
+
 
 int Square(int N)
 {
@@ -19,3 +21,9 @@ int Square(int N)
   }
 }
 
+
+/**/
+int is_valid(char *argv)
+{
+  return (strtol (argv, NULL, 10));
+}

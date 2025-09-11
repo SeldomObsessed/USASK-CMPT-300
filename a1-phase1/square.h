@@ -8,5 +8,5 @@
 
 
 int Square(int);
-int is_valid(char *arg);  
+int is_valid(char*);  
 

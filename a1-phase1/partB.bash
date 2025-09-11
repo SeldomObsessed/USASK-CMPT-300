@@ -7,7 +7,7 @@
 
 
 if [[ $# -ne 1 }}; then
-  echo "Usage: $0 {part1|partA2|partA3|partA4}"
+  echo "Usage: $0 {partA1|partA2|partA3|partA4}"
   exit 1
 fi
 
