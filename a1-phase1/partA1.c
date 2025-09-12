@@ -15,54 +15,103 @@
  * - caller responsible for valid input, but also callee will perform input 
  *   validation.
  * /
- 
 
-#include <square.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <string.h>
-#include <windows.h>
-#include <tchar.h>
-#include strsafe.h>
+#include <square.h>                                                             
+#include <stdlib.h>                                                             
+#include <ctype.h>                                                              
+#include <string.h>                                                             
+#include <windows.h>                                                            
+#include <tchar.h>                                                              
+#include <strsafe.h>                                                             
+                                                                                
+/*TODO update after testing*/                                                   
+#define MAX_THREADS 1024                                                        
+                                                                                
+DWORD WINAPI invoke_square(LPVOID);                                                                                                                
+/*                                                                            
+ * Main entry point.                                                            
+ *                                                                              
+ * Will take 3 parameters, only accepts integers:                               
+ *   1: no. of threads to spawn                                                 
+ *   2: length of deadline                                                      
+ *   3: parameter passed to square()                                            
+ */                                                                             
+                                                                                
+int main (int argc, char *argv[])                                           
+{                   
+  int threads;
+  int deadline;
+  int size;
 
-/*TODO update after testing*/
-#define MAX_THREADS 1024 
+  /*input validation*/                                                         
+  if (argc < 3)                                                                 
+  {                                                                             
+    printf("Usage: expecting 3 parameters\n");                                  
+    exit(1);                                                                    
+  }                                                                             
+                                                                                
+  int args[argc-1];                                                             
+  /*input validation done*/
 
-DWORD WINAPI MyThreadsFunction( LPVOID lpParam);
-void ErrorHandler(LPCSTR lpszFunction); 
+  /*Converts args to integers*/                                                 
+  for (int i =1; i<argc; i++)                                                   
+  {                                                                             
+    if (!is_valid(argv[i]))
+    {                                                                           
+      fprintf(stderr, "Error: argument '%s' is not an integer\n", argv[i]);     
+    }             
+    if (i==1 && argv[i]>1024)
+      {
+        fprintf(stderr, "Error:'%s' threads is not within thread limit
+        of 1024\n",argv[i]);
+      }                                                              
+    args[i-1] = atoi(argv[i]);    
 
-/*
- * Main entry point.
- *
- * Will take 3 parameters, only accepts integers: 
- *   1: no. of threads to spawn
- *   2: length of deadline
- *   3: parameter passed to square()
- */
+  }                                                              
+  /*args[] contain parsed integer parameters*/    
 
-int main void(int argc, char *argv[])
-{
-  if (argc < 3)
+  threads = args[0];
+  deadline = args[1];
+  size = args[2];                                                 
+  /*TODO write function calls*/
+
+  /*h_thread is an arr of thread handles, to allow
+    interaction of threads
+    thread_id is an array of, put simply, 
+    thread identifiers.*/
+
+  HANDLE h_thread[threads];
+  DWORD thread_id[threads];
+  for (i=0;i<threads;i++)
   {
-    printf("Usage: expecting 3 parameters\n");
-    exit(1);
-  }
+    hThread[i] = CreateThread(
+        NULL,
+        0,
+        invoke_square,
+        (LPVOID)size,
+        0,
+        &thread_id[i];
+    );
 
-  int args[argc-1];
-  
-  /*Converts args to integers*/
-  for (int i =1; i<argc; i++)
-  {
-    if !(is_valid(argv[i]))
-    /*TODO write int is_valid(int x) in square.c and add sign to square.h*/
+    if (h_thread[i]==NULL)
     {
-      fprintf(stderr, "Error: argument '%s' is not an integer\n", argv[i]);
+        printf("Error creating thread %d\n", i)
+        return 1;
     }
-    args[i-1] = atoi(argv[i]);
   }
+                                                                                
+}                                    
 
-  /*args[] contain parsed integers*/
-
-  /*TODO write function calls*/  
-  
-}
+/*Thread function, entry point for CreateThread()*/
+/*each thread will only go through this function once*/
+DWORD WINAPI invoke_square(LPVOID goal)
+{
+    int progress=0;
+    int limit = (int)(intptr_t)goal;
+    for (progress; progress<limit; progress++)
+    {
+      square(progress);
+    }
+    return (DWORD)progress;
+}  
+ 

@@ -17,15 +17,21 @@
 /*
  *
  */
-int Square(int N)
+
+/*Global variable to increment Square invocation*/
+int square_counter = 0;
+
+int square(int N)
 {
+
+  square_counter++;
   if (N==0)
   { 
     return 0;
   }
   else 
   {
-    return (Square(N-1) + N + N -1);
+    return (square(N-1) + N + N -1);
   }
 }
 
@@ -47,6 +53,5 @@ int is_valid(char *argv)
   {
     return 1;
   }
-
   return 0;
 }
