@@ -79,6 +79,8 @@ if (very_long_expression && another_long_expression &&
   Filenames: lowercase-separated-by-dashes.txt (or whatever Makaroff seems to
              specify)
 
+  Header guards: SCREAMING_SNAKE_CASE_H
+
 ***** Commenting Style *****
 
   Block / inline comments: /* .... */            
@@ -122,6 +124,8 @@ if (very_long_expression && another_long_expression &&
  */
 
 ***** Code Layout *****
+
+  File ending: all files will end with exactly one newline (except test inputs)
 
   Line length: 80 Character limit *for all filetypes*
 
