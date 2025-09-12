@@ -17,12 +17,8 @@
  * /
 
 #include <square.h>                                                             
-#include <stdlib.h>                                                             
-#include <ctype.h>                                                              
-#include <string.h>                                                             
+#include <stdio.h>                                                             
 #include <windows.h>                                                            
-#include <tchar.h>                                                              
-#include <strsafe.h>                                                             
                                                                                                                                
 #define MAX_THREADS 1024                                                        
                                                                                 
