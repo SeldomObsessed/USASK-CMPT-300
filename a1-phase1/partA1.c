@@ -95,7 +95,7 @@ int main (int argc, char *argv[])
         invoke_square,
         arg,
         0,
-        thread_id
+        i
     );
 
     if (h_thread[i]==NULL)
@@ -129,5 +129,5 @@ DWORD WINAPI invoke_square(LPVOID param)
     }
     free(arg);
     return (DWORD)arg->size;
-}  
- 
+}
+
