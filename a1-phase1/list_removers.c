@@ -6,3 +6,26 @@
  * CMPT332 Fall 2025
  */
 
+void *ListRemove(LIST *list)
+{
+  return NULL;
+}
+
+void ListFree(LIST *list, ItemFreer itemFree)
+{
+  return NULL;
+}
+
+void *ListTrim(LIST *list)
+{
+  return NULL;
+}
+
+void list_free(LIST *list)
+{
+}
+
+void node_free(NODE *node)
+{
+}
+
