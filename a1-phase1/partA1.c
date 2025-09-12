@@ -23,27 +23,25 @@
 #include <windows.h>                                                            
 #include <tchar.h>                                                              
 #include <strsafe.h>                                                             
-                                                                                
-/*TODO update after testing*/                                                   
+                                                                                                                               
 #define MAX_THREADS 1024                                                        
                                                                                 
-DWORD WINAPI invoke_square(LPVOID);                                                                                                                
-/*                                                                            
- * Main entry point.                                                            
- *                                                                              
- * Will take 3 parameters, only accepts integers:                               
- *   1: no. of threads to spawn                                                 
- *   2: length of deadline                                                      
- *   3: parameter passed to square()                                            
- */                                                                             
-                                                                                
+DWORD WINAPI invoke_square(LPVOID);   
+
+typedef struct
+{
+  int thread_id;
+  int size;
+  volatile int *progress_count;
+} ThreadArg;                                                                                         
+                                                                         
 int main (int argc, char *argv[])                                           
 {                   
   int threads;
   int deadline;
   int size;
 
-  /*input validation*/                                                         
+  /*argc validation*/                                                         
   if (argc < 3)                                                                 
   {                                                                             
     printf("Usage: expecting 3 parameters\n");                                  
@@ -51,7 +49,8 @@ int main (int argc, char *argv[])
   }                                                                             
                                                                                 
   int args[argc-1];                                                             
-  /*input validation done*/
+  /*argc validation done*/
+
 
   /*Converts args to integers*/                                                 
   for (int i =1; i<argc; i++)                                                   
@@ -60,58 +59,75 @@ int main (int argc, char *argv[])
     {                                                                           
       fprintf(stderr, "Error: argument '%s' is not an integer\n", argv[i]);     
     }             
-    if (i==1 && argv[i]>1024)
-      {
-        fprintf(stderr, "Error:'%s' threads is not within thread limit
-        of 1024\n",argv[i]);
-      }                                                              
+                                                              
     args[i-1] = atoi(argv[i]);    
-
   }                                                              
   /*args[] contain parsed integer parameters*/    
 
+
   threads = args[0];
+  if (threads>1024)
+  {
+    fprintf(stderr, "Error: arg 1, threads is not within thread limit
+    of 1024\n");
+  } 
   deadline = args[1];
   size = args[2];                                                 
-  /*TODO write function calls*/
 
   /*h_thread is an arr of thread handles, to allow
-    interaction of threads
-    thread_id is an array of, put simply, 
-    thread identifiers.*/
-
+    interaction by sys calls */
   HANDLE h_thread[threads];
-  DWORD thread_id[threads];
-  for (i=0;i<threads;i++)
+  /*shared array for ThreadArgs to access*/
+  volatile int progress_count[threads];
+
+
+  /*This for loop creates threads and */
+  for (int i=0;i<threads;i++)
   {
-    hThread[i] = CreateThread(
+    ThreadArg *arg = malloc(sizeof(ThreadArg));
+    arg->thread_id=i;
+    arg->size=size;
+    /*pointer to the shared array*/
+    arg->progress_count = progress_count;
+    h_thread[i] = CreateThread(
         NULL,
         0,
         invoke_square,
-        (LPVOID)size,
+        arg,
         0,
-        &thread_id[i];
+        thread_id
     );
 
     if (h_thread[i]==NULL)
     {
-        printf("Error creating thread %d\n", i)
+        printf("Error creating thread %d\n", i);
         return 1;
     }
+
   }
-                                                                                
+
+  Sleep(1000*deadline);
+  for (int i=0;i<threads; i++)
+  {
+    CloseHandle(h_thread[i]);
+  }                      
+  for (int i=0;i<threads;i++){
+    printf("Thread %d reached %d\n",(i+1),progress_count[i]);
+  }                                                     
 }                                    
 
 /*Thread function, entry point for CreateThread()*/
 /*each thread will only go through this function once*/
-DWORD WINAPI invoke_square(LPVOID goal)
+DWORD WINAPI invoke_square(LPVOID param)
 {
-    int progress=0;
-    int limit = (int)(intptr_t)goal;
-    for (progress; progress<limit; progress++)
+    ThreadArg *arg= (ThreadArg*)param;
+    int limit = arg->size;
+    for (int i=0; i<limit; i++)
     {
-      square(progress);
+      square(i);
+      arg->progress_count[arg->thread_id]=i;
     }
-    return (DWORD)progress;
+    free(arg);
+    return (DWORD)arg->size;
 }  
  
