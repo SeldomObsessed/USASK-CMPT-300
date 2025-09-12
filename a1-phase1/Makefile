@@ -38,3 +38,5 @@ endif
 .PHONY : all clean
 
 all : $(TARGETS)
+
+mylibtest
