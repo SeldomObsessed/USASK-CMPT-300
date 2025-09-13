@@ -9,6 +9,10 @@
 
 int main(int argc, char **argv)
 {
+  /* dispell compiler complaints */
+  argc++;
+  argv[0][0] = 'a';
+
   return 0;
 }
 

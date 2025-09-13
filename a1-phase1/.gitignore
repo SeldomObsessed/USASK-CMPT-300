@@ -1,0 +1,8 @@
+
+mytestlist
+testlist
+
+*.o
+
+/build/
+

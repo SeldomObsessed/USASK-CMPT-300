@@ -16,7 +16,7 @@ LIB_DIR = ./build/lib
 BIN_DIR = ./build/bin
 
 LDFLAGS = -l:libpthreads.a
-LIST_LDFLAGS = -L/$(LIB_DIR)/$(AMD) -l:list.a
+LIST_LDFLAGS = -L$(LIB_DIR)/$(AMD) -l:list.a
 LIST_OBJS = $(OBJ_DIR)/$(AMD)/list_adders.o $(OBJ_DIR)/$(AMD)/list_movers.o \
 	$(OBJ_DIR)/$(AMD)/list_removers.o
 
@@ -71,7 +71,7 @@ $(LIB_DIR)/$(AMD)/list.a : $(LIST_OBJS) | $(LIB_DIR)/$(AMD)
 
 # Link binaries
 $(BIN_DIR)/$(AMD)/mytestlist: $(LIB_DIR)/$(AMD)/list.a \
-	$(OBJ_DIR)$(AMD)/mytestlist.o | $(BIN_DIR)/$(AMD)
+	$(OBJ_DIR)/$(AMD)/mytestlist.o | $(BIN_DIR)/$(AMD)
 	$(CC) $(CFLAGS) $(OBJ_DIR)/$(AMD)/mytestlist.o \
 		$(LIST_LDFLAGS) -o $(BIN_DIR)/$(AMD)/mytestlist
 # Soft link to ./
