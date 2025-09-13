@@ -6,6 +6,10 @@
  * CMPT332 Fall 2025
  */
 
+#include <stddef.h>
+
+#include <list.h>
+
 void *ListRemove(LIST *list)
 {
   return NULL;

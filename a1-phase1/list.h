@@ -9,6 +9,18 @@
 #ifndef LIST_H
 #define LIST_H
 
+typedef struct node {
+  void *item;
+  struct node *prev;
+  struct node *next;
+} NODE;
+
+typedef struct list {
+  int count; /* number of items in the list */
+  NODE *first; /* head of the linked list */
+  NODE *last; /* tail of the linked liste */
+} LIST;
+
 typedef int (*Comparator)(void *item, void *comparisonArg);
 typedef void (*ItemFreer)(void *item);
 

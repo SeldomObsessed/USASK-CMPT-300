@@ -6,6 +6,10 @@
  * CMPT332 Fall 2025
  */
 
+#include <stddef.h>
+
+#include <list.h>
+
 int ListCount(LIST *list)
 {
   return -1;
