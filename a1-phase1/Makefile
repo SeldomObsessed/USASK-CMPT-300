@@ -16,6 +16,7 @@ LIB_DIR = ./build/lib
 BIN_DIR = ./build/bin
 
 LDFLAGS = -l:libpthreads.a
+WIN_LDFLAGS = -L$(LIB_DIR)/$(AMD) -l:square.a
 LIST_LDFLAGS = -L$(LIB_DIR)/$(AMD) -l:list.a
 LIST_OBJS = $(OBJ_DIR)/$(AMD)/list_adders.o $(OBJ_DIR)/$(AMD)/list_movers.o \
 	$(OBJ_DIR)/$(AMD)/list_removers.o
@@ -25,7 +26,8 @@ LIST_OBJS = $(OBJ_DIR)/$(AMD)/list_adders.o $(OBJ_DIR)/$(AMD)/list_movers.o \
 
 # Dynamically select which binaries to build based on the OS
 ifeq ($(OS),Windows_NT)
-	TARGETS = will_win_binary
+	TARGETS = partA1
+	CC = mingw32-gcc
 else
 	ifeq ($(shell uname -s),Linux)
 		TARGETS = mytestlist
@@ -49,6 +51,7 @@ $(BIN_DIR)/$(AMD) :
 	mkdir -p $(BIN_DIR)/$(AMD)
 
 # Make objects
+
 $(OBJ_DIR)/$(AMD)/list_adders.o : list_adders.c | $(OBJ_DIR)/$(AMD)
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) \
 		list_adders.c -o $(OBJ_DIR)/$(AMD)/list_adders.o
@@ -77,4 +80,32 @@ $(BIN_DIR)/$(AMD)/mytestlist: $(LIB_DIR)/$(AMD)/list.a \
 # Soft link to ./
 mytestlist: $(BIN_DIR)/$(AMD)/mytestlist
 	ln -sf $(BIN_DIR)/$(AMD)/mytestlist mytestlist
+
+# Make PartA file(s)
+
+# Objects
+
+$(OBJ_DIR)/$(AMD)/partA1.o : partA1.c | $(OBJ_DIR)/$(AMD)
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) partA1.c -o $(OBJ_DIR)/$(AMD)/partA1.o
+
+$(OBJ_DIR)/$(AMD)/square.o : square.c | $(OBJ_DIR)/$(AMD)
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) square.c -o $(OBJ_DIR)/$(AMD)/square.o
+
+# Libraries
+
+$(LIB_DIR)/$(AMD)/square.a : $(OBJ_DIR)/$(AMD)/square.o square.o |\
+	$(OBJ_DIR)/$(AMD)
+	ar -rcs $(LIB_DIR)/$(AMD)/square.a $(OBJ_DIR)/$(AMD)/square.o
+
+# Link binaries
+
+$(BIN_DIR)/$(AMD)/partA1 : $(LIB_DIR)/$(AMD)/square.a \
+	$(OBJ_DIR)/$(AMD)/partA1.o | $(BIN_DIR)/$(AMD)
+	$(CC) $(CFLAGS) $(OBJ_DIR)/$(AMD)/partA1.o $(WIN_LDFLAGS)\
+	-o $(BIN_DIR)/$(AMD)/partA1
+
+# Soft link to ./
+
+partA1 : $(BIN_DIR)/$(AMD)/partA1
+	ln -sf $(BIN_DIR)/$(AMD)/partA1 partA1
 
