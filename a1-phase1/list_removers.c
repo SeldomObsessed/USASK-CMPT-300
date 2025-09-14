@@ -1,5 +1,5 @@
 /*
- * filename.(c/h)
+ * list_removers.c
  * Logan Fossenier & William Morris
  * hzv143 & wjm625
  * 11343891 & 11278140
@@ -11,12 +11,21 @@
 #include <list.h>
 
 
+/*
+ * Access the "current" item and take it out of the list. If there is no
+ * "current" item, nothing gets removed
+ *
+ * LIST *list: the LIST from which an item will be removed
+ *
+ * returns a pointer to the "current" item
+ * returns NULL if the list is empty or there is no "current" item
+ */
 void *ListRemove(LIST *list)
 {
   /* check that correct type and range of parameter values have been passed */
   if (list == NULL)
   {
-    return (void *)-1;
+    return NULL;
   }
   return NULL;
 }

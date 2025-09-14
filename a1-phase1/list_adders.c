@@ -40,8 +40,14 @@ LIST *ListCreate()
 int ListAdd(LIST *list, void *item)
 {
   /* check that correct type and range of parameter values have been passed */
-  if (list == NULL || item == NULL)
+  if (list == NULL)
   {
+    fprintf(stderr, "Error in procedure ListAdd: invalid parameter list\n");
+    return -1;
+  }
+  if (item == NULL)
+  {
+    fprintf(stderr, "Error in procedure ListAdd: invalid parameter item\n");
     return -1;
   }
   return 0;
@@ -63,8 +69,14 @@ int ListAdd(LIST *list, void *item)
 int ListInsert(LIST *list, void *item)
 {
   /* check that correct type and range of parameter values have been passed */
-  if (list == NULL || item == NULL)
+  if (list == NULL)
   {
+    fprintf(stderr, "Error in procedure ListInsert: invalid parameter list\n");
+    return -1;
+  }
+  if (item == NULL)
+  {
+    fprintf(stderr, "Error in procedure ListInsert: invalid parameter item\n");
     return -1;
   }
   return 0;
@@ -85,8 +97,14 @@ int ListInsert(LIST *list, void *item)
 int ListAppend(LIST *list, void *item)
 {
   /* check that correct type and range of parameter values have been passed */
-  if (list == NULL || item == NULL)
+  if (list == NULL)
   {
+    fprintf(stderr, "Error in procedure ListAppend: invalid parameter list\n");
+    return -1;
+  }
+  if (item == NULL)
+  {
+    fprintf(stderr, "Error in procedure ListAppend: invalid parameter item\n");
     return -1;
   }
   return 0;
@@ -107,8 +125,14 @@ int ListAppend(LIST *list, void *item)
 int ListPrepend(LIST *list, void *item)
 {
   /* check that correct type and range of parameter values have been passed */
-  if (list == NULL || item == NULL)
+  if (list == NULL)
   {
+    fprintf(stderr, "Error in procedure ListPrepend: invalid parameter list\n");
+    return -1;
+  }
+  if (item == NULL)
+  {
+    fprintf(stderr, "Error in procedure ListPrepend: invalid parameter item\n");
     return -1;
   }
   return 0;
@@ -129,8 +153,14 @@ int ListPrepend(LIST *list, void *item)
 int ListConcat(LIST *list1, LIST *list2)
 {
   /* check that correct type and range of parameter values have been passed */
-  if (list1 == NULL || list2 == NULL)
+  if (list1 == NULL)
   {
+    fprintf(stderr, "Error in procedure ListConcat: invalid parameter list1\n");
+    return -1;
+  }
+  if (list2 == NULL)
+  {
+    fprintf(stderr, "Error in procedure ListConcat: invalid parameter list2\n");
     return -1;
   }
   return 0;
