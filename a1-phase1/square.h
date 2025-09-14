@@ -12,6 +12,5 @@
 
 int Square(int);
 int is_valid(char*);  
-extern int square_counter;
 
 #endif
