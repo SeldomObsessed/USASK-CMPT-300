@@ -1,5 +1,5 @@
 /*
- * filename.(c/h)
+ * list_adders.c
  * Logan Fossenier & William Morris
  * hzv143 & wjm625
  * 11343891 & 11278140
@@ -27,9 +27,9 @@ LIST *ListCreate()
 /*
  * adds an element to the LIST after the "current" position in the LIST and the
  * "current" position becomes the new element. When "current" position is not
- * set, then this operation behaves like an append.
+ * set, then this operation behaves like an append
  *
- * The element MUST be the same type as all the other elements in the list.
+ * the element MUST be the same type as all the other elements in the list
  *
  * LIST *list: the LIST which will be added onto
  * void *item: the item to be added
@@ -50,9 +50,9 @@ int ListAdd(LIST *list, void *item)
 /*
  * adds an element to the LIST before the "current" position in the LIST and the
  * "current" position becomes the new element. When "current" position is not
- * set, then this operation behaves like a prepend.
+ * set, then this operation behaves like a prepend
  *
- * The element MUST be the same type as all the other elements in the list.
+ * the element MUST be the same type as all the other elements in the list
  *
  * LIST *list: the LIST which will be added onto
  * void *item: the item to be added
@@ -72,9 +72,9 @@ int ListInsert(LIST *list, void *item)
 
 /*
  * adds an element to the end of the LIST and the "current" position becomes the
- * new element.
+ * new element
  *
- * The element MUST be the same type as all the other elements in the list.
+ * the element MUST be the same type as all the other elements in the list
  *
  * LIST *list: the LIST which will be added onto
  * void *item: the item to be added
@@ -94,11 +94,11 @@ int ListAppend(LIST *list, void *item)
 
 /*
  * adds an element to the start of the LIST and the "current" position becomes
- * the new element.
+ * the new element
  *
- * The element MUST be the same type as all the other elements in the list.
+ * the element MUST be the same type as all the other elements in the list
  *
- * LIST *list: the List which will be added onto
+ * LIST *list: the LIST which will be added onto
  * void *item: the item to be added
  *
  * returns 0 on success
@@ -114,20 +114,25 @@ int ListPrepend(LIST *list, void *item)
   return 0;
 }
 
-
+/*
+ * adds all the elements of list2 to the end of list1, preserving order
+ *
+ * list2 will be deleted after this function is executed. The elements in both
+ * lists MUST be of the same type
+ *
+ * LIST *list1: the LIST which will be grown
+ * LIST *list2: the LIST which will be appended
+ *
+ * returns 0 on success
+ * returns -1 on failure
+ */
 int ListConcat(LIST *list1, LIST *list2)
 {
   /* check that correct type and range of parameter values have been passed */
   if (list1 == NULL || list2 == NULL)
   {
-    return 1;
+    return -1;
   }
   return 0;
-}
-
-
-NODE *get_node()
-{
-  return NULL;
 }
 
