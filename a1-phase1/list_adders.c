@@ -26,53 +26,90 @@ LIST *ListCreate()
 
 /*
  * adds an element to the LIST after the "current" position in the LIST and the
- * new element becomes the "current" position
+ * "current" position becomes the new element. When "current" position is not
+ * set, then this operation behaves like an append.
+ *
+ * The element MUST be the same type as all the other elements in the list.
  *
  * LIST *list: the LIST which will be added onto
  * void *item: the item to be added
  *
  * returns 0 on success
- * returs -1 on failure
+ * returns -1 on failure
  */
 int ListAdd(LIST *list, void *item)
 {
   /* check that correct type and range of parameter values have been passed */
   if (list == NULL || item == NULL)
   {
-    return 1;
+    return -1;
   }
   return 0;
 }
 
-
+/*
+ * adds an element to the LIST before the "current" position in the LIST and the
+ * "current" position becomes the new element. When "current" position is not
+ * set, then this operation behaves like a prepend.
+ *
+ * The element MUST be the same type as all the other elements in the list.
+ *
+ * LIST *list: the LIST which will be added onto
+ * void *item: the item to be added
+ *
+ * returns 0 on success
+ * returns -1 on failure
+ */
 int ListInsert(LIST *list, void *item)
 {
   /* check that correct type and range of parameter values have been passed */
   if (list == NULL || item == NULL)
   {
-    return 1;
+    return -1;
   }
   return 0;
 }
 
-
+/*
+ * adds an element to the end of the LIST and the "current" position becomes the
+ * new element.
+ *
+ * The element MUST be the same type as all the other elements in the list.
+ *
+ * LIST *list: the LIST which will be added onto
+ * void *item: the item to be added
+ *
+ * returns 0 on success
+ * returns -1 on failure
+ */
 int ListAppend(LIST *list, void *item)
 {
   /* check that correct type and range of parameter values have been passed */
   if (list == NULL || item == NULL)
   {
-    return 1;
+    return -1;
   }
   return 0;
 }
 
-
+/*
+ * adds an element to the start of the LIST and the "current" position becomes
+ * the new element.
+ *
+ * The element MUST be the same type as all the other elements in the list.
+ *
+ * LIST *list: the List which will be added onto
+ * void *item: the item to be added
+ *
+ * returns 0 on success
+ * returns -1 on failure
+ */
 int ListPrepend(LIST *list, void *item)
 {
   /* check that correct type and range of parameter values have been passed */
   if (list == NULL || item == NULL)
   {
-    return 1;
+    return -1;
   }
   return 0;
 }
