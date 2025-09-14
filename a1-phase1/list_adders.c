@@ -10,6 +10,7 @@
 
 #include <list.h>
 
+
 /*
  * makes a new list and returns the reference to the user for later access in
  * the API
@@ -23,6 +24,7 @@ LIST *ListCreate()
 {
   return NULL;
 }
+
 
 /*
  * adds an element to the LIST after the "current" position in the LIST and the
@@ -53,6 +55,7 @@ int ListAdd(LIST *list, void *item)
   return 0;
 }
 
+
 /*
  * adds an element to the LIST before the "current" position in the LIST and the
  * "current" position becomes the new element. When "current" position is not
@@ -82,6 +85,7 @@ int ListInsert(LIST *list, void *item)
   return 0;
 }
 
+
 /*
  * adds an element to the end of the LIST and the "current" position becomes the
  * new element
@@ -110,6 +114,7 @@ int ListAppend(LIST *list, void *item)
   return 0;
 }
 
+
 /*
  * adds an element to the start of the LIST and the "current" position becomes
  * the new element
@@ -137,6 +142,7 @@ int ListPrepend(LIST *list, void *item)
   }
   return 0;
 }
+
 
 /*
  * adds all the elements of list2 to the end of list1, preserving order
