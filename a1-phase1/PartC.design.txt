@@ -80,13 +80,6 @@ ListTrim -> when empty, curr == NULL
 ListSearch -> curr will be set to the head and walked down the list. It just
   gets left where it ends, and this is easier than creating a separate cursor
 
-- I'm going to create a helper list_free() to be called from ListConcat() and
-  ListFree() as well as a heleper node_free() to be called from ListRemove() and
-  ListTrim()
-
-- I'm going to create a helper get_node() which will procure a NODE to be used
-  in ListAdd(), ListInsert(), ListAppend(), and ListPrepend()
-
 - there's going to be a global which is a boolean to track whether the LIST and
   NODE arrays have received their ONE initial malloc(). This will be checked by
   ListCreate() such that when False and when calling ListCreate(), the initial
