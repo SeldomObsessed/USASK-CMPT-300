@@ -187,6 +187,9 @@ if (variable == NULL)
 
 **** Team Agreements ****
 
+  Commit messages: 50 char max
+  Commit bodies: 70 char max per line
+
   Responsibility of style: Both partners should follow the same style.
 
   Merging of code: If one person commits in a different style, the other can
