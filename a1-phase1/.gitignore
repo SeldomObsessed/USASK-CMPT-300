@@ -6,3 +6,7 @@ testlist
 
 /build/
 
+.nfs*
+
+*.swp
+
