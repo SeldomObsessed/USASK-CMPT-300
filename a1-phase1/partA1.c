@@ -35,7 +35,8 @@ typedef struct
                                                                                 
                                                                                 
 int main (int argc, char *argv[])                                               
-{                                                                               
+{               
+    int i;                                                                
     int threads;                                                                
     int deadline;                                                               
     int size;                                                                   
@@ -57,7 +58,7 @@ int main (int argc, char *argv[])
     /* argc validation done */                                                  
                                                                                 
     /* Convert args to integers */                                              
-    for (int i=1; i<argc; i++)                                                  
+    for (i=1; i<argc; i++)                                                  
     {                                                                           
       if (!is_valid(argv[i]))                                                   
       {                                                                         
@@ -115,7 +116,7 @@ int main (int argc, char *argv[])
     /* Wait until deadline */                                                   
     /* TODO: Sleep for deadline in ms */                                           
                                                                                 
-    Sleep(DWORD(1000*deadline));                                                       
+    Sleep((DWORD)(1000*deadline));                                                       
     /* Close thread handles */                                                  
     for (i=0; i<threads; i++)                                               
     {                                                                           
@@ -127,7 +128,7 @@ int main (int argc, char *argv[])
     /* Report progress */                                                       
     for (i=0; i<threads; i++)                                               
     {                                                                           
-        // TODO: print progress_count[i]                                        
+        /* TODO: print progress_count[i] */                                        
     }                                                                           
                                                                                 
     return 0;  /* success */                                                    
