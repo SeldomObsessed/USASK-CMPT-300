@@ -19,6 +19,7 @@
  * invalid when dereferenced outside of the API
  *
  * returns a pointer to a new empty LIST
+ * returns NULL on failure
  */
 LIST *ListCreate()
 {

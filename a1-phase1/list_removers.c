@@ -64,6 +64,7 @@ void ListFree(LIST *list, ItemFreer itemFree)
  * LIST *list: the LIST to remove the item from
  *
  * returns a pointer to the removed item
+ * returns NULL on error or on empty list
  */
 void *ListTrim(LIST *list)
 {
