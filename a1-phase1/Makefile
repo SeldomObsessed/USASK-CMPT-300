@@ -100,7 +100,7 @@ $(OBJ_DIR)/$(WIN)/square.o : square.c | $(OBJ_DIR)/$(WIN)
 
 # Libraries
 
-$(LIB_DIR)/$(WIN)/square.a : $(OBJ_DIR)/$(WIN)/square.o square.o | \
+$(LIB_DIR)/$(WIN)/square.a : $(OBJ_DIR)/$(WIN)/square.o | \
 	$(LIB_DIR)/$(WIN)
 	ar -rcs $(LIB_DIR)/$(WIN)/square.a $(OBJ_DIR)/$(WIN)/square.o
 
