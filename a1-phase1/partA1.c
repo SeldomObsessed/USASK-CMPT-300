@@ -46,13 +46,13 @@ int main (int argc, char *argv[])
     /* Shared progress array */                                                 
     volatile int progress_count[MAX_THREADS];                                                               
                                                                                 
-    printf("Got to procedure main");                                            
+    printf("Got to procedure main\n");                                            
                                                                                 
     /* argc validation */                                                       
     /* TODO: check argc, print usage, exit if not enough args*/                   
     if (argc != 4)                                                              
     {                                                                           
-      printf("Error in procedure main: invalid number of parameters"); 
+      printf("Error in procedure main: invalid number of parameters\n"); 
       return 1;         
     }                                                                           
     /* argc validation done */                                                  
@@ -62,7 +62,7 @@ int main (int argc, char *argv[])
     {                                                                           
       if (!is_valid(argv[i]))                                                   
       {                                                                         
-        printf("Error in procedure main: Invalid parameter %d",i);  
+        printf("Error in procedure main: Invalid parameter %d\n/3",i);  
         return 1;            
       }                                                                         
       else                                                                      
@@ -74,7 +74,7 @@ int main (int argc, char *argv[])
                                                                                 
     if (args[0] > 1024)                                                         
     {                                                                           
-      printf("Error in procedure main: invalid parameter 1");  
+      printf("Error in procedure main: invalid parameter 1\n");  
       return 1;                 
     }                                                                           
     threads = args[0];                                                          
@@ -90,13 +90,13 @@ int main (int argc, char *argv[])
         ThreadArg *arg = malloc(sizeof(ThreadArg));                             
         if (!arg)                                                               
         {                                                                       
-          printf("Error in procedure main: malloc failed at ThreadArg");   
+          printf("Error in procedure main: malloc failed at ThreadArg\n");   
           return 1;     
         }                                                                       
         arg->thread_id = i;                                                     
         arg->size = size;                                                       
         arg->progress_count = progress_count;                                   
-        printf("Got to procedure CreateThread()");                              
+        printf("Got to procedure CreateThread()\n");                              
         h_thread[i] = CreateThread(                                             
           NULL,                                                                 
           0,                                                                    
@@ -106,7 +106,7 @@ int main (int argc, char *argv[])
           NULL);                                                                   
         if (h_thread[i]==NULL)                                                  
         {                                                                       
-          printf("Error in procedure CreateThread: CreateThread failed");       
+          printf("Error in procedure CreateThread: CreateThread failed\n");       
           return 1;                                                             
         }                                                                       
                                                                                 
@@ -121,7 +121,7 @@ int main (int argc, char *argv[])
     for (i=0; i<threads; i++)                                               
     {                                                                           
         /* TODO: CloseHandle */                                                    
-        printf("Got to procedure CloseHandle()");                               
+        printf("Got to procedure CloseHandle()\n");                               
         CloseHandle(h_thread[i]);                                               
     }                                                                           
                                                                                 
@@ -139,7 +139,7 @@ DWORD WINAPI invoke_square(LPVOID param)
 {                
     /*Stop complaining mr gcc*/                                                               
     (void)param; 
-    printf("Got to procedure invoke_square");                                   
+    printf("Got to procedure invoke_square\n");                                   
     /* TODO: cast param to ThreadArg                                            
        TODO: run loop up to size                                                
        TODO: call square()                                                      
