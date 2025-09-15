@@ -10,12 +10,39 @@
 
 #include <list.h>
 
+
+int mock_comparator(void *item, void *comparisonArg)
+{
+  /* Dispeling compiler warnings */
+  int x;
+  x = 3;
+  item = &x;
+  comparisonArg = item;
+  item = comparisonArg;
+  return 0;
+}
+
+
+void mock_itemFreer(void *item)
+{
+  /* Dispeling compiler warnings */
+  int x;
+  x = 3;
+  item = &x;
+  if (item)
+  {
+    return;
+  }
+  return;
+}
+
+
 int main(int argc, char **argv)
 {
   int result, item;
   LIST *my_list, *my_list2;
   LIST local_list, local_list2;
-  ItemFreer itemFree;
+  ItemFreer item_free;
 
   /* dispell compiler complaints */
   argc++;
@@ -72,7 +99,14 @@ int main(int argc, char **argv)
   ListRemove(NULL); /* ListRemove unhappy path (list) */
   ListRemove(my_list); /* ListRemove happy path */
 
-  ListFree(my_list, itemFree);
- return 0;
+  item_free = mock_itemFreer;
+  ListFree(NULL, item_free); /* ListFree unhappy path (list) */
+  ListFree(my_list, NULL); /* ListFree unhapp apth (itemFree) */
+  ListFree(my_list, item_free); /* ListFree happy path */
+
+  ListTrim(NULL); /* ListTrim unhappy path (list) */
+  ListTrim(my_list); /* ListTrim happy path */
+
+  return 0;
 }
 

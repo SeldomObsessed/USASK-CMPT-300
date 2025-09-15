@@ -56,6 +56,7 @@ void ListFree(LIST *list, ItemFreer itemFree)
     );
     return;
   }
+  printf("Got to procedure ListFree()\n");
   return;
 }
 
@@ -76,6 +77,7 @@ void *ListTrim(LIST *list)
     fprintf(stderr, "Error in procedure ListTrim: invalid parameter list\n");
     return NULL;
   }
+  printf("Got to procedure ListTrim()\n");
   return NULL;
 }
 
