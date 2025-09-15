@@ -10,13 +10,10 @@
  *
  * is_valid is a parsing check that verifies if the argument passed
  * is a valid number: >0 and not a string or float.
- * /
+ */
 
 #include <stdlib.h>
-
-/*
- *
- */
+#include <stddef.h>
 
 /*Global variable to increment Square invocation*/
 int square_counter = 0;
