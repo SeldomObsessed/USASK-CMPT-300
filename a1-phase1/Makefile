@@ -16,7 +16,7 @@ LIB_DIR = ./build/lib
 BIN_DIR = ./build/bin
 
 LDFLAGS = -l:libpthreads.a
-WIN_LDFLAGS = -L$(LIB_DIR)/$(AMD) -l:square.a
+WIN_LDFLAGS = -L$(LIB_DIR)/$(WIN) -l:square.a
 LIST_LDFLAGS = -L$(LIB_DIR)/$(AMD) -l:list.a
 LIST_OBJS = $(OBJ_DIR)/$(AMD)/list_adders.o $(OBJ_DIR)/$(AMD)/list_movers.o \
 	$(OBJ_DIR)/$(AMD)/list_removers.o
