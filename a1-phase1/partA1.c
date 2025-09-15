@@ -36,7 +36,6 @@ typedef struct
                                                                                 
 int main (int argc, char *argv[])                                               
 {                                                                               
-    printf("Got to procedure main");                                            
     int threads;                                                                
     int deadline;                                                               
     int size;                                                                   
@@ -46,9 +45,10 @@ int main (int argc, char *argv[])
     /* Shared progress array */                                                 
     volatile int progress_count[MAX_THREADS];                                                               
                                                                                 
+    printf("Got to procedure main");                                            
                                                                                 
     /* argc validation */                                                       
-    // TODO: check argc, print usage, exit if not enough args                   
+    /* TODO: check argc, print usage, exit if not enough args*/                   
     if (argc != 4)                                                              
     {                                                                           
       printf("Error in procedure main: invalid number of parameters"); 
@@ -61,7 +61,7 @@ int main (int argc, char *argv[])
     {                                                                           
       if (!is_valid(argv[i]))                                                   
       {                                                                         
-        printf("Error in procedure main: Invalid parameter %s",i);  
+        printf("Error in procedure main: Invalid parameter %d",i);  
         return 1;            
       }                                                                         
       else                                                                      
@@ -83,9 +83,9 @@ int main (int argc, char *argv[])
                                           
                                                                                 
     /* Create threads */                                                        
-    for (int i=0; i<threads; i++)                                               
+    for (i=0; i<threads; i++)                                               
     {                                                                           
-        // TODO: allocate ThreadArg and call CreateThread()                     
+        /* TODO: allocate ThreadArg and call CreateThread() */                 
         ThreadArg *arg = malloc(sizeof(ThreadArg));                             
         if (!arg)                                                               
         {                                                                       
@@ -102,7 +102,7 @@ int main (int argc, char *argv[])
           invoke_square,                                                        
           arg,                                                                  
           0,                                                                    
-          i);                                                                   
+          NULL);                                                                   
         if (h_thread[i]==NULL)                                                  
         {                                                                       
           printf("Error in procedure CreateThread: CreateThread failed");       
@@ -113,19 +113,19 @@ int main (int argc, char *argv[])
                                                                                 
                                                                                 
     /* Wait until deadline */                                                   
-    // TODO: Sleep for deadline in ms                                           
+    /* TODO: Sleep for deadline in ms */                                           
                                                                                 
-    Sleep(1000*deadline);                                                       
+    Sleep(DWORD(1000*deadline));                                                       
     /* Close thread handles */                                                  
-    for (int i=0; i<threads; i++)                                               
+    for (i=0; i<threads; i++)                                               
     {                                                                           
-        // TODO: CloseHandle                                                    
+        /* TODO: CloseHandle */                                                    
         printf("Got to procedure CloseHandle()");                               
         CloseHandle(h_thread[i]);                                               
     }                                                                           
                                                                                 
     /* Report progress */                                                       
-    for (int i=0; i<threads; i++)                                               
+    for (i=0; i<threads; i++)                                               
     {                                                                           
         // TODO: print progress_count[i]                                        
     }                                                                           
@@ -135,13 +135,15 @@ int main (int argc, char *argv[])
                                                                                 
 /* Thread function */                                                           
 DWORD WINAPI invoke_square(LPVOID param)                                        
-{                                                                               
+{                
+    /*Stop complaining mr gcc*/                                                               
+    (void)param; 
     printf("Got to procedure invoke_square");                                   
-    // TODO: cast param to ThreadArg                                            
-    // TODO: run loop up to size                                                
-    // TODO: call square()                                                      
-    // TODO: update progress_count                                              
-    // TODO: free ThreadArg                                                     
+    /* TODO: cast param to ThreadArg                                            
+       TODO: run loop up to size                                                
+       TODO: call square()                                                      
+       TODO: update progress_count                                              
+       TODO: free ThreadArg  */                                                   
                                                                                 
     return 0;  /* success */                                                    
 }     
