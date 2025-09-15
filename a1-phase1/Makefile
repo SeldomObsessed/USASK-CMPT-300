@@ -106,13 +106,13 @@ $(LIB_DIR)/$(WIN)/square.a : $(OBJ_DIR)/$(WIN)/square.o | \
 
 # Link binaries
 
-$(BIN_DIR)/$(WIN)/partA1 : $(LIB_DIR)/$(WIN)/square.a \
+partA1 : $(LIB_DIR)/$(WIN)/square.a \
 	$(OBJ_DIR)/$(WIN)/partA1.o | $(BIN_DIR)/$(WIN)
 	$(CC) $(CFLAGS) $(OBJ_DIR)/$(WIN)/partA1.o $(WIN_LDFLAGS) \
-	-o $(BIN_DIR)/$(WIN)/partA1
+	-o partA1
 
 # Soft link to ./
 
-partA1 : $(BIN_DIR)/$(WIN)/partA1
-	ln -sf $(BIN_DIR)/$(WIN)/partA1 partA1
+#partA1 : $(BIN_DIR)/$(WIN)/partA1
+#	ln -sf $(BIN_DIR)/$(WIN)/partA1 partA1
 
