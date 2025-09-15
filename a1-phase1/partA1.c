@@ -1,96 +1,147 @@
-/*
- * partA1.c
- * Logan Fossenier & William Morris
- * hzv143 & wjm625
- * 11343891 & 11278140
- * CMPT332 Fall 2025
- *
- * This file implements the main executable for A.1. This executable creates
- * multiple threads which perform the same action until a deadline, without 
- * synchronization between processes/threads. number of threads, length of
- * deadline, and maximum integer size are to be command-line parameters.
- *
- * At this point, only skeletons with no full implementation will be present.
- * 
- * - caller responsible for valid input, but also callee will perform input 
- *   validation.
- */
-
+/*                                                                              
+ * partA1.c                                                                     
+ * Logan Fossenier & William Morris                                             
+ * hzv143 & wjm625                                                              
+ * 11343891 & 11278140                                                          
+ * CMPT332 Fall 2025                                                            
+ *                                                                              
+ * This file implements the main executable for A.1. This executable creates    
+ * multiple threads which perform the same action until a deadline, without     
+ * synchronization between processes/threads. number of threads, length of      
+ * deadline, and maximum integer size are to be command-line parameters.        
+ *                                                                              
+ * At this point, only skeletons with no full implementation will be present.   
+ *                                                                              
+ * - caller responsible for valid input, but also callee will perform input     
+ *   validation.                                                                
+ */                                                                             
+                                                                                
 #include <square.h>                                                             
-#include <stdio.h>                                                             
+#include <stdio.h>                                                              
 #include <windows.h>                                                            
-                     
+#include <stdlib.h>                                                             
+                                                                                
 #define MAX_THREADS 1024                                                        
                                                                                 
-DWORD WINAPI invoke_square(LPVOID);   
-
-/* ThreadArg type to be passed into CreatThread */
-typedef struct
-{
-  int thread_id;
-  int size;
-  volatile int *progress_count;
-} ThreadArg;   
-
-int main (int argc, char *argv[])                                           
-{                   
-    int threads;
-    int deadline;
-    int size;
-
-    /* argc validation */
-    // TODO: check argc, print usage, exit if not enough args
-
-    int args[argc-1];                                                             
-    /* argc validation done */
-
-    /* Convert args to integers */
-    // TODO: loop through argv, validate, convert to int, store in args[]
-    /* args[] contains parsed integer parameters */
-
-    threads = args[0];
-    deadline = args[1];
-    size = args[2];                                                 
-
-    /* Thread handle array */
-    HANDLE h_thread[threads];
-
-    /* Shared progress array */
-    volatile int progress_count[threads];
-
-    /* Create threads */
-    for (int i=0; i<threads; i++)
-    {
-        // TODO: allocate ThreadArg and call CreateThread()
-    }
-
-    /* Wait until deadline */
-    // TODO: Sleep for deadline in ms
-
-    /* Close thread handles */
-    for (int i=0; i<threads; i++)
-    {
-        // TODO: CloseHandle
-    }                      
-
-    /* Report progress */
-    for (int i=0; i<threads; i++)
-    {
-        // TODO: print progress_count[i]
-    }     
-
-    return 0;  /* success */
-}                                    
-
-/* Thread function */
-DWORD WINAPI invoke_square(LPVOID param)
-{
-    // TODO: cast param to ThreadArg
-    // TODO: run loop up to size
-    // TODO: call square()
-    // TODO: update progress_count
-    // TODO: free ThreadArg
-
-    return 0;  /* success */
-}
-
+DWORD WINAPI invoke_square(LPVOID);                                             
+                                                                                
+/* ThreadArg type to be passed into CreatThread */                              
+typedef struct                                                                  
+{                                                                               
+  int thread_id;                                                                
+  int size;                                                                     
+  volatile int *progress_count;                                                 
+} ThreadArg;                                                                    
+                                                                                
+                                                                                
+int main (int argc, char *argv[])                                               
+{                                                                               
+    printf("Got to procedure main");                                            
+    int threads;                                                                
+    int deadline;                                                               
+    int size;                                                                   
+    int args[3];  
+    /* Thread handle array */                                                   
+    HANDLE h_thread[MAX_THREADS];                                                   
+    /* Shared progress array */                                                 
+    volatile int progress_count[MAX_THREADS];                                                               
+                                                                                
+                                                                                
+    /* argc validation */                                                       
+    // TODO: check argc, print usage, exit if not enough args                   
+    if (argc != 4)                                                              
+    {                                                                           
+      printf("Error in procedure main: invalid number of parameters"); 
+      return 1;         
+    }                                                                           
+    /* argc validation done */                                                  
+                                                                                
+    /* Convert args to integers */                                              
+    for (int i=1; i<argc; i++)                                                  
+    {                                                                           
+      if (!is_valid(argv[i]))                                                   
+      {                                                                         
+        printf("Error in procedure main: Invalid parameter %s",i);  
+        return 1;            
+      }                                                                         
+      else                                                                      
+      {                                                                         
+        args[i-1] = atoi(argv[i]);                                              
+      }                                                                         
+    }                                                                           
+    /* args[] contains parsed integer parameters */                             
+                                                                                
+    if (args[0] > 1024)                                                         
+    {                                                                           
+      printf("Error in procedure main: invalid parameter 1");  
+      return 1;                 
+    }                                                                           
+    threads = args[0];                                                          
+    deadline = args[1];                                                         
+    size = args[2];                                                             
+                                                                                
+                                          
+                                                                                
+    /* Create threads */                                                        
+    for (int i=0; i<threads; i++)                                               
+    {                                                                           
+        // TODO: allocate ThreadArg and call CreateThread()                     
+        ThreadArg *arg = malloc(sizeof(ThreadArg));                             
+        if (!arg)                                                               
+        {                                                                       
+          printf("Error in procedure main: malloc failed at ThreadArg");   
+          return 1;     
+        }                                                                       
+        arg->thread_id = i;                                                     
+        arg->size = size;                                                       
+        arg->progress_count = progress_count;                                   
+        printf("Got to procedure CreateThread()");                              
+        h_thread[i] = CreateThread(                                             
+          NULL,                                                                 
+          0,                                                                    
+          invoke_square,                                                        
+          arg,                                                                  
+          0,                                                                    
+          i);                                                                   
+        if (h_thread[i]==NULL)                                                  
+        {                                                                       
+          printf("Error in procedure CreateThread: CreateThread failed");       
+          return 1;                                                             
+        }                                                                       
+                                                                                
+    }                                                                           
+                                                                                
+                                                                                
+    /* Wait until deadline */                                                   
+    // TODO: Sleep for deadline in ms                                           
+                                                                                
+    Sleep(1000*deadline);                                                       
+    /* Close thread handles */                                                  
+    for (int i=0; i<threads; i++)                                               
+    {                                                                           
+        // TODO: CloseHandle                                                    
+        printf("Got to procedure CloseHandle()");                               
+        CloseHandle(h_thread[i]);                                               
+    }                                                                           
+                                                                                
+    /* Report progress */                                                       
+    for (int i=0; i<threads; i++)                                               
+    {                                                                           
+        // TODO: print progress_count[i]                                        
+    }                                                                           
+                                                                                
+    return 0;  /* success */                                                    
+}                                                                               
+                                                                                
+/* Thread function */                                                           
+DWORD WINAPI invoke_square(LPVOID param)                                        
+{                                                                               
+    printf("Got to procedure invoke_square");                                   
+    // TODO: cast param to ThreadArg                                            
+    // TODO: run loop up to size                                                
+    // TODO: call square()                                                      
+    // TODO: update progress_count                                              
+    // TODO: free ThreadArg                                                     
+                                                                                
+    return 0;  /* success */                                                    
+}     
