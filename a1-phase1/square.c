@@ -41,14 +41,14 @@ int is_valid(char *argv)
   /*string check*/
   if (!(strtol (argv, NULL, 10)))
   {
-    return 1;
+    return 0;
   }
   
   num = strtol(argv,NULL,10);
   /*negative number check*/
   if (num<0)
   {
-    return 1;
+    return 0;
   }
-  return 0;
+  return 1;
 }
