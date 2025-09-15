@@ -108,7 +108,7 @@ $(LIB_DIR)/$(WIN)/square.a : $(OBJ_DIR)/$(WIN)/square.o | \
 
 $(BIN_DIR)/$(WIN)/partA1 : $(LIB_DIR)/$(WIN)/square.a \
 	$(OBJ_DIR)/$(WIN)/partA1.o | $(BIN_DIR)/$(WIN)
-	$(CC) $(CFLAGS) $(OBJ_DIR)/$(WIN)/partA1.o $(WIN_LDFLAGS)\
+	$(CC) $(CFLAGS) $(OBJ_DIR)/$(WIN)/partA1.o $(WIN_LDFLAGS) \
 	-o $(BIN_DIR)/$(WIN)/partA1
 
 # Soft link to ./
