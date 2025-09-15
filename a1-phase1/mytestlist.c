@@ -43,6 +43,7 @@ int main(int argc, char **argv)
   LIST *my_list, *my_list2;
   LIST local_list, local_list2;
   ItemFreer item_free;
+  Comparator comparator;
 
   /* dispell compiler complaints */
   argc++;
@@ -106,6 +107,31 @@ int main(int argc, char **argv)
 
   ListTrim(NULL); /* ListTrim unhappy path (list) */
   ListTrim(my_list); /* ListTrim happy path */
+
+  /* list_movers.c tests */
+  ListCount(NULL); /* ListCount unhappy path (list) */
+  ListCount(my_list); /* ListCount happy path */
+
+  ListFirst(NULL); /* ListFirst unhappy path (list) */
+  ListFirst(my_list); /* ListFirst happy path */
+
+  ListLast(NULL); /* ListLast unhappy path (list) */
+  ListLast(my_list); /* ListLast happy path */
+
+  ListNext(NULL); /* ListNext unhappy path (list) */
+  ListNext(my_list); /* ListNext happy path */
+
+  ListPrev(NULL); /* ListPrev unhappy path (list) */
+  ListPrev(my_list); /* ListPrev happy path */
+
+  ListCurr(NULL); /* ListCurr unhappy path (list) */
+  ListCurr(my_list); /* ListCurr happy path */
+
+  comparator = mock_comparator;
+  ListSearch(NULL, comparator, &item); /* ListSearch unhappy path (list) */
+  ListSearch(my_list, NULL, &item); /* ListSearch unhappy path (comparator) */
+  ListSearch(my_list, comparator, NULL); /* ListSearch unhappy path (item) */
+  ListSearch(my_list, comparator, &item); /* ListSearch happy path */
 
   return 0;
 }

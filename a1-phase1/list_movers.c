@@ -26,6 +26,7 @@ int ListCount(LIST *list)
     fprintf(stderr, "Error in procedure ListCount: invalid parameter list\n");
     return -1;
   }
+  printf("Got to procedure ListCount()\n");
   return 0;
 }
 
@@ -46,6 +47,7 @@ void *ListFirst(LIST *list)
     fprintf(stderr, "Error in procedure ListFirst: invalid parameter list\n");
     return NULL;
   }
+  printf("Got to procedure ListFirst()\n");
   return NULL;
 }
 
@@ -66,6 +68,7 @@ void *ListLast(LIST *list)
     fprintf(stderr, "Error in procedure ListLast: invalid parameter list\n");
     return NULL;
   }
+  printf("Got to procedure ListLast()\n");
   return NULL;
 }
 
@@ -89,6 +92,7 @@ void *ListNext(LIST *list)
     fprintf(stderr, "Error in procedure ListNext: invalid parameter list\n");
     return NULL;
   }
+  printf("Got to procedure ListNext()\n");
   return NULL;
 }
 
@@ -112,6 +116,7 @@ void *ListPrev(LIST *list)
     fprintf(stderr, "Error in procedure ListPrev: invalid parameter list\n");
     return NULL;
   }
+  printf("Got to procedure ListPrev()\n");
   return NULL;
 }
 
@@ -130,6 +135,7 @@ void *ListCurr(LIST *list)
     fprintf(stderr, "Error in procedure ListCurr: invalid parameter list\n");
     return NULL;
   }
+  printf("Got to procedure ListCurr()\n");
   return NULL;
 }
 
@@ -170,6 +176,7 @@ void *ListSearch(LIST *list, Comparator comparator, void *comparisonArg)
     );
     return NULL;
   }
+  printf("Got to procedure ListSearch()\n");
   return NULL;
 }
 
