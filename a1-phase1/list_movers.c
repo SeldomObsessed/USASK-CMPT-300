@@ -7,6 +7,7 @@
  */
 
 #include <stddef.h>
+#include <stdio.h>
 
 #include <list.h>
 

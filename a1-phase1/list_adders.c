@@ -6,10 +6,14 @@
  * CMPT332 Fall 2025
  */
 
+#include <stdbool.h>
 #include <stddef.h>
+#include <stdio.h>
 
 #include <list.h>
 
+
+bool init = false; /* Will be true after the first time that ListCreate runs */
 
 /*
  * makes a new list and returns the reference to the user for later access in
@@ -23,6 +27,7 @@
  */
 LIST *ListCreate()
 {
+  printf("Got to procedure ListCreate()\n");
   return NULL;
 }
 
@@ -53,6 +58,7 @@ int ListAdd(LIST *list, void *item)
     fprintf(stderr, "Error in procedure ListAdd: invalid parameter item\n");
     return -1;
   }
+  printf("Got to procedure ListAdd()\n");
   return 0;
 }
 
@@ -83,6 +89,7 @@ int ListInsert(LIST *list, void *item)
     fprintf(stderr, "Error in procedure ListInsert: invalid parameter item\n");
     return -1;
   }
+  printf("Got to procedure ListInsert()\n");
   return 0;
 }
 
@@ -112,6 +119,7 @@ int ListAppend(LIST *list, void *item)
     fprintf(stderr, "Error in procedure ListAppend: invalid parameter item\n");
     return -1;
   }
+  printf("Got to procedure ListAppend()\n");
   return 0;
 }
 
@@ -141,6 +149,7 @@ int ListPrepend(LIST *list, void *item)
     fprintf(stderr, "Error in procedure ListPrepend: invalid parameter item\n");
     return -1;
   }
+  printf("Got to procedure ListPrepend()\n");
   return 0;
 }
 
@@ -170,6 +179,15 @@ int ListConcat(LIST *list1, LIST *list2)
     fprintf(stderr, "Error in procedure ListConcat: invalid parameter list2\n");
     return -1;
   }
+  if (list1 == list2)
+  {
+    fprintf(
+      stderr,
+      "Error in procedure ListConcat: list1 must not equal list2\n"
+    );
+    return -1;
+  }
+  printf("Got to procedure ListConcat()\n");
   return 0;
 }
 
