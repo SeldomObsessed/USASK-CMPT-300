@@ -7,6 +7,7 @@
  */
 
 #include <stddef.h>
+#include <stdio.h>
 
 #include <list.h>
 
@@ -28,6 +29,7 @@ void *ListRemove(LIST *list)
     fprintf(stderr, "Error in procedure ListRemove: invalid parameter list\n");
     return NULL;
   }
+  printf("Got to procedure ListRemove()\n");
   return NULL;
 }
 
