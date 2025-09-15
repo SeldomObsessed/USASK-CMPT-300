@@ -10,7 +10,7 @@ CPPFLAGS = -std=gnu90 -Wall -Werror -Wextra -Wsign-conversion -pedantic \
 	-I/student/cmpt332/pthreads -I.
 
 AMD = Linux-x86_64
-
+WIN = Windows-x86_64
 OBJ_DIR = ./build/obj
 LIB_DIR = ./build/lib
 BIN_DIR = ./build/bin
@@ -47,6 +47,16 @@ $(LIB_DIR)/$(AMD) :
 $(BIN_DIR)/$(AMD) :
 	mkdir -p $(BIN_DIR)/$(AMD)
 
+# Windows dirs
+$(OBJ_DIR)/$(WIN) :
+	mkdir -p $(OBJ_DIR)/$(WIN)
+
+$(LIB_DIR)/$(WIN) :
+	mkdir -p $(LIB_DIR)/$(WIN)
+
+$(BIN_DIR)/$(WIN) :
+	mkdir -p $(BIN_DIR)/$(WIN)
+
 # Make objects
 
 $(OBJ_DIR)/$(AMD)/list_adders.o : list_adders.c | $(OBJ_DIR)/$(AMD)
@@ -82,27 +92,27 @@ mytestlist: $(BIN_DIR)/$(AMD)/mytestlist
 
 # Objects
 
-$(OBJ_DIR)/$(AMD)/partA1.o : partA1.c | $(OBJ_DIR)/$(AMD)
-	$(CC) -c $(CFLAGS) $(CPPFLAGS) partA1.c -o $(OBJ_DIR)/$(AMD)/partA1.o
+$(OBJ_DIR)/$(WIN)/partA1.o : partA1.c | $(OBJ_DIR)/$(WIN)
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) partA1.c -o $(OBJ_DIR)/$(WIN)/partA1.o
 
-$(OBJ_DIR)/$(AMD)/square.o : square.c | $(OBJ_DIR)/$(AMD)
-	$(CC) -c $(CFLAGS) $(CPPFLAGS) square.c -o $(OBJ_DIR)/$(AMD)/square.o
+$(OBJ_DIR)/$(WIN)/square.o : square.c | $(OBJ_DIR)/$(WIN)
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) square.c -o $(OBJ_DIR)/$(WIN)/square.o
 
 # Libraries
 
-$(LIB_DIR)/$(AMD)/square.a : $(OBJ_DIR)/$(AMD)/square.o square.o |\
-	$(OBJ_DIR)/$(AMD)
-	ar -rcs $(LIB_DIR)/$(AMD)/square.a $(OBJ_DIR)/$(AMD)/square.o
+$(LIB_DIR)/$(WIN)/square.a : $(OBJ_DIR)/$(WIN)/square.o square.o | \
+	$(OBJ_DIR)/$(WIN)
+	ar -rcs $(LIB_DIR)/$(WIN)/square.a $(OBJ_DIR)/$(WIN)/square.o
 
 # Link binaries
 
-$(BIN_DIR)/$(AMD)/partA1 : $(LIB_DIR)/$(AMD)/square.a \
-	$(OBJ_DIR)/$(AMD)/partA1.o | $(BIN_DIR)/$(AMD)
-	$(CC) $(CFLAGS) $(OBJ_DIR)/$(AMD)/partA1.o $(WIN_LDFLAGS)\
-	-o $(BIN_DIR)/$(AMD)/partA1
+$(BIN_DIR)/$(WIN)/partA1 : $(LIB_DIR)/$(WIN)/square.a \
+	$(OBJ_DIR)/$(WIN)/partA1.o | $(BIN_DIR)/$(WIN)
+	$(CC) $(CFLAGS) $(OBJ_DIR)/$(WIN)/partA1.o $(WIN_LDFLAGS)\
+	-o $(BIN_DIR)/$(WIN)/partA1
 
 # Soft link to ./
 
-partA1 : $(BIN_DIR)/$(AMD)/partA1
-	ln -sf $(BIN_DIR)/$(AMD)/partA1 partA1
+partA1 : $(BIN_DIR)/$(WIN)/partA1
+	ln -sf $(BIN_DIR)/$(WIN)/partA1 partA1
 
