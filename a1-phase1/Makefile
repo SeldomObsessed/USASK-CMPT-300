@@ -24,7 +24,7 @@ LIST_OBJS = $(OBJ_DIR)/$(AMD)/list_adders.o $(OBJ_DIR)/$(AMD)/list_movers.o \
 # Dynamically select which binaries to build based on the OS
 ifeq ($(OS),Windows_NT)
 	TARGETS = partA1
-	CC = x86_64-w64-mingw32-gcc
+	CC = gcc
 else
 	ifeq ($(shell uname -s),Linux)
 		TARGETS = mytestlist
