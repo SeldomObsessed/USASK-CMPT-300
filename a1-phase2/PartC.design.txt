@@ -94,11 +94,42 @@ ListSearch -> curr will be set to the head and walked down the list. It just
 - phase2 I will create a test plan which covers many ways to break / validate
   the robustness of each function. The adders need to be implemented, but not
   the removers. I'm going to do the dynamic growth of the arrays. A counter will
-  exist which tracks how many nodes are in use, and how many have been allocated
-  which will be used in the get_node() and ListCreate() functions. When there
-  are no longer any nodes left, the expansion procedure will begin. Roughly:
+  exist which tracks how many nodes are in use, and how many have been
+  allocated. This allows for the available space to be treated as an array that
+  I can use. When there are deletions, the last item in the block of array will
+  be moved into that space so there's no gaps
 
-save ptr1 of the start of the current block given by the most recent malloc /
-realloc. realloc, and get ptr2 (the new start of this next block).
+- There are 4 main problems as far as I'm concerned
 
-case LIST: 
+1 realloc() shifts the block of memory assigned to the NODEs / LISTs (maybe, or
+  maybe not) and as such all the pointers become invalidated. Solution: they are
+  shifted by a constant value, so go through all the chains and update the
+  pointers by a constant value (new_ptr - old_ptr (could be negative))
+
+2 when halving, using realloc() the above problem occurs but there is a new
+  concern too. If half of the block of memory is going to be invalidated, no
+  NODEs or LISTs must occupy that space. What this means is that, as deletions
+  occur, the "gaps" produced in the block of memory being used must be "filled"
+  and I will do this by copying the last entry in the block (tracked by idx
+  already) into that space. If this is a NODE, the prev's next and the next's
+  prev must be updated. All LISTs must be checked for the old pointer at the
+  head, tail, or current, as that will also need updating
+
+3 a LIST, during halving (or even doubling) is another can of worms. Say I am
+  allocating from "2000", as an adress, and hand out 2000, 2001, 2002 as LIST
+  pointers. After a realloc moving everything to, say, "1000", a user would
+  come back with 2001 when they really mean the current 1001 list. We cannot
+  update the user's pointer! The only thing I can think of doing is keeping a
+  lookup table data structure (3rd malloc) that gets resized when LISTs get
+  resized. It'll store user held pointers and program actual locations
+
+4 solution 3 opens a new issue. Say a realloc now happens and sets it at "900".
+  If we create the one-hundredth list, we'll hand out 1000 AGAIN. Solution: use
+  the unused bits at the high end of the pointer since we're building on 64 bit
+  systems there's space. These are tainted pointers and shouldn't be used
+  directly, but since they are just keys to a real pointer, this is fine. If
+  there is huge reuse, say 10-20, and 10,000 lists, you can't really search
+  through all 10,000 lists, noting that 1, 2, 3, 4... are all free in turn. I
+  will say that this isn't going to happen in our case, and I will implement
+  it that way, but it would need to be made more efficient in real industry use
+
