@@ -18,9 +18,10 @@ typedef struct node {
 
 /* contains a linked list of NODEs */
 typedef struct list {
-  int count;   /* number of NODEs in the list */
-  NODE *first; /* head of the linked list */
-  NODE *last;  /* tail of the linked liste */
+  int count;     /* number of NODEs in the list */
+  NODE *current; /* the current element in the list */
+  NODE *first;   /* head of the linked list */
+  NODE *last;    /* tail of the linked liste */
 } LIST;
 
 /* user passed comparison function to search a LIST */
@@ -50,8 +51,6 @@ void *ListSearch(LIST *list, Comparator comparator, void *comparisonArg);
 void *ListRemove(LIST *list);
 void ListFree(LIST *list, ItemFreer itemFree);
 void *ListTrim(LIST *list);
-void list_free(LIST *list);
-void node_free(NODE *node);
 
 #endif
 

@@ -128,9 +128,9 @@ int main(int argc, char **argv)
   ListCurr(my_list); /* ListCurr happy path */
 
   comparator = mock_comparator;
+  /* &item is passed as the comparator, anything goes, (even NULL) */
   ListSearch(NULL, comparator, &item); /* ListSearch unhappy path (list) */
   ListSearch(my_list, NULL, &item); /* ListSearch unhappy path (comparator) */
-  ListSearch(my_list, comparator, NULL); /* ListSearch unhappy path (item) */
   ListSearch(my_list, comparator, &item); /* ListSearch happy path */
 
   return 0;

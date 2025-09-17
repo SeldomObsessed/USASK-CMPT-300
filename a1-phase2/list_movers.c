@@ -148,6 +148,8 @@ void *ListCurr(LIST *list)
  * "current" element. If no results are ever found, the "current" element is set
  * to NULL
  *
+ * comparisonArg is allowed to be NULL, in contrast to other parameters
+ *
  * returns a pointer to the "current" element at the end of the search (which
  *   will be the found item, or NULL
  * returns NULL on error
@@ -168,14 +170,12 @@ void *ListSearch(LIST *list, Comparator comparator, void *comparisonArg)
     );
     return NULL;
   }
+
+  /* Dispel compiler warning */
   if (comparisonArg == NULL)
   {
-    fprintf(
-      stderr,
-      "Error in procedure ListSearch: invalid parameter comparisonArg\n"
-    );
-    return NULL;
   }
+
   printf("Got to procedure ListSearch()\n");
   return NULL;
 }

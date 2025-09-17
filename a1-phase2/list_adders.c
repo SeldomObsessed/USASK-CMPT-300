@@ -16,7 +16,7 @@
 bool init = false; /* Will be true after the first time that ListCreate runs */
 
 /*
- * makes a new list and returns the reference to the user for later access in
+ * makes a new LIST and returns the reference to the user for later access in
  * the API
  *
  * tags the pointer for internal handling, making the pointer potentially
