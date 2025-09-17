@@ -60,8 +60,7 @@ LIST struct: count, pointer to head (first), pointer to tail (last), pointer to
 
 NODE struct: pointer to item, pointer to next, pointer to prev
 
-ListCreate -> will do the initial malloc() calls, and thereafter calls the
-  list_get() function to return to the user
+ListCreate -> will do the initial malloc() calls
 ListCount -> will access item_count
 ListFirst -> when empty curr == NULL
 ListLast -> when empty curr == NULL
@@ -132,4 +131,29 @@ ListSearch -> curr will be set to the head and walked down the list. It just
   through all 10,000 lists, noting that 1, 2, 3, 4... are all free in turn. I
   will say that this isn't going to happen in our case, and I will implement
   it that way, but it would need to be made more efficient in real industry use
+
+- I will make node_get(), node_delete(), and list_delete().
+    NOTE: Makaroff just told me he wants node_double() / node_half() instead
+
+  node_double() will be called when nodes_next_index == nodes_count (really >=
+  but the > case means things are already broken) and if so it will realloc() a
+  doubling in memory (nodes_count *= 2; malloc(nodes_count*sizeof(NODE))) and
+  then go through all nodes (via indexing) and update each pointer (+= 
+  new_block_ptr - old_block_ptr). It also needs to += head/tail/current of each
+  list. At the end it will return node_block_ptr + next_node_index++;
+
+  node_half() will be called when nodes_next_index == nodes_count / 2 (really <=
+  but the < case means things are already broken). Note! my number will start as
+  a power of 2, makeing sure that division by 2 is always an integer. This also
+  only triggers when nodes_count > MIN_NODE_COUNT. It does the opposite of the
+  above, and as such there must be no fragmentation
+
+  list_double() does not exist, but will happen in the one function that gets
+  lists. The lookup table will be doubled here too
+
+  list_delete() is not called list_double because it also updates the lookup
+  table that I'm going to be using
+
+- Sep 17 Makaroff approved during an office hour questioning that I am allowed
+  to make these three helper functions
 
