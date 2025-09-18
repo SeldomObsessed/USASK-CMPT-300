@@ -10,7 +10,7 @@
  * synchronization between processes/threads. number of threads, length of 
  * deadline, and maximum integer size are to be command-line parameters.   
  *                                                                        
- * At this point, only skeletons with no full implementation will be present.
+ * At this point, full functionality has been implemented.
  *                                                                          
  * - caller responsible for valid input, but also callee will perform input 
  *   validation.                     
@@ -67,7 +67,7 @@ int main (int argc, char *argv[])
   {                           
     if (!is_valid(argv[i]))  
     {                       
-      printf("Error in procedure main: Invalid parameter %d\n/3",i);  
+      printf("Error in procedure main: Invalid parameter %d/3\n",i);  
       return 1;            
     }                      
     else                  
