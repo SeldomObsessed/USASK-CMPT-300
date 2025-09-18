@@ -1,15 +1,15 @@
 /*
- * partA2.c
+ * partA3.c
  * Logan Fossenier & William Morris
  * hzv143 & wjm625                
  * 11343891 & 11278140           
  * CMPT332 Fall 2025            
  *
- * This file implements the main executable for partA2. This executable
+ * This file implements the main executable for partA3. This executable
  * creates multiple threads which perform the same action until a deadline, 
  * without synchronization between processes/threads. number of threads, 
  * length of deadline, and maximum integer size are to be command-line 
- * parameters. The package of threads used is UBC pthreads.
+ * parameters. The packahe of threads used is POSIX threads.
  *
  * At this point, only skeletons with no full implementation will be present.
  *
@@ -22,6 +22,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
+#include <pthreads.h>
+
 
 #define MAX_THREADS 1024
 
@@ -88,6 +90,7 @@ int main(int argc, char* argv)
   }
   
   /*Sleep for deadline*/
+  /*use of unistd.h*/
   sleep(deadline);
   
   for (i=0;i<threads;i++)
