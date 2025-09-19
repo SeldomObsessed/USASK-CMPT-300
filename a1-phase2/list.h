@@ -9,6 +9,10 @@
 #ifndef LIST_H
 #define LIST_H
 
+/* minimum list and node quantities */
+#define MIN_LISTS 2
+#define MIN_NODES 16
+
 /* represents a user's item in a LIST */
 typedef struct node {
   void *item;        /* the item, always a pointer, must be homogenous */

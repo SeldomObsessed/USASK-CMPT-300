@@ -9,24 +9,46 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <list.h>
+#include <list_mem.h>
 
+unsigned long int list_count = MIN_LISTS; /* currently allocated # LISTs */
+unsigned long int node_count = MIN_NODES; /* currently allocated # NODEs */
+unsigned long int next_list_idx = 0;      /* idx of next free LIST */
+unsigned long int next_node_idx = 0;      /* idx of next free NODE */
 
-bool init = false; /* Will be true after the first time that ListCreate runs */
+NODE *nodes;                /* array of NODEs to fill LISTs */
+LIST *lists;                /* array of LISTs to be passed out to users */
+MAP *maps;                  /* array of MAPs to be a lookup table */
+
+bool init = false;          /* whether initial mallocs have been run */
+
 
 /*
  * makes a new LIST and returns the reference to the user for later access in
  * the API
  *
  * tags the pointer for internal handling, making the pointer potentially
- * invalid when dereferenced outside of the API
+ * invalid when dereferenced outside of the API. Handles the case where the
+ * next_list_idx >= list_count and will double the amount of space
  *
  * returns a pointer to a new empty LIST
  * returns NULL on failure
  */
 LIST *ListCreate()
 {
+  if (init == false)
+  {
+    /* make the initial sized arrays */
+    nodes = malloc(node_count * sizeof(NODE));
+    lists = malloc(list_count  * sizeof(LIST));
+    maps = malloc(list_count * sizeof(MAP));
+
+    init = true;
+  }
+
   printf("Got to procedure ListCreate()\n");
   return NULL;
 }
