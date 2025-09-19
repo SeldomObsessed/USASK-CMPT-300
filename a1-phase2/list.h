@@ -11,7 +11,7 @@
 
 /* minimum list and node quantities */
 #define MIN_LISTS 2
-#define MIN_NODES 16
+#define MIN_NODES 1
 
 /* represents a user's item in a LIST */
 typedef struct node {

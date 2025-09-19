@@ -85,6 +85,12 @@ int resize_nodes(bool grow)
   /* forget about the head of the old block of NODEs */
   nodes = new_nodes;
 
+  printf(
+      "double_nodes reallocated from %lu to %lu NODEs\n",
+      grow ? node_count / 2 : node_count * 2,
+      node_count
+    );
+
   return 0;
 }
 
