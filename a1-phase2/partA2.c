@@ -11,7 +11,7 @@
  * length of deadline, and maximum integer size are to be command-line 
  * parameters. The package of threads used is UBC pthreads.
  *
- * At this point, only skeletons with no full implementation will be present.
+ * At time of submission, this code should compile and work as expected.
  *
  * - caller responsible for valid input, but also callee will perform input
  *   validation.                                                          
@@ -22,6 +22,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
+#include <standards.h>
+#include <os.h>
 
 #define MAX_THREADS 1024
 
@@ -32,7 +34,7 @@ typedef struct
   int thread_id;
   int size;
   volatile int *progress_count;
-} ThreadArg
+} ThreadArg;
 
 int main(int argc, char* argv)
 {
@@ -84,7 +86,6 @@ int main(int argc, char* argv)
     /* Record time */
     start_time[i] = clock();
     /*TODO:Create thread*/
-    
   }
   
   /*Sleep for deadline*/
@@ -106,23 +107,22 @@ int main(int argc, char* argv)
   printf("square() invoked %d times\n",square_counter);
   return 0;
   /*Great success*/
-  
 }
 
 /* Thread function */
-/* Type invoke_squre(void* param)
- * {
- *   int i
- *   printf("Got to procedure invoke_square()");
- *   ThreadArg arg = (ThreadArg*)param;
- *   for (i=0;i<arg->size;i++)
- *   {
- *     arg->progress_count[arg->thread_id]++;
- *     square(i);
- *   }
- *   free(arg);
- *   printf("Got to end of invoke_square()");
- *   return 0;
- *   Great success
- *   
- * }/
+void invoke_squre(void* param)
+{
+  int i
+  printf("Got to procedure invoke_square()");
+  ThreadArg arg = (ThreadArg*)param;
+  for (i=0;i<arg->size;i++)
+  {
+    arg->progress_count[arg->thread_id]++;
+    square(i);
+  }
+  free(arg);
+  printf("Got to end of invoke_square()");
+  return 0;
+  /* Great success */ 
+}
+
