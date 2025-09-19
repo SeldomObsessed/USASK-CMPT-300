@@ -9,9 +9,9 @@
  * creates multiple threads which perform the same action until a deadline, 
  * without synchronization between processes/threads. number of threads, 
  * length of deadline, and maximum integer size are to be command-line 
- * parameters. The packahe of threads used is POSIX threads.
+ * parameters. The package of threads used is POSIX threads.
  *
- * At this point, only skeletons with no full implementation will be present
+ * By time of submission, partA3 will be a fully implemented solution
  * - caller responsible for valid input, but also callee will perform input
  *   validation.                               
  */ 
@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
-#include <pthreads.h>
+#include <pthread.h>
 
 #define MAX_THREADS 1024
 
@@ -41,7 +41,7 @@ int main(int argc, char* argv)
   int deadline;
   int size;
   int args[3];
-  volatile int progress_count[MAX_THREADS];
+  volatile int progress_count[MAX_THREADS+1];
   clock_t start_time[MAX_THREADS];
   clock_t end_time[MAX_THREADS];
   /* POSIX thread handle array */
@@ -82,10 +82,11 @@ int main(int argc, char* argv)
  
   printf("Got to procedure Create()\n");
   /* Create Threads */
+  progress_count[MAX_THREADS] = 1;
   for (i=0;i<threads;i++)
   {
     /* initialize thread ard*/
-    ThreadArd *arg = malloc(sizeof(ThreadArg));
+    ThreadArg *arg = malloc(sizeof(ThreadArg));
     arg->size = size;
     arg->thread_id = i;
     arg->progress_count = progress_count;
@@ -93,21 +94,26 @@ int main(int argc, char* argv)
     start_time[i] = clock();
     /*TODO:Create thread*/
     pthread_t[i] = pthread_create(
+      /* handle */
       &handle[i],
+      /* attributes - generic */
       NULL,
+      /* function pointer */
       invoke_square,
+      /* Single argument */
       arg
   );
     
   }
   
-  /*Sleep for deadline*/
-  /*use of unistd.h*/
+  /* Sleep for deadline */
+  /* use of unistd.h */
   sleep(deadline);
-  
+  progress_count[MAX_THREADS] = 0;
   for (i=0;i<threads;i++)
   {    
     /* TODO: Kill children*/
+
     
     end_time[i] = clock();
   }
@@ -125,23 +131,34 @@ int main(int argc, char* argv)
 }
 
 /* Thread function */
-Type invoke_squre(void* param)
+void invoke_squre(void* param)
 {
-  /*
+  
   int i
-  */
+  
   printf("Got to procedure invoke_square()");
   ThreadArg *arg = (ThreadArg*)param;
-  /*
+  
   for (i=0;i<arg->size;i++)
   {
-    arg->progress_count[arg->thread_id]++;
-    square(i);
+    /* Thread works until the flag is set to 0 */
+    if (arg->progress_count[arg->thread+1])
+    {
+      arg->progress_count[arg->thread_id]++;
+      square(i);
+    {
+    else
+    {
+      /**/
+      free(arg);
+      printf("Thread %d ended prematurely\n",arg->thread_id);
+      pthread_exit(NULL);
+      /* success */
+    }
   }
   free(arg);
-  */
-  printf("Got to end of invoke_square()");
-  return 0;
+  
+  /* printf("Got to end of invoke_square()"); not_necessary*/
   /* Great success */
  }
 
