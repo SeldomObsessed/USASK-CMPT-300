@@ -40,6 +40,8 @@ bool init = false;          /* whether initial mallocs have been run */
  */
 LIST *ListCreate()
 {
+  LIST *new_lists; /* head of new array, on realloc */
+
   if (init == false)
   {
     /* make the initial sized arrays */
@@ -76,13 +78,37 @@ LIST *ListCreate()
       exit(1);
     }
 
+    printf(
+      "ListCreate() malloc'ed space for %lu LISTs, %lu MAPs, and %lu NODES\n",
+      list_count,
+      list_count,
+      node_count
+    );
+
     init = true;
   }
 
   /* the array needs to be doubled */
   if (next_list_idx >= list_count)
   {
-    
+    list_count *= 2;
+    new_lists = realloc(lists, list_count * sizeof(LIST));
+    if (new_lists == NULL)
+    {
+      fprintf(
+        stderr,
+        "ListCreate could not reallocate %lu LISTs\n",
+        list_count
+      );
+      /* It isn't worth aborting over a realloc failure, just try later */
+      return NULL;
+    }
+
+    printf(
+      "ListCreate() realloc'ed space from %lu to %lu LISTs\n",
+      list_count / 2,
+      list_count
+    );
   }
 
   printf("Got to procedure ListCreate()\n");
