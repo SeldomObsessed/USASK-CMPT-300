@@ -41,7 +41,7 @@ int main(int argc, char **argv)
 {
   int result, item;
   LIST *my_list, *my_list2;
-  LIST local_list, local_list2;
+  LIST local_list2;
   ItemFreer item_free;
   Comparator comparator;
 
@@ -54,7 +54,6 @@ int main(int argc, char **argv)
 
   item = 42;
   ListAdd(my_list, &item); /* ListAdd unhappy path (list) */
-  my_list = &local_list;
   ListAdd(my_list, NULL); /* ListAdd unhappy path (item) */
   result = ListAdd(my_list, &item); /* ListAdd happy path */
   if (result != 0)

@@ -216,7 +216,7 @@ LIST *ListCreate()
     /* finish the map entry and return the user_key pointer we just made */
     maps[nli].real_ptr = lists + nli;
     nli += 1;
-    return maps[nli].user_key;
+    return maps[nli - 1].user_key;
   }
 }
 
@@ -318,8 +318,8 @@ int ListAppend(LIST *list, void *item)
 
   printf("Got to procedure ListAppend()\n");
 
-  /* determine true list-> This is done first since the list may be bad, in which
-   * case we shouldn't double nodes */
+  /* determine true list-> This is done first since the list may be bad, in
+   * which case we shouldn't double nodes */
   active_list = false;
   for (i = 0; i < list_count; i++)
   {
