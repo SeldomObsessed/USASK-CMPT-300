@@ -17,8 +17,8 @@
 
 unsigned long int list_count = MIN_LISTS; /* currently allocated # LISTs */
 unsigned long int node_count = MIN_NODES; /* currently allocated # NODEs */
-unsigned long int next_list_idx = 0;      /* idx of next free LIST */
-unsigned long int next_node_idx = 0;      /* idx of next free NODE */
+unsigned long int nli = 0;      /* idx of next free LIST */
+unsigned long int nni = 0;      /* idx of next free NODE */
 
 NODE *nodes;                /* array of NODEs to fill LISTs */
 LIST *lists;                /* array of LISTs to be passed out to users */
@@ -31,13 +31,15 @@ bool init = false;          /* whether initial mallocs have been run */
  * makes a new LIST and returns the reference to the user for later access in
  * the API
  *
- * tags the pointer for internal handling, making the pointer potentially
- * invalid when dereferenced outside of the API. Handles the case where the
- * next_list_idx >= list_count and will double the amount of space. Calls
- * exit(1) if malloc fails.
+ * will initialize all initial data structures required to support the API.
+ * pointers given may be tagged, which is for internal handling, and as such
+ * the pointers given should only be used via the API. Will dynamically resize
+ * the amount of space allocated to LISTs when there are not enough of them
  *
  * returns a pointer to a new empty LIST
- * returns NULL on failure
+ * returns NULL on recoverable failure
+ * calls exit(1) if malloc fails (only risks occuring on first use)
+ * calls exit(2) on specific realloc fail
  */
 LIST *ListCreate()
 {
@@ -96,7 +98,7 @@ LIST *ListCreate()
   }
 
   /* the array needs to be doubled */
-  if (next_list_idx >= list_count)
+  if (nli >= list_count)
   {
     list_count *= 2;
     new_lists = realloc(lists, list_count * sizeof(LIST));
@@ -151,10 +153,10 @@ LIST *ListCreate()
   }
 
   /* hand back a list to the user plus get rid of garbage */
-  lists[next_list_idx].count = 0;
-  lists[next_list_idx].current = NULL;
-  lists[next_list_idx].first = NULL;
-  lists[next_list_idx].last = NULL;
+  lists[nli].count = 0;
+  lists[nli].current = NULL;
+  lists[nli].first = NULL;
+  lists[nli].last = NULL;
 
   /* tag if it is in the lookup table. This is VERY VERY slow if there is a huge
    * number of LISTs in the lookup table with the same handed out pointer. Like,
@@ -179,7 +181,7 @@ LIST *ListCreate()
        * pointer which is 48 bits on our amd64 system */
       if (
            ((uintptr_t)maps[i].user_key & TAG_MASK) ==
-           ((uintptr_t)(lists + next_list_idx) & TAG_MASK)
+           ((uintptr_t)(lists + nli) & TAG_MASK)
       )
       {
         /* shift 48 bits out of the user held pointer to look at its tag, if the
@@ -207,14 +209,14 @@ LIST *ListCreate()
     /* great, tag is now equal to the required tag (probably 0). What this code
      * does is take the REAL LIST pointer and slaps the tag in the high 16 bits
      * by shifting our tag variable 48 bits up */
-    maps[next_list_idx].user_key = (
-      (LIST *)(((uintptr_t)(lists + next_list_idx)) | ((uintptr_t)tag << 48))
+    maps[nli].user_key = (
+      (LIST *)(((uintptr_t)(lists + nli)) | ((uintptr_t)tag << 48))
     );
 
     /* finish the map entry and return the user_key pointer we just made */
-    maps[next_list_idx].real_ptr = lists + next_list_idx;
-    next_list_idx += 1;
-    return maps[next_list_idx].user_key;
+    maps[nli].real_ptr = lists + nli;
+    nli += 1;
+    return maps[nli].user_key;
   }
 }
 
@@ -245,6 +247,7 @@ int ListAdd(LIST *list, void *item)
     fprintf(stderr, "Error in procedure ListAdd: invalid parameter item\n");
     return -1;
   }
+
   printf("Got to procedure ListAdd()\n");
   return 0;
 }
@@ -285,7 +288,9 @@ int ListInsert(LIST *list, void *item)
  * adds an element to the end of the LIST and the "current" position becomes the
  * new element
  *
- * the element MUST be the same type as all the other elements in the list
+ * the element MUST be the same type as all the other elements in the LIST. Will
+ * dynamically resize the amount of space allocated to NODEs when there are not
+ * enough of them
  *
  * LIST *list: the LIST which will be added onto
  * void *item: the item to be added
@@ -295,6 +300,10 @@ int ListInsert(LIST *list, void *item)
  */
 int ListAppend(LIST *list, void *item)
 {
+  unsigned long int i;
+  int flag;
+  bool active_list;
+
   /* check that correct type and range of parameter values have been passed */
   if (list == NULL)
   {
@@ -306,7 +315,62 @@ int ListAppend(LIST *list, void *item)
     fprintf(stderr, "Error in procedure ListAppend: invalid parameter item\n");
     return -1;
   }
+
   printf("Got to procedure ListAppend()\n");
+
+  /* determine true list-> This is done first since the list may be bad, in which
+   * case we shouldn't double nodes */
+  active_list = false;
+  for (i = 0; i < list_count; i++)
+  {
+    if (maps[i].user_key == list)
+    {
+      active_list = true;
+      list = maps[i].real_ptr;
+      break;
+    }
+  }
+
+  /* the user gave a list which was freed */
+  if (!active_list)
+  {
+    fprintf(stderr, "ListAppend was given an inactive list\n");
+    return -1;
+  }
+
+  /* if the node supply has run out double it */
+  if (nni >= node_count)
+  {
+    flag = resize_nodes(true);
+    if (flag != 0)
+    {
+      fprintf(stderr, "Error in procedure ListAppend: unable to double NODE\n");
+      return -1;
+    }
+  }
+
+  /* build the node we're using */
+  nodes[nni].item = item;
+  nodes[nni].next = NULL;
+
+  /* if the LIST is empty, slap this node in */
+  if (list->count == 0)
+  {
+    list->first = nodes + nni;
+    list->last = nodes + nni;
+    nodes[nni].prev = NULL;
+  }
+  /* otherwise point the old last to the new node */
+  else
+  {
+    list->last->next = nodes + nni;
+    nodes[nni].prev = list->last;
+    list->last = nodes + nni;
+  }
+  list->current = nodes + nni;
+  list->count++;
+  nni++;
+
   return 0;
 }
 

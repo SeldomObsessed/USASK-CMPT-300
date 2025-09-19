@@ -19,7 +19,7 @@ LDFLAGS = -l:libpthreads.a
 WIN_LDFLAGS = -L$(LIB_DIR)/$(WIN) -l:square.a
 LIST_LDFLAGS = -L$(LIB_DIR)/$(AMD) -l:list.a
 LIST_OBJS = $(OBJ_DIR)/$(AMD)/list_adders.o $(OBJ_DIR)/$(AMD)/list_movers.o \
-	$(OBJ_DIR)/$(AMD)/list_removers.o
+	$(OBJ_DIR)/$(AMD)/list_removers.o $(OBJ_DIR)/$(AMD)/list_mem.o
 
 # Dynamically select which binaries to build based on the OS
 ifeq ($(OS),Windows_NT)
@@ -70,6 +70,10 @@ $(OBJ_DIR)/$(AMD)/list_movers.o : list_movers.c | $(OBJ_DIR)/$(AMD)
 $(OBJ_DIR)/$(AMD)/list_removers.o : list_removers.c | $(OBJ_DIR)/$(AMD)
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) \
 		list_removers.c -o $(OBJ_DIR)/$(AMD)/list_removers.o
+
+$(OBJ_DIR)/$(AMD)/list_mem.o : list_mem.c | $(OBJ_DIR)/$(AMD)
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) \
+		list_mem.c -o $(OBJ_DIR)/$(AMD)/list_mem.o
 
 $(OBJ_DIR)/$(AMD)/mytestlist.o : mytestlist.c | $(OBJ_DIR)/$(AMD)
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) \
