@@ -10,14 +10,107 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <list.h>
+#include <list_mem.h>
 
 extern NODE *nodes;
 extern LIST *lists;
+extern MAP  *maps;
 extern unsigned long int node_count;
+extern unsigned long int list_count;
 extern unsigned long int nli;
 extern unsigned long int nni;
+
+int delete_list(LIST *list)
+{
+  LIST *new_location;
+  long unsigned int i;
+  ptrdiff_t shift;
+
+  /* get rid of the lookup entry */
+  for (i = 0; i < nli; i++)
+  {
+    if (list == maps[i].user_key)
+    {
+      /* copy the last LIST entry to the location of the LIST to be deleted */
+      new_location = maps[i].real_ptr;
+      memmove(new_location, lists + nli - 1, sizeof(LIST));
+      /* copy the last lookup entry here */
+      memmove(maps + i, maps + nli - 1, sizeof(MAP));
+
+      /* now we need to make the lookup table we just moved point to the right
+       * LIST. We choose not to use this fact, but it just so happens that due
+       * to the implementation, the real_ptr will be at the same idx in lists as
+       * the map entry in maps. You could question the implementation and say it
+       * could JUST use that but, eh, whatever it's more extensible like this */
+      maps[i].real_ptr = lists + i;
+
+      nli--;
+    }
+  }
+
+  /* see if the allocation needs to be halved. Per design html, it says if you
+   * are using LESS than half and since nli is the NEXT ptr, this is not off by
+   * one */
+  if (nli < list_count / 2)
+  {
+    list_count /= 2;
+    new_location = realloc(lists, list_count * sizeof(LIST));
+    if (new_location == NULL)
+    {
+      list_count *= 2;
+
+      fprintf(
+        stderr,
+        "delete_list could not reallocate from %lu to %lu LISTs\n",
+        list_count,
+        list_count / 2
+      );
+      /* no program abort, just try again later */
+      return -1;
+    }
+    maps = realloc(maps, list_count * sizeof(MAP));
+    if (maps == NULL)
+    {
+      /* this is a really bad place to be. We only have list_count LISTs but
+       * list_count * 2 MAPs, which means the program will lose this memory. We
+       * could fix this with finite retying, per ListCreate's comment on the
+       * matter */
+      fprintf(
+        stderr,
+        "delete_list could not reallocate from %lu to %lu MAPs\n",
+        list_count / 2,
+        list_count
+      );
+      exit(2);
+    }
+
+    /* update all LIST pointers (inside of the lookup table) */
+    if (lists != new_location)
+    {
+      shift = new_location - lists;
+      for (i = 0; i < nli / 2; i++)
+      {
+        /* you might say "lo! it could touch garbage!" but it won't. This loop
+         * only ever triggers on a halving, and only touches in use (nli) */
+        maps[i].real_ptr += shift;
+      }
+    }
+    /* great, now forget about the old block */
+    lists = new_location;
+  }
+
+  return 0;
+}
+
+
+/* I would have really appreciated a get_node() function which performed all the
+ * copy-pasted code at the start of every adder function, then went into the
+ * logic seen below in resize_nodes. Makaroff said not to do that, so my other
+ * code is therefore less DRY */
+/* get_node() */
 
 int resize_nodes(bool grow)
 {
