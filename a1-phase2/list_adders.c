@@ -41,6 +41,8 @@ bool init = false;          /* whether initial mallocs have been run */
 LIST *ListCreate()
 {
   LIST *new_lists; /* head of new array, on realloc */
+  ptrdiff_t shift; /* block's diff in mem offset to shift old references */
+  unsigned long int i;
 
   if (init == false)
   {
@@ -95,13 +97,30 @@ LIST *ListCreate()
     new_lists = realloc(lists, list_count * sizeof(LIST));
     if (new_lists == NULL)
     {
+      list_count /= 2;
+
       fprintf(
         stderr,
         "ListCreate could not reallocate %lu LISTs\n",
         list_count
       );
-      /* It isn't worth aborting over a realloc failure, just try later */
+      /* it isn't worth aborting over a realloc failure, just try later */
       return NULL;
+    }
+    maps = realloc(maps, list_count * sizeof(MAP));
+    if (maps == NULL)
+    {
+       /* this is a really bad place to be. We have list_count LISTs but only
+        * list_count / 2 MAPs, which means the program is going to fail very
+        * shortly without any rectification taking place. I could code this, but
+        * c'mon, how often does realloc fail? I don't think we need this level
+        * of robustness, but it could be added with finite retrying */
+       fprintf(
+         stderr,
+         "ListCreate could not reallocate %lu MAPs\n",
+         list_count
+       );
+       exit(2);
     }
 
     printf(
@@ -109,7 +128,41 @@ LIST *ListCreate()
       list_count / 2,
       list_count
     );
+
+    /* update all LIST pointers (inside of the lookup table) */
+    if (lists != new_lists)
+    {
+      shift = new_lists - lists;
+      for (i = 0; i < list_count / 2; i++)
+      {
+        /* you might say "lo! it could touch garbage!" but it won't. This loop
+         * only ever triggers on a doubling, when all MAPs are in use, and after
+         * the doubling we can still go to [list_count / 2 - 1] safely */
+        maps[i].real_ptr += shift;
+      }
+    }
+    /* great, now forget about the old block */
+    lists = new_lists;
   }
+
+  /* hand back a list to the user plus get rid of garbage */
+  lists[next_list_idx].count = 0;
+  lists[next_list_idx].current = NULL;
+  lists[next_list_idx].first = NULL;
+  lists[next_list_idx].last = NULL;
+
+  /* tag if it is in the lookup table. This is VERY VERY slow if there is a huge
+   * number of LISTs in the lookup table with the same handed out pointer. Like,
+   * by comparison anyway. 20 of the same tagged original ptr and 8,0000 LISTs
+   * would lead to 160,000 steps through maps. But this is necessary, otherwise
+   * luck could have it that you hand out (LIST *)2000 multiple times and things
+   * would break. Makaroff told me to just explain that I know this could be
+   * slow if the code loses the rng gambit, but the fix would be out of the
+   * scope of this project (having excess memory on the side to go through all
+   * the MAPs and collect all tags on the root pointer at once as opposed to
+   * counting one by one, then go through that list quickly to find the 
+   * smallest tag available) */
+  
 
   printf("Got to procedure ListCreate()\n");
   return NULL;
