@@ -226,7 +226,9 @@ LIST *ListCreate()
  * "current" position becomes the new element. When "current" position is not
  * set, then this operation behaves like an append
  *
- * the element MUST be the same type as all the other elements in the list
+ * the element MUST be the same type as all the other elements in the LIST. Will
+ * dynamically resize the amount of space allocated to NODEs when there are not
+ * enough of them
  *
  * LIST *list: the LIST which will be added onto
  * void *item: the item to be added
@@ -236,6 +238,10 @@ LIST *ListCreate()
  */
 int ListAdd(LIST *list, void *item)
 {
+  unsigned long int i;
+  int flag;
+  bool active_list;
+
   /* check that correct type and range of parameter values have been passed */
   if (list == NULL)
   {
@@ -249,6 +255,71 @@ int ListAdd(LIST *list, void *item)
   }
 
   printf("Got to procedure ListAdd()\n");
+
+  /* determine true LIST * This is done first since the LIST may be bad, in
+   * which case we shouldn't double NODEs */
+  active_list = false;
+  for (i = 0; i < list_count; i++)
+  {
+    if (maps[i].user_key == list)
+    {
+      active_list = true;
+      list = maps[i].real_ptr;
+      break;
+    }
+  }
+
+  /* the user gave a LIST which was freed */
+  if (!active_list)
+  {
+    fprintf(stderr, "ListAdd was given an inactive list\n");
+    return -1;
+  }
+
+  /* if the NODE supply has run out double it */
+  if (nni >= node_count)
+  {
+    flag = resize_nodes(true);
+    if (flag != 0)
+    {
+      fprintf(stderr, "Error in procedure ListAdd: unable to double NODE\n");
+      return -1;
+    }
+  }
+
+  /* build the NODE we're using */
+  nodes[nni].item = item;
+  nodes[nni].next = NULL;
+  nodes[nni].prev = NULL;
+
+  /* when the LIST is empty, perform append */
+  if (list->count == 0)
+  {
+    list->first = nodes + nni;
+    list->last = nodes + nni;
+  }
+  /* when current is NULL, perform append */
+  else if (list->current == NULL)
+  {
+    list->last->next = nodes + nni;
+    nodes[nni].prev = list->last;
+    list->last = nodes + nni;
+  }
+  /* otherwise, put in the middle */
+  else
+  {
+    nodes[nni].prev = list->current;
+    nodes[nni].next = list->current->next;
+    if (list->current->next != NULL)
+    {
+      list->current->next->prev = nodes + nni;
+    }
+    list->current->next = nodes + nni;
+  }
+  list->current = nodes + nni;
+  list->count++;
+  nni++;
+
   return 0;
 }
 
@@ -318,7 +389,7 @@ int ListAppend(LIST *list, void *item)
 
   printf("Got to procedure ListAppend()\n");
 
-  /* determine true LIST-> This is done first since the LIST may be bad, in
+  /* determine true LIST * This is done first since the LIST may be bad, in
    * which case we shouldn't double NODEs */
   active_list = false;
   for (i = 0; i < list_count; i++)
@@ -408,7 +479,7 @@ int ListPrepend(LIST *list, void *item)
 
   printf("Got to procedure ListPrepend()\n");
 
-  /* determine true LIST -> This is done first since the LIST may be bad, in
+  /* determine true LIST * This is done first since the LIST may be bad, in
    * which case we shouldn't double NODEs */
   active_list = false;
   for (i = 0; i < list_count; i++)

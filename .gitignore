@@ -3,6 +3,7 @@ mytestlist
 testlist
 
 *.o
+*.a
 
 /build/
 
