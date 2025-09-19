@@ -32,7 +32,8 @@ bool init = false;          /* whether initial mallocs have been run */
  *
  * tags the pointer for internal handling, making the pointer potentially
  * invalid when dereferenced outside of the API. Handles the case where the
- * next_list_idx >= list_count and will double the amount of space
+ * next_list_idx >= list_count and will double the amount of space. Calls
+ * exit(1) if malloc fails.
  *
  * returns a pointer to a new empty LIST
  * returns NULL on failure
@@ -43,10 +44,45 @@ LIST *ListCreate()
   {
     /* make the initial sized arrays */
     nodes = malloc(node_count * sizeof(NODE));
+    if (nodes == NULL)
+    {
+      fprintf(
+        stderr,
+        "ListCreate could not allocate %lu NODEs\n",
+        node_count
+      );
+      exit(1);
+    }
+
     lists = malloc(list_count  * sizeof(LIST));
+    if (lists == NULL)
+    {
+      fprintf(
+        stderr,
+        "ListCreate could not allocate %lu LISTs\n",
+        list_count
+      );
+      exit(1);
+    }
+
     maps = malloc(list_count * sizeof(MAP));
+    if (maps == NULL)
+    {
+      fprintf(
+        stderr,
+        "ListCreate could not allocate %lu MAPs\n",
+        list_count
+      );
+      exit(1);
+    }
 
     init = true;
+  }
+
+  /* the array needs to be doubled */
+  if (next_list_idx >= list_count)
+  {
+    
   }
 
   printf("Got to procedure ListCreate()\n");
