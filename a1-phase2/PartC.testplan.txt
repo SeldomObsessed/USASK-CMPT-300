@@ -127,3 +127,21 @@ ListFree()
 - test list arg with 3 nodes and curr==last
 - test a ListFree()'d list to see what happens with an invalid list
 
+ListTrim()
+- test NULL list arg
+- test list arg with no nodes
+- test list arg with one node
+- test list arg with 3 nodes and curr==first
+- test a ListFree()'d list to see what happens with an invalid list
+
+ListSearch()
+- test NULL list arg
+- test NULL comparator arg
+- test NULL comparisonArg arg
+- test a list arg with no nodes
+- test a list arg with one node which is a match
+- test a list arg with one node which is not a match
+- test a list arg with 3 nodes where curr==2nd_node and first matches
+- test a list arg with 3 nodes where curr==first and there are no matches
+- test a ListFree()'d list to see what happens with an invalid list
+
