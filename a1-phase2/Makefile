@@ -99,6 +99,15 @@ mytestlist: $(BIN_DIR)/$(AMD)/mytestlist
 $(OBJ_DIR)/$(WIN)/partA1.o : partA1.c | $(OBJ_DIR)/$(WIN)
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) partA1.c -o $(OBJ_DIR)/$(WIN)/partA1.o
 
+$(OBJ_DIR)/$(AMD)/partA2.o : partA2.c | $(OBJ_DIR)/$(AMD)
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) partA2.c -o $(OBJ_DIR)/$(WIN)/partA2.o
+
+$(OBJ_DIR)/$(AMD)/partA3.o : partA3.c | $(OBJ_DIR)/$(AMD)
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) partA3.c -o $(OBJ_DIR)/$(WIN)/partA3.o
+
+$(OBJ_DIR)/$(AMD)/partA4.o : partA4.c | $(OBJ_DIR)/$(AMD)
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) partA4.c -o $(OBJ_DIR)/$(WIN)/partA4.o
+
 $(OBJ_DIR)/$(WIN)/square.o : square.c | $(OBJ_DIR)/$(WIN)
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) square.c -o $(OBJ_DIR)/$(WIN)/square.o
 
@@ -115,8 +124,33 @@ partA1 : $(LIB_DIR)/$(WIN)/square.a \
 	$(CC) $(CFLAGS) $(OBJ_DIR)/$(WIN)/partA1.o $(WIN_LDFLAGS) \
 	-o partA1
 
+partA2 : $(LIB_DIR)/$(WIN)/square.a \
+	$(OBJ_DIR)/$(AMD)/partA2.o | $(BIN_DIR)/$(AMD)
+	$(CC) $(CFLAGS) $(OBJ_DIR)/$(AMD)/partA2.o $(AMD_LDFLAGS) \
+	-o $(BIN_DIR)/$(AMD)/partA2
+
+partA3 : $(LIB_DIR)/$(WIN)/square.a \
+	$(OBJ_DIR)/$(AMD)/partA3.o | $(BIN_DIR)/$(AMD)
+	$(CC) $(CFLAGS) $(OBJ_DIR)/$(AMD)/partA3.o $(AMD_LDFLAGS) \
+	-o $(BIN_DIR)/$(AMD)/partA3
+
+partA4 : $(LIB_DIR)/$(WIN)/square.a \
+	$(OBJ_DIR)/$(AMD)/partA4.o | $(BIN_DIR)/$(AMD)
+	$(CC) $(CFLAGS) $(OBJ_DIR)/$(AMD)/partA4.o $(AMD_LDFLAGS) \
+	-o $(BIN_DIR)/$(AMD)/partA4
+
 # Soft link to ./
 
 #partA1 : $(BIN_DIR)/$(WIN)/partA1
 #	ln -sf $(BIN_DIR)/$(WIN)/partA1 partA1
+# commented out because windows doesn't like sf links
+
+partA2 : $(BIN_DIR)/$(AMD)/partA2
+	ln -sf $(BIN_DIR)/$(AMD)/partA2 partA2
+
+partA3 : $(BIN_DIR)/$(AMD)/partA3
+	ln -sf $(BIN_DIR)/$(AMD)/partA3 partA3
+
+partA4 : $(BIN_DIR)/$(AMD)/partA4
+	ln -sf $(BIN_DIR)/$(AMD)/partA4 partA4
 
