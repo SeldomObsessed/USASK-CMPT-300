@@ -15,6 +15,8 @@
 #ifndef LIST_INTERNAL_H
 #define LIST_INTERNAL_H
 
+#define TAG_MASK 0x0000FFFFFFFFFFFFUL /* this sets high 16 bits to 0 on & */
+
 typedef struct map {
   LIST *user_key; /* what the program handed out, and what the user will use */
   LIST *real_ptr; /* where this list is in memory */

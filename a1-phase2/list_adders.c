@@ -8,6 +8,7 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -42,7 +43,11 @@ LIST *ListCreate()
 {
   LIST *new_lists; /* head of new array, on realloc */
   ptrdiff_t shift; /* block's diff in mem offset to shift old references */
+  u_int16_t tag;    /* 16 bit tag for distinguishing duplicate LIST pointers */
+  bool new_tag;
   unsigned long int i;
+
+  printf("Got to procedure ListCreate()\n");
 
   if (init == false)
   {
@@ -162,10 +167,55 @@ LIST *ListCreate()
    * the MAPs and collect all tags on the root pointer at once as opposed to
    * counting one by one, then go through that list quickly to find the 
    * smallest tag available) */
-  
+  tag = 0;
+  new_tag = false;
+  while (true)
+  {
+    new_tag = true; /* assume we can stop here and tag, until proven wrong */
+    for (i = 0; i < list_count ; i++)
+    {
+      /* huzzah! we were about to hand out this existing user held pointer. As
+       * a note, the TAG_MASK just sets the high 16 bits to zero, leaving the
+       * pointer which is 48 bits on our amd64 system */
+      if (
+           ((uintptr_t)maps[i].user_key & TAG_MASK) ==
+           ((uintptr_t)(lists + next_list_idx) & TAG_MASK)
+      )
+      {
+        /* shift 48 bits out of the user held pointer to look at its tag, if the
+         * tag there is equal to our current increment of tag, we'll have to
+         * loop through again. THIS is the slow part, like if the next free tag
+         * for a given pointer is 20, here's where it will loop through a stupid
+         * amount of times, but realistically this tag shouldn't ever get too
+         * high */
+        if ((uint16_t)((uintptr_t)maps[i].user_key >> 48) == tag)
+        {
+          /* sidenote, this will fail if there is ever 2^16 duplicates... but I
+           * think that's an acceptably unreasonable situation to not deal with
+           * it */
+          tag += 1;
+          new_tag = false;
+          break;
+        }
+      }
+    }
+    if (!new_tag)
+    {
+      continue;
+    }
 
-  printf("Got to procedure ListCreate()\n");
-  return NULL;
+    /* great, tag is now equal to the required tag (probably 0). What this code
+     * does is take the REAL LIST pointer and slaps the tag in the high 16 bits
+     * by shifting our tag variable 48 bits up */
+    maps[next_list_idx].user_key = (
+      (LIST *)(((uintptr_t)(lists + next_list_idx)) | ((uintptr_t)tag << 48))
+    );
+
+    /* finish the map entry and return the user_key pointer we just made */
+    maps[next_list_idx].real_ptr = lists + next_list_idx;
+    next_list_idx += 1;
+    return maps[next_list_idx].user_key;
+  }
 }
 
 
