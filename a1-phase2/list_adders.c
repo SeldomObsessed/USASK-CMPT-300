@@ -622,6 +622,9 @@ int ListPrepend(LIST *list, void *item)
  */
 int ListConcat(LIST *list1, LIST *list2)
 {
+  unsigned long int i;
+  int flag, active_list;
+
   /* check that correct type and range of parameter values have been passed */
   if (list1 == NULL)
   {
@@ -641,7 +644,51 @@ int ListConcat(LIST *list1, LIST *list2)
     );
     return -1;
   }
+
   printf("Got to procedure ListConcat()\n");
+
+  /* determine true LIST * This is done first since the LIST may be bad, in
+   * which case we shouldn't continue */
+  active_list = 0;
+  for (i = 0; i < list_count; i++)
+  {
+    if (maps[i].user_key == list1)
+    {
+      active_list++;
+      list1 = maps[i].real_ptr;
+    }
+    else if (maps[i].user_key == list2)
+    {
+      active_list++;
+      list2 = maps[i].real_ptr;
+    }
+    /* the search is complete, both lists were found, skip further comparison */
+    if (active_list == 2)
+    {
+      continue;
+    }
+  }
+
+  /* the user gave a LIST which was freed */
+  if (active_list != 2)
+  {
+    fprintf(stderr, "ListConcat was given at least one inactive list\n");
+    return -1;
+  }
+
+  /* perform concatenation */
+  list1->last->next = list2->first;
+  list1->last = list2->last;
+
+  /* "free" list2 (scrub lookup table entry, maybe half memory) */
+  flag = delete_list(list2);
+  if (flag != 0)
+  {
+    /* this is actually okay, we have more memory than needed, but it will be
+     * cleaned up (or at least an attempt will be made) next time delete_list
+     * is called */
+  }
+
   return 0;
 }
 

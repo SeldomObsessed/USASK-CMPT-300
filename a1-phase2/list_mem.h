@@ -20,6 +20,7 @@ typedef struct map {
   LIST *real_ptr; /* where this list is in memory */
 } MAP;
 
+int delete_list(LIST *list);
 int resize_nodes(bool grow);
 
 #endif
