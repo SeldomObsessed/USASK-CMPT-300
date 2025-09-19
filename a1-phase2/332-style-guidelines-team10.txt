@@ -1,0 +1,199 @@
+Logan Fossenier & William Morris
+hzv143 & wjm625
+11343891 & 11278140
+
+***** File Team Names *****
+.txt (or other plaintext files)
+
+filename.txt
+Logan Fossenier & William Morris
+hzv143 & wjm625
+11343891 & 11278140
+CMPT332 Fall 2025
+
+.c / .h
+/*
+ * filename.(c/h)
+ * Logan Fossenier & William Morris
+ * hzv143 & wjm625
+ * 11343891 & 11278140
+ * CMPT332 Fall 2025
+ */
+
+.bash
+#!/bin/bash
+# filename.bash
+# Logan Fossenier & William Morris
+# hzv143 & wjm625
+# 11343891 & 11278140
+# CMPT332 Fall 2025
+
+Makefile
+# Makefile
+# Logan Fossenier & William Morris
+# hzv143 & wjm625
+# 11343891 & 11278140
+# CMPT332 Fall 2025
+
+
+***** Braces and Indentation *****
+
+Allman style eg.
+if (x) 
+{
+  ...
+}
+
+
+  Indentation style: 2 spaces
+
+
+Continued lines will be aligned and indented...:
+
+int do_something_with_data(
+  int first_arg,
+  int second_arg,
+  int third_arg,
+  int fourth_arg);
+
+They may also have longer lines before being continued, lines also need to
+be split at sensible places (i.e. operators) :
+
+if (very_long_expression && another_long_expression &&
+  yet_another_long_expression && final_expression)
+{
+  ...
+}
+
+
+***** Naming Conventions *****
+
+  Variable and functions: snake_case
+
+  Constants/macros: SCREAMING_SNAKE_CASE
+
+  Structs, enums: snake_case
+
+  Typedefs: CamelCase
+
+  Filenames: lowercase-separated-by-dashes.txt (or whatever Makaroff seems to
+             specify)
+
+  Header guards: SCREAMING_SNAKE_CASE_H
+
+***** Commenting Style *****
+
+  Block / inline comments: /* .... */            
+
+  Header comments: Follow "File Team Names" conventions, below "CMPT 332 Fall
+                   2025" an optional description and notes may be added. The
+                   description is all lowercase unless multiple sentences long
+                   and the notes start with "-". e.g.
+
+/*
+ * complexComp.c
+ * Logan Fossenier & William Morris
+ * hzv143 & wjm625
+ * 11343891 & 11278140
+ * CMPT332 Fall 2025
+ *
+ * this file implements functions for handling complex numbers, including
+ * addition, subtraction, multiplication, and division
+ *
+ * - uses double precision for calculations
+ * - error checking is minimal; caller is responsible for input validation.
+ */
+
+
+  Function comments: Will optionally contain a description of purpose,
+                     explanation of functionality, description of params, and
+                     description of returns. e.g.
+
+/*
+ * compares two complex numbers to determine which is larger
+ *
+ * only accepts strings with the real and imaginary components being written
+ * as two space separated doubles
+ *
+ * void *first: a string of the first number to be compared
+ * void *second: a string of the second number to be compared
+ *
+ * returns -1 if first < second
+ * returns 1 if first > second
+ * returns 0 if first == second
+ */
+
+***** Code Layout *****
+
+  File ending: all files will end with exactly one newline (except test inputs)
+
+  Line length: 80 Character limit *for all filetypes*
+
+  Blank Lines: Blank lines are not required after variable declarations, but two
+               between function definitions
+
+  Grouping: C .h #includes first, custom .h #includes second, globals, main()
+            when present, other functions. ORDER INCLUDES alphabetically. No ""
+            includes.
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <mymodule.h>
+
+/* Global variables */a
+#define MAGIC_NUMBER 42
+
+static int counter = 0;
+
+/* Function definitions */
+int main(void)
+{
+  return 0;
+}
+
+void do_something(void)
+{
+  counter += MAGIC_NUMBER;
+  helper();
+}
+
+static void helper(void)
+{
+  printf("Helper called!\n");
+}
+
+***** Error Handling *****
+
+  Return codes: standard approach e.g. 0 = success, nonzero = error
+  
+  Assertions: Assertions will only be used in test files, not the actual program
+
+assert(ptr != NULL); /* We promised this function never gets NULL */
+        
+  Errors: Potential runtime errors must be handled with error messages and
+          proper return codes. We will always use fprintf e.g.
+
+variable = malloc(sizeof(structure));
+if (variable == NULL)
+{
+  fprintf(stderr, "Error: malloc failed\n);
+  return -1;        
+}
+
+***** Preprocessor Directives *****
+
+  Include guards: #ifndef FILE_H #endif
+
+**** Team Agreements ****
+
+  Commit messages: 50 char max
+  Commit bodies: 70 char max per line
+
+  Responsibility of style: Both partners should follow the same style.
+
+  Merging of code: If one person commits in a different style, the other can
+                   reformat.
+
+  Tooling: Manual formatting should suffice.
+
