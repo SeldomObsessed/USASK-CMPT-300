@@ -8,18 +8,16 @@ CC = gcc
 CFLAGS = -g -O0
 CPPFLAGS = -std=gnu90 -Wall -Werror -Wextra -Wsign-conversion -pedantic \
 	-I/student/cmpt332/pthreads -I.
-OS = $(shell uname -s)
 AMD = Linux-x86_64
 WIN = Windows-x86_64
 OBJ_DIR = ./build/obj
 LIB_DIR = ./build/lib
 BIN_DIR = ./build/bin
-UBC_DIR = /student/cmpt332/pthreads
+UBC_DIR = /student/cmpt332/pthreads/lib/Linuxx86_64
 
 
-LDFLAGS = -l:libpthreads.a
 WIN_LDFLAGS = -L$(LIB_DIR)/$(WIN) -l:square.a
-UBC_LDFLAGS = -L$(UBC_DIR)/lib/
+UBC_LDFLAGS = -L$(UBC_DIR) -l:libpthreads.a
 LIST_LDFLAGS = -L$(LIB_DIR)/$(AMD) -l:list.a
 LIST_OBJS = $(OBJ_DIR)/$(AMD)/list_adders.o $(OBJ_DIR)/$(AMD)/list_movers.o \
 	$(OBJ_DIR)/$(AMD)/list_removers.o $(OBJ_DIR)/$(AMD)/list_mem.o
@@ -27,10 +25,8 @@ LIST_OBJS = $(OBJ_DIR)/$(AMD)/list_adders.o $(OBJ_DIR)/$(AMD)/list_movers.o \
 # Dynamically select which binaries to build based on the OS
 ifeq ($(OS),Windows_NT)
 	TARGETS = partA1
-else
-	ifeq ($(shell uname -s),Linux)
+else ifeq ($(shell uname -s),Linux)
 		TARGETS = mytestlist
-	endif
 endif
 
 .PHONY : all clean
@@ -94,7 +90,7 @@ $(BIN_DIR)/$(AMD)/mytestlist: $(LIB_DIR)/$(AMD)/list.a \
 mytestlist: $(BIN_DIR)/$(AMD)/mytestlist
 	ln -sf $(BIN_DIR)/$(AMD)/mytestlist mytestlist
 
-# Make PartA file(s)
+# Make PartA files
 
 # Objects
 
@@ -126,19 +122,19 @@ partA1 : $(LIB_DIR)/$(WIN)/square.a \
 	$(CC) $(CFLAGS) $(OBJ_DIR)/$(WIN)/partA1.o $(WIN_LDFLAGS) \
 	-o partA1
 
-partA2 : $(LIB_DIR)/$(WIN)/square.a \
+partA2 : $(LIB_DIR)/$(WIN)/square.a $(UBC_DIR)/libpthreads.a \
 	$(OBJ_DIR)/$(AMD)/partA2.o | $(BIN_DIR)/$(AMD)
-	$(CC) $(CFLAGS) $(OBJ_DIR)/$(AMD)/partA2.o $(AMD_LDFLAGS) \
+	$(CC) $(CFLAGS) $(OBJ_DIR)/$(AMD)/partA2.o $(UBC_LDFLAGS) $(WIN_LDFLAGS) \
 	-o $(BIN_DIR)/$(AMD)/partA2
 
 partA3 : $(LIB_DIR)/$(WIN)/square.a \
 	$(OBJ_DIR)/$(AMD)/partA3.o | $(BIN_DIR)/$(AMD)
-	$(CC) $(CFLAGS) $(OBJ_DIR)/$(AMD)/partA3.o $(AMD_LDFLAGS) \
+	$(CC) $(CFLAGS) $(OBJ_DIR)/$(AMD)/partA3.o $(WIN_LDFLAGS) -lpthread \
 	-o $(BIN_DIR)/$(AMD)/partA3
 
 partA4 : $(LIB_DIR)/$(WIN)/square.a \
 	$(OBJ_DIR)/$(AMD)/partA4.o | $(BIN_DIR)/$(AMD)
-	$(CC) $(CFLAGS) $(OBJ_DIR)/$(AMD)/partA4.o $(AMD_LDFLAGS) \
+	$(CC) $(CFLAGS) $(OBJ_DIR)/$(AMD)/partA4.o $(WIN_LDFLAGS) \
 	-o $(BIN_DIR)/$(AMD)/partA4
 
 # Soft link to ./
