@@ -8,15 +8,18 @@ CC = gcc
 CFLAGS = -g -O0
 CPPFLAGS = -std=gnu90 -Wall -Werror -Wextra -Wsign-conversion -pedantic \
 	-I/student/cmpt332/pthreads -I.
-
+OS = $(shell uname -s)
 AMD = Linux-x86_64
 WIN = Windows-x86_64
 OBJ_DIR = ./build/obj
 LIB_DIR = ./build/lib
 BIN_DIR = ./build/bin
+UBC_DIR = /student/cmpt332/pthreads
+
 
 LDFLAGS = -l:libpthreads.a
 WIN_LDFLAGS = -L$(LIB_DIR)/$(WIN) -l:square.a
+UBC_LDFLAGS = -L$(UBC_DIR)/lib/
 LIST_LDFLAGS = -L$(LIB_DIR)/$(AMD) -l:list.a
 LIST_OBJS = $(OBJ_DIR)/$(AMD)/list_adders.o $(OBJ_DIR)/$(AMD)/list_movers.o \
 	$(OBJ_DIR)/$(AMD)/list_removers.o $(OBJ_DIR)/$(AMD)/list_mem.o
@@ -24,7 +27,6 @@ LIST_OBJS = $(OBJ_DIR)/$(AMD)/list_adders.o $(OBJ_DIR)/$(AMD)/list_movers.o \
 # Dynamically select which binaries to build based on the OS
 ifeq ($(OS),Windows_NT)
 	TARGETS = partA1
-	CC = gcc
 else
 	ifeq ($(shell uname -s),Linux)
 		TARGETS = mytestlist
