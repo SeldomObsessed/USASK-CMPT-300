@@ -23,6 +23,18 @@ extern unsigned long int list_count;
 extern unsigned long int nli;
 extern unsigned long int nni;
 
+
+/*
+ * takes a LIST and returns it to the supply of free LISTs. The LIST will no
+ * longer be able to be used in the API
+ *
+ * will dynamically resize the amount of space allocated to LISTs when there are
+ * too many of them
+ *
+ * returns 0 on success
+ * returns -1 on failure
+ * calls exit(2) on specific realloc fail
+ */
 int delete_list(LIST *list)
 {
   LIST *new_location;
@@ -112,6 +124,14 @@ int delete_list(LIST *list)
  * code is therefore less DRY */
 /* get_node() */
 
+
+/*
+ * will double or halve the supply of NODEs.
+ *
+ * returns 0 on success
+ * returns -1 on failure
+ * calls exit(2) on specific realloc fail
+ */
 int resize_nodes(bool grow)
 {
   NODE *new_nodes; /* head of new array, on realloc */

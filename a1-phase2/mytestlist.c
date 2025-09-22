@@ -39,6 +39,9 @@ void mock_itemFreer(void *item)
 
 int main(int argc, char **argv)
 {
+  LIST *list1, *list2;
+  int item1, item2, item3;
+
   int result, item;
   LIST *my_list, *my_list2;
   LIST local_list2;
@@ -50,16 +53,37 @@ int main(int argc, char **argv)
   argv[0][0] = 'a';
 
   /* list_adders.c tests */
-  my_list  = ListCreate(); /* ListCreate happy path */
+  list1 = ListCreate(); /* ListCreate happy path */
+  list2 = ListCreate();
 
-  item = 42;
-  ListAdd(my_list, &item); /* ListAdd unhappy path (list) */
-  ListAdd(my_list, NULL); /* ListAdd unhappy path (item) */
-  result = ListAdd(my_list, &item); /* ListAdd happy path */
+  ListAdd(NULL, &item); /* 1 ListAdd unhappy path (list) */
+  ListAdd(list1, NULL); /* 2 ListAdd unhappy path (item) */
+  result = 0;
+  item1 = 42;
+  item2 = 777;
+  item3 = 1;
+
+  result += ListAdd(list1, &item1); /* 3 ListAdd happy path */
+  result += ListAdd(list1, &item1); /* 4 ListAdd happy path */
+  list1->current = list1->first; /* (relatively) safe to -> at low counts */
+  result += ListAdd(list1, &item2); /* 5 ListAdd happy path */
+  if (
+    list1->current->item != &item2 ||
+    list1->current->prev->item != &item1
+  )
+  {
+    result += 1;
+  }
+  
+
   if (result != 0)
   {
     fprintf(stderr, "Error in procedure ListAdd, non-zero return");
   }
+  
+
+  my_list = ListCreate();
+  ListAdd(list2, &item3);
 
   ListInsert(NULL, &item); /* ListInsert unhappy path (list) */
   ListInsert(my_list, NULL); /* ListInsert unhappy path (item) */
@@ -94,6 +118,10 @@ int main(int argc, char **argv)
   {
     fprintf(stderr, "Error in procedure ListConcat, non-zero return");
   }
+
+
+  my_list = ListCreate();
+  item = 42;
 
   /* list_removers.c tests */
   ListRemove(NULL); /* ListRemove unhappy path (list) */

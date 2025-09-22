@@ -65,14 +65,14 @@ ListCurr()
 - test a ListFree()'d list to see what happens with an invalid list
 
 ListAdd()
-- test NULL list arg
-- test NULL item arg
-- test list arg with no nodes
-- test list arg with one node
-- test list arg with two nodes, and curr==first
-- test list arg with two nodes, and curr==last
-- test list arg with two nodes, and curr==NULL
-- test a ListFree()'d list to see what happens with an invalid list
+1 test NULL list arg
+2 test NULL item arg
+3 test list arg with no nodes
+4 test list arg with one node
+5 test list arg with two nodes, and curr==first
+6 test list arg with two nodes, and curr==last
+7 test list arg with two nodes, and curr==NULL
+8 test a ListFree()'d list to see what happens with an invalid list
 
 ListInsert()
 - test NULL list arg
