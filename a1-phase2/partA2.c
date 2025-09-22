@@ -27,7 +27,7 @@
 
 #define MAX_THREADS 1024
 
-void invoke_square(int size);
+void invoke_square(void *param);
 
 typedef struct
 {
@@ -40,7 +40,7 @@ typedef struct
   clock_t *end_time;
 } ThreadArg;
 
-int main(int argc, char* argv)
+int main(int argc, char* argv[])
 {
   int i;
   int threads;
@@ -48,6 +48,7 @@ int main(int argc, char* argv)
   int size;
   int args[3];
   double cpu_time;
+  ThreadArg arg[MAX_THREADS];
   volatile int square_count[MAX_THREADS];
   volatile int progress_count[MAX_THREADS];
   clock_t start_time[MAX_THREADS];
@@ -90,30 +91,26 @@ int main(int argc, char* argv)
   /* Create Threads */
   for (i=0;i<threads;i++)
   {
+    arg[i].size=size;
+    arg[i].thread_id=i;
+    arg[i].progress_count=progress_count;
+    arg[i].start_time=start_time;
+    arg[i].end_time=end_time;
+    arg[i].square_count=square_count;
     /* Record time */
     start_time[i] = clock();
-    /*TODO:Create thread*/
-    ThreadArg arg = malloc(sizeof(ThreadArg));
-    arg->size=size;
-    arg->thread_id=i;
-    arg->progress_count=progress_count;
-    arg->start_time=start_time;
-    arg->end_time=end_time;
-    arg->square_count=square_count;
+    /* Create Thread */
     handle[i] = Create(
       invoke_square,
       16000,
-      "child"
-      arg,
+      "child",
+      (void *)&arg[i],
       NORM,
       USR
     );
-    
-
   }
-  
   /*Sleep for deadline*/
-  sleep(deadline);
+  sleep((unsigned int)deadline);
   
   for (i=0;i<threads;i++)
   {    
@@ -130,33 +127,34 @@ int main(int argc, char* argv)
       cpu_time = ((double)(end_time[i]-start_time[i]))/CLOCKS_PER_SEC;
       printf("Thread %d progress: %d/%d\n",i,progress_count[i],size);
       printf("Thread executed for %f seconds \n",cpu_time);
+      printf("Thread %d invoked square() %d times\n",i,square_count[i]);
     }
-  printf("square() invoked %d times\n",square_counter);
+  }
+  printf("square() invoked %d times in total\n",square_counter);
   return 0;
   /*Great success*/
 }
 
 /* Thread function */
-void invoke_squre(void* param)
+void invoke_square(void *param)
 {
-  int i
+  int i;
   int cpu_time;
+  ThreadArg *arg = (ThreadArg*)param;
+  int id = arg->thread_id;
   printf("Got to procedure invoke_square()");
-  ThreadArg arg = (ThreadArg*)param;
   for (i=0;i<arg->size;i++)
   {
     square_counter++;
     arg->square_count[i]++;
-    arg->progress_count[arg->thread_id]++;
+    arg->progress_count[id]++;
     square(i);
   }
-  free(arg);
-  printf("Thread %d finished exection\n");
-  cpu_time=((double)(arg->end_time[thread_id]-arg->start_time[thread_id]))
+  printf("Thread %d finished exection\n",id);
+  cpu_time=((double)(arg->end_time[id]-arg->start_time[id]))
            /CLOCKS_PER_SEC;
-  printf("Thread %d progress: %d/%d\n",thread_id,size,size);
-  printf("Thread executed for %f seconds \n",cpu_time); 
-  return 0;
+  printf("Thread %d progress: %d/%d\n",id,arg->size,arg->size);
+  printf("Thread executed for %d seconds \n",cpu_time); 
   /* Great success */
 }
 
