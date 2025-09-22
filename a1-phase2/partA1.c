@@ -65,7 +65,7 @@ int main (int argc, char *argv[])
   /* Convert args to integers */
   for (i=1; i<argc; i++)       
   {                           
-    if (!is_valid(argv[i]))  
+    if (!is_valid((argv[i]))  
     {                       
       printf("Error in procedure main: Invalid parameter %d/3\n",i);  
       return 1;            
