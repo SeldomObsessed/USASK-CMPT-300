@@ -650,7 +650,7 @@ int ListConcat(LIST *list1, LIST *list2)
   /* determine true LIST * This is done first since the LIST may be bad, in
    * which case we shouldn't continue */
   active_list = 0;
-  for (i = 0; i < list_count; i++)
+  for (i = 0; i < nli; i++)
   {
     if (maps[i].user_key == list1)
     {
