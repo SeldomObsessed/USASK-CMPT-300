@@ -81,6 +81,7 @@ void *ListRemove(LIST *list)
   /* access and "cover up" the current node */
   memmove(list->current, nodes + nni - 1, sizeof(NODE));
   nni--;
+  list->count--;
 
   /* update all references to the moved [nni - 1] NODE */
   if (list->current->next != NULL)
@@ -158,6 +159,7 @@ void *ListRemove(LIST *list)
   /* forget old block */
   nodes = tmp_node;
 
+  /* update item count */
   return item;
 }
 
@@ -307,13 +309,128 @@ void ListFree(LIST *list, ItemFreer itemFree)
  */
 void *ListTrim(LIST *list)
 {
+  void *item;
+  unsigned long int i;
+  NODE *tmp_node;
+  ptrdiff_t shift;
+
   /* check that correct type and range of parameter values have been passed */
   if (list == NULL)
   {
     fprintf(stderr, "Error in procedure ListTrim: invalid parameter list\n");
     return NULL;
   }
+
   printf("Got to procedure ListTrim()\n");
+
+  /* access true LIST *ptr */
+  for (i = 0; i < nli; i++)
+  {
+    if (list == maps[i].user_key)
+    {
+      list = maps[i].real_ptr;
+      break;
+    }
+  }
+
+  /* no removal occurs if there is no last NODE */
+  if (list->last == NULL)
+  {
+     return NULL;
+  }
+
+  /* update the NODE next to last */
+  if (list->last->prev != NULL)
+  {
+    list->last->prev->next = NULL;
+  }
+
+  /* the new last NODE */
+  tmp_node = list->last->prev;
+  item = list->last->item;
+
+  /* access and "cover up" the last NODE */
+  memmove(list->last, nodes + nni - 1, sizeof(NODE));
+  nni--;
+  list->count--;
+
+  /* update all references to the moved [nni - 1] NODE */
+  if (list->last->next != NULL)
+  {
+    list->last->next->prev = list->last;
+  }
+  if (list->last->prev != NULL)
+  {
+    list->last->prev->next = list->last;
+  }
+  /* check in LISTs too */
+  for (i = 0; i < nli; i++)
+  {
+    if (lists[i].first == nodes + nni)
+    {
+      lists[i].first = list->last;
+    }
+    if (lists[i].last == nodes + nni)
+    {
+      lists[i].last = list->last;
+    }
+    if (lists[i].current == nodes + nni)
+    {
+      lists[i].current = list->last;
+    }
+  }
+
+  /* update LIST last */
+  list->last = tmp_node;
+
+
+  /* check if the NODEs need to be shrunk. Per design html, it says if you
+   * using LESS than half and since nli is the NEXT ptr, this is not off by one 
+   */
+  if (nni < node_count / 2)
+  {
+    node_count /= 2;
+    tmp_node = realloc(nodes, node_count * sizeof(NODE));
+    if (tmp_node == NULL)
+    {
+      node_count *= 2;
+
+      fprintf(
+        stderr,
+        "List_Remove could not reallocate from %lu to %lu NODEs\n",
+        node_count,
+        node_count / 2
+      );
+      /* no program abort, just try again later */
+      return item;
+    }
+
+    /* update all NODE pointers*/
+    if (nodes != tmp_node)
+    {
+      shift = tmp_node - nodes;
+      /* from NODE to NODE */
+      for (i = 0; i < nni; i++)
+      {
+        /* this might look sketchy, updating random garbage values, but due
+         * to the fact that < nni is used, only active NODEs are touched */
+        tmp_node[i].prev += tmp_node[i].prev == NULL ? 0 : shift;
+        tmp_node[i].next += tmp_node[i].next == NULL ? 0 : shift;
+      }
+      /* from LIST to NODE */
+      for (i = 0; i < nli; i++)
+      {
+        /* same as above, not touching garbage */
+        lists[i].first += lists[i].first == NULL ? 0 : shift;
+        lists[i].last += lists[i].last == NULL ? 0 : shift;
+        lists[i].current += lists[i].current == NULL ? 0 : shift;
+      }
+    }
+  }
+
+  /* forget old block */
+  nodes = tmp_node;
+
   return NULL;
 }
 
