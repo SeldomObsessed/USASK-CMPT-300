@@ -6,10 +6,17 @@
  * CMPT332 Fall 2025
  */
 
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
 
 #include <list.h>
+#include <list_mem.h>
+
+extern NODE *nodes;
+extern MAP *maps;
+extern unsigned long int nli;
+extern unsigned long int nni;
 
 
 /*
@@ -20,14 +27,28 @@
  */
 int ListCount(LIST *list)
 {
+  unsigned long int i;
+
   /* check that correct type and range of parameter values have been passed */
   if (list == NULL)
   {
     fprintf(stderr, "Error in procedure ListCount: invalid parameter list\n");
     return -1;
   }
+
   printf("Got to procedure ListCount()\n");
-  return 0;
+
+  /* access the true LIST *ptr */
+  for (i = 0; i < nli; i++)
+  {
+    if (list == maps[i].user_key)
+    {
+      list = maps[i].real_ptr;
+      break;
+    }
+  }
+
+  return list->count;
 }
 
 
@@ -41,14 +62,30 @@ int ListCount(LIST *list)
  */
 void *ListFirst(LIST *list)
 {
+  unsigned int i;
+
   /* check that correct type and range of parameter values have been passed */
   if (list == NULL)
   {
     fprintf(stderr, "Error in procedure ListFirst: invalid parameter list\n");
     return NULL;
   }
+
   printf("Got to procedure ListFirst()\n");
-  return NULL;
+
+  /* access true LIST *ptr */
+  for (i = 0; i < nli; i++)
+  {
+    if (list == maps[i].user_key)
+    {
+       list = maps[i].real_ptr;
+       break;
+    }
+  }
+
+  list->current = list->first;
+
+  return list->current;
 }
 
 
@@ -62,14 +99,30 @@ void *ListFirst(LIST *list)
  */
 void *ListLast(LIST *list)
 {
+  unsigned int i;
+
   /* check that correct type and range of parameter values have been passed */
   if (list == NULL)
   {
     fprintf(stderr, "Error in procedure ListLast: invalid parameter list\n");
     return NULL;
   }
+
   printf("Got to procedure ListLast()\n");
-  return NULL;
+
+  /* access true LIST *ptr */
+  for (i = 0; i < nli; i++)
+  {
+    if (list == maps[i].user_key)
+    {
+       list = maps[i].real_ptr;
+       break;
+    }
+  }
+
+  list->current = list->last;
+
+  return list->current;
 }
 
 
@@ -86,14 +139,33 @@ void *ListLast(LIST *list)
  */
 void *ListNext(LIST *list)
 {
+  unsigned int i;
+
   /* check that correct type and range of parameter values have been passed */
   if (list == NULL)
   {
     fprintf(stderr, "Error in procedure ListNext: invalid parameter list\n");
     return NULL;
   }
+
   printf("Got to procedure ListNext()\n");
-  return NULL;
+
+  /* access true LIST *ptr */
+  for (i = 0; i < nli; i++)
+  {
+    if (list == maps[i].user_key)
+    {
+       list = maps[i].real_ptr;
+       break;
+    }
+  }
+
+  if (list->current != NULL)
+  {
+    list->current = list->current->next;
+  }
+
+  return list->current;
 }
 
 
@@ -110,14 +182,33 @@ void *ListNext(LIST *list)
  */
 void *ListPrev(LIST *list)
 {
+  unsigned int i;
+
   /* check that correct type and range of parameter values have been passed */
   if (list == NULL)
   {
     fprintf(stderr, "Error in procedure ListPrev: invalid parameter list\n");
     return NULL;
   }
+
   printf("Got to procedure ListPrev()\n");
-  return NULL;
+
+  /* access true LIST *ptr */
+  for (i = 0; i < nli; i++)
+  {
+    if (list == maps[i].user_key)
+    {
+       list = maps[i].real_ptr;
+       break;
+    }
+  }
+
+  if (list->current != NULL)
+  {
+    list->current = list->current->prev;
+  }
+
+  return list->current;
 }
 
 
@@ -129,14 +220,28 @@ void *ListPrev(LIST *list)
  */
 void *ListCurr(LIST *list)
 {
+  unsigned int i;
+
   /* check that correct type and range of parameter values have been passed */
   if (list == NULL)
   {
     fprintf(stderr, "Error in procedure ListCurr: invalid parameter list\n");
     return NULL;
   }
+
   printf("Got to procedure ListCurr()\n");
-  return NULL;
+
+  /* access true LIST *ptr */
+  for (i = 0; i < nli; i++)
+  {
+    if (list == maps[i].user_key)
+    {
+       list = maps[i].real_ptr;
+       break;
+    }
+  }
+
+  return list->current;
 }
 
 
@@ -156,6 +261,8 @@ void *ListCurr(LIST *list)
  */
 void *ListSearch(LIST *list, Comparator comparator, void *comparisonArg)
 {
+  unsigned long int i;
+
   /* check that correct type and range of parameter values have been passed */
   if (list == NULL)
   {
@@ -177,6 +284,26 @@ void *ListSearch(LIST *list, Comparator comparator, void *comparisonArg)
   }
 
   printf("Got to procedure ListSearch()\n");
-  return NULL;
+
+    /* access true LIST *ptr */
+  for (i = 0; i < nli; i++)
+  {
+    if (list == maps[i].user_key)
+    {
+       list = maps[i].real_ptr;
+       break;
+    }
+  }
+
+  list->current = list->first;
+  while (list->current != NULL)
+  {
+    if (comparator(list->current->item, comparisonArg) == 0)
+    {
+      break;
+    }
+  }
+
+  return list->current;
 }
 
