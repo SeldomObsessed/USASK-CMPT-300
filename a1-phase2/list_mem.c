@@ -103,7 +103,7 @@ int delete_list(LIST *list)
     if (lists != new_location)
     {
       shift = new_location - lists;
-      for (i = 0; i < nli / 2; i++)
+      for (i = 0; i < nli; i++)
       {
         /* you might say "lo! it could touch garbage!" but it won't. This loop
          * only ever triggers on a halving, and only touches in use (nli) */
