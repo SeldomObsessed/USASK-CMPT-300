@@ -34,7 +34,7 @@ endif
 all : $(TARGETS)
 
 clean :
-	rm -rf ./build/ mytestlist
+	rm -rf ./build/ mytestlist partA2 partA3 partA4
 
 $(OBJ_DIR)/$(AMD) :
 	mkdir -p $(OBJ_DIR)/$(AMD)
@@ -98,13 +98,13 @@ $(OBJ_DIR)/$(WIN)/partA1.o : partA1.c | $(OBJ_DIR)/$(WIN)
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) partA1.c -o $(OBJ_DIR)/$(WIN)/partA1.o
 
 $(OBJ_DIR)/$(AMD)/partA2.o : partA2.c | $(OBJ_DIR)/$(AMD)
-	$(CC) -c $(CFLAGS) $(CPPFLAGS) partA2.c -o $(OBJ_DIR)/$(WIN)/partA2.o
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) partA2.c -o $(OBJ_DIR)/$(AMD)/partA2.o
 
 $(OBJ_DIR)/$(AMD)/partA3.o : partA3.c | $(OBJ_DIR)/$(AMD)
-	$(CC) -c $(CFLAGS) $(CPPFLAGS) partA3.c -o $(OBJ_DIR)/$(WIN)/partA3.o
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) partA3.c -o $(OBJ_DIR)/$(AMD)/partA3.o
 
 $(OBJ_DIR)/$(AMD)/partA4.o : partA4.c | $(OBJ_DIR)/$(AMD)
-	$(CC) -c $(CFLAGS) $(CPPFLAGS) partA4.c -o $(OBJ_DIR)/$(WIN)/partA4.o
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) partA4.c -o $(OBJ_DIR)/$(AMD)/partA4.o
 
 $(OBJ_DIR)/$(WIN)/square.o : square.c | $(OBJ_DIR)/$(WIN)
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) square.c -o $(OBJ_DIR)/$(WIN)/square.o
@@ -122,17 +122,17 @@ partA1 : $(LIB_DIR)/$(WIN)/square.a \
 	$(CC) $(CFLAGS) $(OBJ_DIR)/$(WIN)/partA1.o $(WIN_LDFLAGS) \
 	-o partA1
 
-partA2 : $(LIB_DIR)/$(WIN)/square.a $(UBC_DIR)/libpthreads.a \
-	$(OBJ_DIR)/$(AMD)/partA2.o | $(BIN_DIR)/$(AMD)
+$(BIN_DIR)/$(AMD)/partA2 : $(LIB_DIR)/$(WIN)/square.a \
+	$(UBC_DIR)/libpthreads.a $(OBJ_DIR)/$(AMD)/partA2.o | $(BIN_DIR)/$(AMD)
 	$(CC) $(CFLAGS) $(OBJ_DIR)/$(AMD)/partA2.o $(UBC_LDFLAGS) $(WIN_LDFLAGS) \
 	-o $(BIN_DIR)/$(AMD)/partA2
 
-partA3 : $(LIB_DIR)/$(WIN)/square.a \
+$(BIN_DIR)/$(AMD)/partA3 : $(LIB_DIR)/$(WIN)/square.a \
 	$(OBJ_DIR)/$(AMD)/partA3.o | $(BIN_DIR)/$(AMD)
 	$(CC) $(CFLAGS) $(OBJ_DIR)/$(AMD)/partA3.o $(WIN_LDFLAGS) -lpthread \
 	-o $(BIN_DIR)/$(AMD)/partA3
 
-partA4 : $(LIB_DIR)/$(WIN)/square.a \
+$(BIN_DIR)/$(AMD)/partA4 : $(LIB_DIR)/$(WIN)/square.a \
 	$(OBJ_DIR)/$(AMD)/partA4.o | $(BIN_DIR)/$(AMD)
 	$(CC) $(CFLAGS) $(OBJ_DIR)/$(AMD)/partA4.o $(WIN_LDFLAGS) \
 	-o $(BIN_DIR)/$(AMD)/partA4
