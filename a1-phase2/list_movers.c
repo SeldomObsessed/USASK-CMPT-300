@@ -85,7 +85,7 @@ void *ListFirst(LIST *list)
 
   list->current = list->first;
 
-  return list->current;
+  return list->current->item;
 }
 
 
@@ -122,7 +122,7 @@ void *ListLast(LIST *list)
 
   list->current = list->last;
 
-  return list->current;
+  return list->current->item;
 }
 
 
@@ -165,7 +165,7 @@ void *ListNext(LIST *list)
     list->current = list->current->next;
   }
 
-  return list->current;
+  return list->current->item;
 }
 
 
@@ -208,7 +208,7 @@ void *ListPrev(LIST *list)
     list->current = list->current->prev;
   }
 
-  return list->current;
+  return list->current->item;
 }
 
 
@@ -241,7 +241,7 @@ void *ListCurr(LIST *list)
     }
   }
 
-  return list->current;
+  return list->current->item;
 }
 
 
@@ -304,6 +304,6 @@ void *ListSearch(LIST *list, Comparator comparator, void *comparisonArg)
     }
   }
 
-  return list->current;
+  return list->current->item;
 }
 

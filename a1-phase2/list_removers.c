@@ -37,7 +37,6 @@ void *ListRemove(LIST *list)
   unsigned long int i;
   void *item;
   NODE *tmp_node;
-  ptrdiff_t shift;
 
   /* check that correct type and range of parameter values have been passed */
   if (list == NULL)
@@ -117,47 +116,9 @@ void *ListRemove(LIST *list)
    */
   if (nni < node_count / 2)
   {
-    node_count /= 2;
-    tmp_node = realloc(nodes, node_count * sizeof(NODE));
-    if (tmp_node == NULL)
-    {
-      node_count *= 2;
-
-      fprintf(
-        stderr,
-        "List_Remove could not reallocate from %lu to %lu NODEs\n",
-        node_count,
-        node_count / 2
-      );
-      /* no program abort, just try again later */
-      return item;
-    }
-
-    /* update all NODE pointers*/
-    if (nodes != tmp_node)
-    {
-      shift = tmp_node - nodes;
-      /* from NODE to NODE */
-      for (i = 0; i < nni; i++)
-      {
-        /* this might look sketchy, updating random garbage values, but due
-         * to the fact that < nni is used, only active NODEs are touched */
-        tmp_node[i].prev += tmp_node[i].prev == NULL ? 0 : shift;
-        tmp_node[i].next += tmp_node[i].next == NULL ? 0 : shift;
-      }
-      /* from LIST to NODE */
-      for (i = 0; i < nli; i++)
-      {
-        /* same as above, not touching garbage */
-        lists[i].first += lists[i].first == NULL ? 0 : shift;
-        lists[i].last += lists[i].last == NULL ? 0 : shift;
-        lists[i].current += lists[i].current == NULL ? 0 : shift;
-      }
-    }
+    /* doesn't really matter if there's an error, just try again later */
+    resize_nodes(false);
   }
-
-  /* forget old block */
-  nodes = tmp_node;
 
   /* update item count */
   return item;
@@ -173,8 +134,7 @@ void *ListRemove(LIST *list)
 void ListFree(LIST *list, ItemFreer itemFree)
 {
   long unsigned int i;
-  NODE *walker, *tmp_node, *next;
-  ptrdiff_t shift;
+  NODE *walker, *next;
   LIST *user_key;
 
   /* check that correct type and range of parameter values have been passed */
@@ -249,43 +209,8 @@ void ListFree(LIST *list, ItemFreer itemFree)
      * by one */
     if (nni < node_count / 2)
     {
-      node_count /= 2;
-      tmp_node = realloc(nodes, node_count * sizeof(NODE));
-      if (tmp_node == NULL)
-      {
-        node_count *= 2;
-
-        fprintf(
-          stderr,
-          "List_Remove could not reallocate from %lu to %lu NODEs\n",
-           node_count,
-          node_count / 2
-        );
-        /* no program abort, just try again later */
-        return;
-      }
-
-      /* update all NODE pointers*/
-      if (nodes != tmp_node)
-      {
-        shift = tmp_node - nodes;
-        /* from NODE to NODE */
-        for (i = 0; i < nni; i++)
-        {
-          /* this might look sketchy, updating random garbage values, but due
-           * to the fact that < nni is used, only active NODEs are touched */
-          tmp_node[i].prev += tmp_node[i].prev == NULL ? 0 : shift;
-          tmp_node[i].next += tmp_node[i].prev == NULL ? 0 : shift;
-        }
-        /* from LIST to NODE */
-        for (i = 0; i < nli; i++)
-        {
-          /* same as above, not touching garbage */
-          lists[i].first += lists[i].first == NULL ? 0 : shift;
-          lists[i].last += lists[i].last == NULL ? 0 : shift;
-          lists[i].current += lists[i].current == NULL ? 0 : shift;
-        }
-      }
+      /* result doesn't matter, on error just try again later */
+      resize_nodes(false);
     }
     /* step to the next node to free */
     walker = next;
@@ -312,7 +237,6 @@ void *ListTrim(LIST *list)
   void *item;
   unsigned long int i;
   NODE *tmp_node;
-  ptrdiff_t shift;
 
   /* check that correct type and range of parameter values have been passed */
   if (list == NULL)
@@ -389,48 +313,13 @@ void *ListTrim(LIST *list)
    */
   if (nni < node_count / 2)
   {
-    node_count /= 2;
-    tmp_node = realloc(nodes, node_count * sizeof(NODE));
-    if (tmp_node == NULL)
-    {
-      node_count *= 2;
-
-      fprintf(
-        stderr,
-        "List_Remove could not reallocate from %lu to %lu NODEs\n",
-        node_count,
-        node_count / 2
-      );
-      /* no program abort, just try again later */
-      return item;
-    }
-
-    /* update all NODE pointers*/
-    if (nodes != tmp_node)
-    {
-      shift = tmp_node - nodes;
-      /* from NODE to NODE */
-      for (i = 0; i < nni; i++)
-      {
-        /* this might look sketchy, updating random garbage values, but due
-         * to the fact that < nni is used, only active NODEs are touched */
-        tmp_node[i].prev += tmp_node[i].prev == NULL ? 0 : shift;
-        tmp_node[i].next += tmp_node[i].next == NULL ? 0 : shift;
-      }
-      /* from LIST to NODE */
-      for (i = 0; i < nli; i++)
-      {
-        /* same as above, not touching garbage */
-        lists[i].first += lists[i].first == NULL ? 0 : shift;
-        lists[i].last += lists[i].last == NULL ? 0 : shift;
-        lists[i].current += lists[i].current == NULL ? 0 : shift;
-      }
-    }
+    /* result doesn't matter on fail, just try again later */
+    resize_nodes(false);
   }
 
   /* forget old block */
   nodes = tmp_node;
 
-  return NULL;
+  return item;
 }
 

@@ -36,8 +36,77 @@ void mock_itemFreer(void *item)
   return;
 }
 
+int main(void)
+{
+  LIST *list1, *list2, *list3;
+  int item1, item2, item3;
+  int result;
+  void *result_ptr;
 
-int main(int argc, char **argv)
+  /* list_adders.c tests */
+
+  list1 = ListCreate(); /* 1 ListCreate */
+  list2 = ListCreate();
+  list3 = ListCreate(); /* 2 ListCreate */
+
+  if (list1 == NULL || list2 == NULL || list3 == NULL)
+  {
+    fprintf(stderr, "Err ListCreate: ListCreate NULL return\n");
+  }
+
+  result = 0;
+  item1 = 1;
+  item2 = 2;
+  item3 = 3;
+  result += ListAdd(NULL, &item1); /* 1 ListAdd */
+  result += ListAdd(list1, NULL); /* 2 ListAdd */
+
+  if (result != -2)
+  {
+    fprintf(stderr, "Err ListAdd: ListAdd wrong return value (-2)\n");
+  }
+  result = 0;
+
+  result += ListAdd(list1, &item1); /* 3 ListAdd */
+  result += ListAdd(list1, &item2); /* 4 ListAdd */
+  /* List should be (1 -> c[2]) */
+  result_ptr = ListFirst(list1);
+
+  if (result_ptr != &item1)
+  {
+    fprintf(stderr, "Err ListAdd: ListFirst wrong ptr return\n");
+  }
+
+  /* List should be (c[1] -> 2) */
+  result += ListAdd(list1, &item3); /* 5 ListAdd */
+  /* List should be (1 -> c[3] -> 2) */
+  if (*(int *)ListCurr(list1) != 3)
+  {
+     fprintf(stderr, "Err ListAdd: ListAdd wrong current value (3)\n");
+  }
+
+  result_ptr = ListRemove(list1);
+  /* List should be (1 -> c[2]) */
+  if (*(int *)ListCurr(list1) != 2)
+  {
+    fprintf(stderr, "Err ListAdd: ListCurr wrong ptr return\n");
+  }
+  if (result_ptr != &item3)
+  {
+    fprintf(stderr, "Err ListAdd: ListRemove wrong ptr return\n");
+  }
+  result_ptr = ListRemove(list1);
+  if (result_ptr != &item2)
+  {
+    fprintf(stderr, "Err ListAdd: ListRemove wrong ptr return\n");
+  }
+  
+
+  return 0;
+}
+
+
+int mainp(int argc, char **argv)
 {
   LIST *list1, *list2;
   int item1, item2, item3;
