@@ -95,16 +95,16 @@ mytestlist: $(BIN_DIR)/$(AMD)/mytestlist
 # Objects
 
 $(OBJ_DIR)/$(WIN)/partA1.o : partA1.c | $(OBJ_DIR)/$(WIN)
-	$(CC) -c $(CFLAGS) $(CPPFLAGS) partA1.c -o $(OBJ_DIR)/$(WIN)/partA1.o
+	$(CC) -c -g $(CFLAGS) $(CPPFLAGS) partA1.c -o $(OBJ_DIR)/$(WIN)/partA1.o
 
 $(OBJ_DIR)/$(AMD)/partA2.o : partA2.c | $(OBJ_DIR)/$(AMD)
-	$(CC) -c $(CFLAGS) $(CPPFLAGS) partA2.c -o $(OBJ_DIR)/$(AMD)/partA2.o
+	$(CC) -c -g $(CFLAGS) $(CPPFLAGS) partA2.c -o $(OBJ_DIR)/$(AMD)/partA2.o
 
 $(OBJ_DIR)/$(AMD)/partA3.o : partA3.c | $(OBJ_DIR)/$(AMD)
-	$(CC) -c $(CFLAGS) $(CPPFLAGS) partA3.c -o $(OBJ_DIR)/$(AMD)/partA3.o
+	$(CC) -c -g $(CFLAGS) $(CPPFLAGS) partA3.c -o $(OBJ_DIR)/$(AMD)/partA3.o
 
 $(OBJ_DIR)/$(AMD)/partA4.o : partA4.c | $(OBJ_DIR)/$(AMD)
-	$(CC) -c $(CFLAGS) $(CPPFLAGS) partA4.c -o $(OBJ_DIR)/$(AMD)/partA4.o
+	$(CC) -c -g $(CFLAGS) $(CPPFLAGS) partA4.c -o $(OBJ_DIR)/$(AMD)/partA4.o
 
 $(OBJ_DIR)/$(WIN)/square.o : square.c | $(OBJ_DIR)/$(WIN)
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) square.c -o $(OBJ_DIR)/$(WIN)/square.o
