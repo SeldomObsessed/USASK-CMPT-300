@@ -10,8 +10,8 @@
 #ifndef SQUARE_H
 #define SQUARE_H
 
-extern square_counter;
-int Square(int);
+extern int square_counter;
+int square(int);
 int is_valid(char*);  
 
 #endif
