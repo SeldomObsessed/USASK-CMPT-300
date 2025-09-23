@@ -24,7 +24,7 @@
 
 #define MAX_THREADS 1024
 
-void invoke_square(void *param);
+PROCESS invoke_square(void *param);
 
 typedef struct
 {
@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
   long start_time[MAX_THREADS];
   long end_time[MAX_THREADS];
   PID handle[MAX_THREADS];
-  /* printf("Got to procedure main\n"); */
+  printf("Got to procedure main\n");
   
   /* argc validation */
   if (argc!=4)
@@ -82,6 +82,7 @@ int main(int argc, char* argv[])
   }
   threads = args[0];
   deadline = args[1];
+  printf("deadline %d\n", args[1]);
   size = args[2];
  
   /* printf("Got to procedure Create()\n"); */
@@ -99,7 +100,7 @@ int main(int argc, char* argv[])
     /* Create Thread */
     handle[i] = Create(
       (void(*)()) invoke_square,
-      16000,
+      160000,
       "child",
       (void *)&arg[i],
       NORM,
@@ -107,7 +108,8 @@ int main(int argc, char* argv[])
     );
   }
   /*Sleep for deadline*/
-  Sleep(deadline*100);
+  Sleep(deadline*100); 
+  /* Apparently there are 100 ticks per second. so.*/
   
   for (i=0;i<threads;i++)
   {    
@@ -133,7 +135,7 @@ int main(int argc, char* argv[])
 }
 
 /* Thread function */
-void invoke_square(void *param)
+PROCESS invoke_square(void *param)
 {
   int i;
   long cpu_time;
