@@ -26,7 +26,7 @@ LIST_OBJS = $(OBJ_DIR)/$(AMD)/list_adders.o $(OBJ_DIR)/$(AMD)/list_movers.o \
 ifeq ($(OS),Windows_NT)
 	TARGETS = partA1
 else ifeq ($(shell uname -s),Linux)
-		TARGETS = mytestlist
+		TARGETS = mytestlist partA2 partA3
 endif
 
 .PHONY : all clean
