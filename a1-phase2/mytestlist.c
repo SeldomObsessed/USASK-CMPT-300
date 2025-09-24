@@ -188,7 +188,80 @@ int main(void)
     fprintf(stderr, "Err ListAdd: ListRemove did not clear list\n");
   }
 
-  /* 1 ListInsert */
+  if (result !=  0)
+  {
+    fprintf(stderr, "Err ListAdd: non-zero returns\n");
+  }
+
+  result = 0;
+  result += ListInsert(NULL, &item1); /* 1 ListInsert */
+  result += ListInsert(list1, NULL); /* 2 ListInsert */
+  if (result != -2)
+  {
+    fprintf(stderr, "Err ListInsert: ListInsert not reporting errors\n");
+  }  
+
+  result = 0;
+  result += ListInsert(list1, &item1); /* 3 ListInsert */
+  result += ListInsert(list1, &item2); /* 4 ListInsert */
+  /* list should be (c[2] -> 1) */
+  if (ListCurr(list1) != &item2)
+  {
+    fprintf(stderr, "Err ListInsert: ListCurr wrong ptr return\n");
+  }
+  if (ListLast(list1) != &item1)
+  {
+    fprintf(stderr, "Err ListInsert: ListLast wrong ptr return\n");
+  }
+
+  ListFirst(list1);
+  /* list should be (c[2] -> 1) */
+  result += ListInsert(list1, &item3); /* 5 ListInsert */
+  /* list should be (c[3] -> 2 -> 1) */
+  if (ListCurr(list1) != &item3)
+  {
+    fprintf(stderr, "Err ListInsert: ListCurr wrong ptr return\n");
+  }
+  if (ListLast(list1) != &item1)
+  {
+    fprintf(stderr, "Err ListInsert: ListFirst wrong ptr return\n");
+  }
+
+  ListRemove(list1);
+  ListLast(list1);
+  /* list should be (3 -> c[2]) */
+  result += ListInsert(list1, &item1); /* 6 ListInsert */
+  /* list should be (3 -> c[1] -> 2) */
+  if (ListCurr(list1) != &item1)
+  {
+    fprintf(stderr, "Err ListInsert: ListCurr wrong ptr return\n");
+  }
+  if (ListFirst(list1) != &item3)
+  {
+    fprintf(stderr, "Err ListInsert: ListFirst wrong ptr return\n");
+  }
+  if (ListNext(list1) != &item1 || ListNext(list1) != &item2 ||
+      ListNext(list1) != NULL)
+  {
+    fprintf(stderr, "Err ListInsert: List not joined properly\n");
+  }
+
+  /* list should be c[](3 -> 1 -> 2) */
+  result += ListInsert(list1, &item4); /* 7 ListInsert */
+  /* list should be (c[4] -> 3 -> 1 -> 2) */
+  if (ListCurr(list1) != &item4)
+  {
+    fprintf(stderr, "Err ListInsert: ListCurr wrong ptr return\n");
+  }
+  if (ListNext(list1) != &item3)
+  {
+    fprintf(stderr, "Err ListInsert: ListNext wrong ptr return\n");
+  }
+
+  if (result != 0)
+  {
+    fprintf(stderr, "Err ListInsert: non-zero returns\n");
+  }
   return 0;
 }
 

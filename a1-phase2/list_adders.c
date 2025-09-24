@@ -422,6 +422,11 @@ int ListInsert(LIST *list, void *item)
     {
       list->current->prev->next = nodes + nni;
     }
+    /* otherwise, this is the new first element */
+    else
+    {
+      list->first = nodes + nni;
+    }
     list->current->prev = nodes + nni;
   }
   list->current = nodes + nni;
