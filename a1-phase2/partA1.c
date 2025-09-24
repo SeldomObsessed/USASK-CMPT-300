@@ -117,7 +117,7 @@ int main (int argc, char *argv[])
         return 1;                 
       }                          
   }                             
-  
+  running = 1;
   /* Wait until deadline */    
   Sleep((DWORD)(1000*deadline)); 
   
