@@ -259,7 +259,7 @@ int ListAdd(LIST *list, void *item)
   /* determine true LIST * This is done first since the LIST may be bad, in
    * which case we shouldn't double NODEs */
   active_list = false;
-  for (i = 0; i < list_count; i++)
+  for (i = 0; i < nli; i++)
   {
     if (maps[i].user_key == list)
     {
@@ -313,6 +313,11 @@ int ListAdd(LIST *list, void *item)
     if (list->current->next != NULL)
     {
       list->current->next->prev = nodes + nni;
+    }
+    /* otherwise, this is the new last element */
+    else
+    {
+      list->last = nodes + nni;
     }
     list->current->next = nodes + nni;
   }

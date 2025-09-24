@@ -36,8 +36,164 @@ void mock_itemFreer(void *item)
   return;
 }
 
+int main(void)
+{
+  LIST llist1;
+  LIST *list1, *list2, *list3, *list4;
+  int item1, item2, item3, item4;
+  int result, i;
+  void *result_ptr;
 
-int main(int argc, char **argv)
+
+  /* list_adders.c tests */
+
+  list1 = ListCreate(); /* 1 ListCreate */
+  list2 = ListCreate();
+  list3 = ListCreate(); /* 2 ListCreate */
+
+  if (list1 == NULL || list2 == NULL || list3 == NULL)
+  {
+    fprintf(stderr, "Err ListCreate: ListCreate NULL return\n");
+  }
+
+  result = 0;
+  item1 = 1;
+  item2 = 2;
+  item3 = 3;
+  item4 = 4;
+  result += ListAdd(NULL, &item1); /* 1 ListAdd */
+  result += ListAdd(list1, NULL); /* 2 ListAdd */
+
+  if (result != -2)
+  {
+    fprintf(stderr, "Err ListAdd: ListAdd wrong return value (-2)\n");
+  }
+  result = 0;
+
+  result += ListAdd(list1, &item1); /* 3 ListAdd */
+  result += ListAdd(list1, &item2); /* 4 ListAdd */
+  /* list should be (1 -> c[2]) */
+  result_ptr = ListCurr(list1);
+  if (result_ptr != &item2)
+  {
+    fprintf(stderr, "Err ListAdd: ListCurr wrong ptr return\n");
+  }
+  result_ptr = ListPrev(list1);
+  if (result_ptr != &item1)
+  {
+    fprintf(stderr, "Err ListPrev: ListPrev wrong ptr return\n");
+  }
+  result_ptr = ListFirst(list1);
+  if (result_ptr != &item1)
+  {
+    fprintf(stderr, "Err ListAdd: ListFirst wrong ptr return\n");
+  }
+  result_ptr = ListLast(list1);
+  if (result_ptr != &item2)
+  {
+    fprintf(stderr, "Err ListAdd: ListLast wrong ptr return\n");
+  }
+  
+
+  ListFirst(list1);
+  /* list should be (c[1] -> 2) */
+  result += ListAdd(list1, &item3); /* 5 ListAdd */
+  /* list should be (1 -> c[3] -> 2) */
+  if (*(int *)ListCurr(list1) != 3)
+  {
+     fprintf(stderr, "Err ListAdd: ListAdd wrong current value (3)\n");
+  }
+
+  result_ptr = ListRemove(list1);
+  /* list should be (1 -> c[2]) */
+  if (*(int *)ListCurr(list1) != 2)
+  {
+    fprintf(stderr, "Err ListAdd: ListCurr wrong ptr return\n");
+  }
+  if (result_ptr != &item3)
+  {
+    fprintf(stderr, "Err ListAdd: ListRemove wrong ptr return\n");
+  }
+  /* demonstrate shrink ability */
+  result_ptr = ListRemove(list1);
+  /* list should be c[](1) */
+  if (result_ptr != &item2)
+  {
+    fprintf(stderr, "Err ListAdd: ListRemove wrong ptr return\n");
+  }
+  if (ListCurr(list1) != NULL)
+  {
+    fprintf(stderr, "Err ListAdd: ListCurr wrong ptr return\n");
+  }
+  if (ListFirst(list1) != &item1)
+  {
+    fprintf(stderr, "Err ListAdd: ListFirst wrong ptr return\n");
+  }
+  if (ListLast(list1) != &item1)
+  {
+    fprintf(stderr, "Err ListAdd: ListLast wrong ptr return\n");
+  }
+  if (ListPrev(list1) != NULL)
+  {
+    fprintf(stderr, "Err ListAdd: ListPrev wrong ptr return\n");
+  }
+  ListFirst(list1);
+  if (ListNext(list1) != NULL)
+  {
+    fprintf(stderr, "Err ListAdd: ListPrev wrong ptr return\n");
+  }
+
+  result_ptr = ListLast(list1);
+  /* list should be (c[1]) */
+  if (result_ptr != &item1)
+  {
+    fprintf(stderr, "Err ListAdd: ListLast wrong ptr return\n");
+  }
+  result += ListAdd(list1, &item2);
+  /* list should be (1 -> c[2]) */
+
+  result += ListAdd(list1, &item3); /* 6 ListAdd */
+  /* list should be (1 -> 2 -> c[3]) */
+  if (*(int *)ListCurr(list1) != 3)
+  {
+    fprintf(stderr, "Err ListAdd: ListCurr wrong ptr return\n");
+  }
+
+  result_ptr = ListNext(list1);
+  /* list should be c[](1 -> 2 -> 3) */
+  if (result_ptr != NULL)
+  {
+    fprintf(stderr, "Err ListAdd: ListNext wrong ptr return\n");
+  }
+
+  result += ListAdd(list1, &item4); /* 7 ListAdd */
+  /* list should be (1 -> 2 -> 3 -> c[4]) */
+  result_ptr = ListCurr(list1);
+  if (result_ptr != &item4)
+  {
+    fprintf(stderr, "Err ListAdd: ListCurr wrong ptr return\n");
+  }
+
+  list4 = &llist1;
+  ListAdd(list4, &item1); /* 8 ListAdd */
+
+  ListFirst(list1);
+  for (i = 4; i > 0; i--)
+  {
+    ListRemove(list1);
+  }
+  if (ListLast(list1) != NULL || ListFirst(list1) != NULL ||
+      ListCurr(list1) != NULL)
+  {
+    fprintf(stderr, "Err ListAdd: ListRemove did not clear list\n");
+  }
+
+  /* 1 ListInsert */
+  return 0;
+}
+
+
+int mainp(int argc, char **argv)
 {
   LIST *list1, *list2;
   int item1, item2, item3;

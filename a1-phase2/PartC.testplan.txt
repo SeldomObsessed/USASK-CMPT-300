@@ -9,8 +9,8 @@ should be checked for each file, and then I'll go higher level things are
 interacting tests after that.
 
 ListCreate()
-- test calling once on program start
-- test calling three times (to exceed the LIST_MIN allocation and test realloc)
+1 test calling once on program start
+2 test calling three times (to exceed the LIST_MIN allocation and test realloc)
 
 ListCount()
 - test NULL list arg
@@ -81,7 +81,7 @@ ListInsert()
 - test list arg with one node
 - test list arg with two nodes, and curr==first
 - test list arg with two nodes, and curr==last
-- test list arg with two nodes, and curr==NULL
+- test list arg with three nodes, and curr==NULL
 - test a ListFree()'d list to see what happens with an invalid list
 
 ListAppend()
