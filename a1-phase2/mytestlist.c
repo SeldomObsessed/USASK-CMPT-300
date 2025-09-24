@@ -44,8 +44,15 @@ int main(void)
   int result, i;
   void *result_ptr;
 
+  printf("Welcome to the tests!\n\n"
+          "If you see \"Error\" that means an API function was successfully\n"
+          "forced into generating an expected error.\n\n"
+          "If you see \"Err\" that means the test suite is reporting errors\n"
+          "in the API\n\n\n");
 
   /* list_adders.c tests */
+
+  printf("\nBegin ListCreate()\n\n");
 
   list1 = ListCreate(); /* 1 ListCreate */
   list2 = ListCreate();
@@ -55,6 +62,8 @@ int main(void)
   {
     fprintf(stderr, "Err ListCreate: ListCreate NULL return\n");
   }
+
+  printf("\nBegin ListAdd()\n\n");
 
   result = 0;
   item1 = 1;
@@ -174,8 +183,17 @@ int main(void)
     fprintf(stderr, "Err ListAdd: ListCurr wrong ptr return\n");
   }
 
+  if (result != 0)
+  {
+    fprintf(stderr, "Err ListAdd: non-zero returns\n");
+  }
+
   list4 = &llist1;
-  ListAdd(list4, &item1); /* 8 ListAdd */
+  result = ListAdd(list4, &item1); /* 8 ListAdd */
+  if (result != -1)
+  {
+    fprintf(stderr, "Err ListAdd: does not report errors correctly\n");
+  }
 
   ListFirst(list1);
   for (i = 4; i > 0; i--)
@@ -188,10 +206,7 @@ int main(void)
     fprintf(stderr, "Err ListAdd: ListRemove did not clear list\n");
   }
 
-  if (result !=  0)
-  {
-    fprintf(stderr, "Err ListAdd: non-zero returns\n");
-  }
+  printf("\nBegin ListInsert()\n\n");
 
   result = 0;
   result += ListInsert(NULL, &item1); /* 1 ListInsert */
@@ -263,6 +278,14 @@ int main(void)
     fprintf(stderr, "Err ListInsert: non-zero returns\n");
   }
 
+  result += ListInsert(list4, &item1); /* 8 ListInsert */
+  if (result != -1)
+  {
+    fprintf(stderr, "Err ListInsert: not reporting errors\n");
+  }
+
+  printf("\nBegin ListAppend()\n\n");
+
   result = 0;
   result += ListAppend(NULL, &item1); /* 1 ListAppend */
   result += ListAppend(list2, NULL); /* 2 ListAppend */
@@ -314,8 +337,16 @@ int main(void)
     fprintf(stderr, "Err ListAppend: ListPrev shows not linked right\n");
   }
 
-  ListAppend(list4, &item3); /* 6 ListAppend */
+  if (result != 0)
+  {
+    fprintf(stderr, "Err ListAppend: non-zero returns\n");
+  }
 
+  ListAppend(list4, &item3); /* 6 ListAppend */
+  if (result != 0)
+  {
+  }
+ 
   return 0;
 }
 
