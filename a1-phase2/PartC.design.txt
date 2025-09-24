@@ -157,3 +157,10 @@ ListSearch -> curr will be set to the head and walked down the list. It just
 - Sep 17 Makaroff approved during an office hour questioning that I am allowed
   to make these three helper functions
 
+
+==============
+HARK GRADER THIS MAY BE IMPORTANT
+==============
+I am going to do a refactor during phase 3. No more MAP struct, I realized I
+can put user_key in the LIST struct. Whoops.
+
