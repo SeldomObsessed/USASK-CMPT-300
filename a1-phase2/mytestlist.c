@@ -262,6 +262,60 @@ int main(void)
   {
     fprintf(stderr, "Err ListInsert: non-zero returns\n");
   }
+
+  result = 0;
+  result += ListAppend(NULL, &item1); /* 1 ListAppend */
+  result += ListAppend(list2, NULL); /* 2 ListAppend */
+  if (result != -2)
+  {
+    fprintf(stderr, "Err ListAppend: ListAppend not reporting errors\n");
+  }
+
+  result = 0;
+  result += ListAppend(list2, &item1); /* 3 ListAppend */
+  result += ListAppend(list2, &item2); /* 4 ListAppend */
+  /* list should be (1 -> c[2]) */
+  if (ListCurr(list2) != &item2)
+  {
+    fprintf(stderr, "Err ListAppend: ListCurr wrong ptr return\n");
+  }
+  if (ListNext(list2) != NULL)
+  {
+    fprintf(stderr, "Err ListAppend: ListNext shows not linked right\n");
+  }
+  if (ListLast(list2) != &item2)
+  {
+    fprintf(stderr, "Err ListAppend: ListLast wrong ptr return\n");
+  }
+  if (ListPrev(list2) != &item1 || ListPrev(list2) != NULL)
+  {
+    fprintf(stderr, "Err ListAppend: ListPrev shows not linked right\n");
+  }
+  if (ListFirst(list2) != &item1)
+  {
+    fprintf(stderr, "Err ListAppend: ListFirst wrong ptr return\n");
+  }
+
+  ListLast(list2);
+  ListRemove(list2);
+  /* list should be c[](1) */
+  ListAppend(list2, &item3); /* 5 ListAppend */
+  /* list should be (1 -> c[3]) */
+  if (ListCurr(list2) != &item3)
+  {
+    fprintf(stderr, "Err ListAppend: ListCurr wrong ptr return\n");
+  }
+  if (ListPrev(list2) != &item1)
+  {
+    fprintf(stderr, "Err ListAppend: ListPrev shows not linked right\n");
+  }
+  if (ListPrev(list2) != NULL)
+  {
+    fprintf(stderr, "Err ListAppend: ListPrev shows not linked right\n");
+  }
+
+  ListAppend(list4, &item3); /* 6 ListAppend */
+
   return 0;
 }
 

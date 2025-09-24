@@ -612,6 +612,7 @@ int ListPrepend(LIST *list, void *item)
   }
   list->first = nodes + nni;
   list->current = nodes + nni;
+  list->count++;
   nni++;
 
   return 0;
