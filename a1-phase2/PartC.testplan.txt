@@ -85,12 +85,12 @@ ListInsert()
 8 test a ListFree()'d list to see what happens with an invalid list
 
 ListAppend()
-- test NULL list arg
-- test NULL item arg
-- test list arg with no nodes
-- test list arg with one node
-- test list arg after deletion from 1 -> 0
-- test a ListFree()'d list to see what happens with an invalid list
+1 test NULL list arg
+2 test NULL item arg
+3 test list arg with no nodes
+4 test list arg with one node
+5 test list arg after deletion from 1 -> 0
+6 test a ListFree()'d list to see what happens with an invalid list
 
 ListPrepend()
 - test NULL list arg
