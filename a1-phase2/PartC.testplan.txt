@@ -93,12 +93,12 @@ ListAppend()
 6 test a ListFree()'d list to see what happens with an invalid list
 
 ListPrepend()
-- test NULL list arg
-- test NULL item arg
-- test list arg with no nodes
-- test list arg with one node
-- test list arg with two nodes and curr==last
-- test a ListFree()'d list to see what happens with an invalid list
+1 test NULL list arg
+2 test NULL item arg
+3 test list arg with no nodes
+4 test list arg with one node
+5 test list arg with two nodes and curr==last
+6 test a ListFree()'d list to see what happens with an invalid list
 
 ListRemove()
 - test NULL list arg
