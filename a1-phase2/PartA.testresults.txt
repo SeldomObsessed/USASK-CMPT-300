@@ -13,6 +13,9 @@ Error in procedure main: invalid parameter 1
 
   Passed
 
+Param 1 (partA1)
+
+
 Param 2
 ./partA2 1 -2 3
 Got to procedure main
