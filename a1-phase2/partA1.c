@@ -159,8 +159,8 @@ DWORD WINAPI invoke_square(LPVOID param)
       break;
     }
   }
-  free(arg); 
   printf("Thread %d terminated\n",arg->thread_id);    
+  free(arg); 
   return 0;
   /*Success*/
 }     
