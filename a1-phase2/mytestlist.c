@@ -342,11 +342,57 @@ int main(void)
     fprintf(stderr, "Err ListAppend: non-zero returns\n");
   }
 
-  ListAppend(list4, &item3); /* 6 ListAppend */
+  result = ListAppend(list4, &item3); /* 6 ListAppend */
+  if (result != -1)
+  {
+    fprintf(stderr, "Err ListAppend: not reporting errors\n");
+  }
+
+  printf("\nBegin ListPrepend()\n\n");
+
+  result = 0;
+  result += ListPrepend(NULL, &item1); /* 1 ListPrepend */
+  result += ListPrepend(list3, NULL); /* 2 ListPrepend */
+  if (result != -2)
+  {
+    fprintf(stderr, "Err ListPrepend: not reporting errors\n");
+  }
+
+  result = 0;
+  result += ListPrepend(list3, &item1); /* 3 ListPrepend */
+  result += ListPrepend(list3, &item2); /* 4 ListPrepend */
+  /* List should be (c[2] -> 1) */
+  if (ListCurr(list3) != &item2 || ListFirst(list3) != &item2)
+  {
+    fprintf(stderr, "Err ListPrepend: ListFirst wrong ptr return\n");
+  }
+  if (ListNext(list3) != &item1 || ListLast(list3) != &item1)
+  {
+    fprintf(stderr, "Err ListPrepend: ListLast wrong ptr return\n");
+  }
+
+  result += ListPrepend(list3, &item3); /* 5 ListPrepend */
+  /* List should be (c[3] -> 2 -> 1) */
+  if (ListCurr(list3) != &item3 || ListFirst(list3) != &item3)
+  {
+    fprintf(stderr, "Err ListPrepend: ListFirst wrong ptr return\n");
+  }
+  if (ListNext(list3) != &item2)
+  {
+    fprintf(stderr, "Err ListPrepend: ListNext wrong ptr return\n");
+  }
+
   if (result != 0)
   {
+    fprintf(stderr, "Err ListPrepend: non-zero returns\n");
   }
- 
+
+  result += ListPrepend(list4, &item4);
+  if (result != -1)
+  {
+    fprintf(stderr, "Err ListPrepend: not reporting errros\n");
+  }
+
   return 0;
 }
 
