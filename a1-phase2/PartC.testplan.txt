@@ -81,7 +81,7 @@ ListInsert()
 - test list arg with one node
 - test list arg with two nodes, and curr==first
 - test list arg with two nodes, and curr==last
-- test list arg with two nodes, and curr==NULL
+- test list arg with three nodes, and curr==NULL
 - test a ListFree()'d list to see what happens with an invalid list
 
 ListAppend()

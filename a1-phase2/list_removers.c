@@ -37,6 +37,7 @@ void *ListRemove(LIST *list)
   unsigned long int i;
   void *item;
   NODE *tmp_node;
+  bool flag;
 
   /* check that correct type and range of parameter values have been passed */
   if (list == NULL)
@@ -47,14 +48,25 @@ void *ListRemove(LIST *list)
 
   printf("Got to procedure ListRemove()\n");
 
+  flag = false;
   /* access true LIST *ptr */
   for (i = 0; i < nli; i++)
   {
     if (list == maps[i].user_key)
     {
        list = maps[i].real_ptr;
+       flag = true;
        break;
     }
+  }
+
+  if (flag != true)
+  {
+    fprintf(
+      stderr,
+      "Error in procedure ListRemove: was given an inactive list\n"
+    );
+    return NULL;
   }
 
   /* no removal occurs if there is no current NODE */
@@ -73,38 +85,56 @@ void *ListRemove(LIST *list)
     list->current->prev->next = list->current->next;
   }
 
+  /* update last and first when necessary */
+  if (list->current == list->first)
+  {
+    list->first = list->current->next;
+  }
+  if (list->current == list->last)
+  {
+    list->last = list->current->prev;
+  }
+
   /* the NODE after the initial current, which needs to be the final current */
   tmp_node = list->current->next;
   item = list->current->item;
-
+  
+  flag = false; /* if you are moving what you are deleting, DON'T TOUCH */
+  if (list->current == nodes + nni - 1)
+  {
+    flag = true;
+  }
   /* access and "cover up" the current node */
   memmove(list->current, nodes + nni - 1, sizeof(NODE));
   nni--;
   list->count--;
 
   /* update all references to the moved [nni - 1] NODE */
-  if (list->current->next != NULL)
+  if (!flag)
   {
-    list->current->next->prev = list->current;
-  }
-  if (list->current->prev != NULL)
-  {
-    list->current->prev->next = list->current;
-  }
-  /* check in LISTs too */
-  for (i = 0; i < nli; i++)
-  {
-    if (lists[i].first == nodes + nni)
+    if (list->current->next != NULL)
     {
-      lists[i].first = list->current;
+      list->current->next->prev = list->current;
     }
-    if (lists[i].last == nodes + nni)
+    if (list->current->prev != NULL)
     {
-      lists[i].last = list->current;
+      list->current->prev->next = list->current;
     }
-    if (lists[i].current == nodes + nni)
+    /* check in LISTs too */
+    for (i = 0; i < nli; i++)
     {
-      lists[i].current = list->current;
+      if (lists[i].first == nodes + nni)
+      {
+        lists[i].first = list->current;
+      }
+      if (lists[i].last == nodes + nni)
+      {
+        lists[i].last = list->current;
+      }
+      if (lists[i].current == nodes + nni)
+      {
+        lists[i].current = list->current;
+      }
     }
   }
 
@@ -316,9 +346,6 @@ void *ListTrim(LIST *list)
     /* result doesn't matter on fail, just try again later */
     resize_nodes(false);
   }
-
-  /* forget old block */
-  nodes = tmp_node;
 
   return item;
 }
