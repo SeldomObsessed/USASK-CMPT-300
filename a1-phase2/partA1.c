@@ -133,7 +133,7 @@ int main (int argc, char *argv[])
   /* Report progress */      
   for (i=0; i<threads; i++) 
   {                        
-    cpu_time = ((double)(end_time[i]-start_time[i]))/CLOCKS_PER_SEC; 
+    cpu_time = ((double)(end_time[i]-start_time[i]))/(CLOCKS_PER_SEC*10); 
     printf("Thread %d progress: %d/%d\n",i,progress_count[i],size);
     printf("Thread executed for %f seconds\n",cpu_time); 
   }
