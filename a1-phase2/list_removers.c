@@ -112,6 +112,10 @@ void *ListRemove(LIST *list)
   /* update all references to the moved [nni - 1] NODE */
   if (!flag)
   {
+    if (tmp_node == nodes + nni)
+    {
+      tmp_node = list->current;
+    }
     if (list->current->next != NULL)
     {
       list->current->next->prev = list->current;

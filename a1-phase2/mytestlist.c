@@ -38,10 +38,12 @@ void mock_itemFreer(void *item)
 
 int main(void)
 {
-  LIST *list1, *list2, *list3;
+  LIST llist1;
+  LIST *list1, *list2, *list3, *list4;
   int item1, item2, item3, item4;
-  int result;
+  int result, i;
   void *result_ptr;
+
 
   /* list_adders.c tests */
 
@@ -114,12 +116,12 @@ int main(void)
   }
   /* demonstrate shrink ability */
   result_ptr = ListRemove(list1);
-  /* list should be (1) */
+  /* list should be c[](1) */
   if (result_ptr != &item2)
   {
     fprintf(stderr, "Err ListAdd: ListRemove wrong ptr return\n");
   }
-  if (ListCurr(list1) != &item1)
+  if (ListCurr(list1) != NULL)
   {
     fprintf(stderr, "Err ListAdd: ListCurr wrong ptr return\n");
   }
@@ -171,8 +173,22 @@ int main(void)
   {
     fprintf(stderr, "Err ListAdd: ListCurr wrong ptr return\n");
   }
-  
 
+  list4 = &llist1;
+  ListAdd(list4, &item1); /* 8 ListAdd */
+
+  ListFirst(list1);
+  for (i = 4; i > 0; i--)
+  {
+    ListRemove(list1);
+  }
+  if (ListLast(list1) != NULL || ListFirst(list1) != NULL ||
+      ListCurr(list1) != NULL)
+  {
+    fprintf(stderr, "Err ListAdd: ListRemove did not clear list\n");
+  }
+
+  /* 1 ListInsert */
   return 0;
 }
 
