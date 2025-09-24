@@ -1,0 +1,45 @@
+PartA.testplan.txt
+Logan Fossenier & William Morris
+hzv143 & wjm625
+11343891 & 11278140
+CMPT332 Fall 2025
+
+Since all partA1->partA4 will have identical runtime arguments and console logs
+we will test each part using the same plan.
+
+First we will run each part using the parameters given in the Assignment1 HTML.
+This should return (mostly) identical console logs, but perhaps not all in the 
+same order. Threads execute when the scheduler feels they should.
+
+Example: ./partAn 4 3 200 should result in 
+Threadn completed in x seconds
+Threadn invoked square() y times
+Threadn progress 200/200
+
+Then we will test invalid parameters for each to ensure that the program
+specifies which command line argument is invalid. We will test negative numbers
+on parameter 1, 2, and 3. This should print something along the lines of
+"error in procedure main: invalid parameter n" where n is the first parameter
+that is invalid. 
+
+Example: ./partAn -1 3 400 should result in
+error in procedure main: invalid parameter 1
+
+or instead of -1 3 400, we execute with 1 -3 200 which should result in
+error in procedure main: invalid parameter 2
+
+And so on. Then we will test large inputs, such as parameter 1 which should be
+between 1 and 1024 (an arbitrary limit for now).
+
+Example: ./partAn 1025 3 400 should result in 
+error in procedure main: invalid parameter 2
+
+We will then stress test the program using a large parameters 3, and give
+an unreasonably short deadline to ensure threads do not have time to terminate
+prematurely. This should ensure that, depending on how exit funcionality is
+specified in partA1->partA4, the program behaves correctly and prints all 
+required information to the console.
+
+Example: ./partA2 4 1 20000000 (20 million). This will either crash the program
+or (hopefully) print messages to the console verifying that the thread ended
+prematurely, and its progress will be n/20000000 where n<20M.
