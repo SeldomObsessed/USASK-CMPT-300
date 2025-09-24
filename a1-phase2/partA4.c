@@ -1,15 +1,15 @@
 /*
- * partA2.c
+ * partA4.c
  * Logan Fossenier & William Morris
  * hzv143 & wjm625                
  * 11343891 & 11278140           
  * CMPT332 Fall 2025            
  *
- * This file implements the main executable for partA2. This executable
- * creates multiple threads which perform the same action until a deadline, 
- * without synchronization between processes/threads. number of threads, 
+ * This file implements the main executable for partA4. This executable
+ * creates multiple processes which execute the same task until a deadline, 
+ * without synchronization between processes. number of processes, 
  * length of deadline, and maximum integer size are to be command-line 
- * parameters. The package of threads used is UBC pthreads.
+ * parameters. Process package used is UNIX processes.
  *
  * At this point, only skeletons with no full implementation will be present.
  *
@@ -125,4 +125,5 @@ int main(int argc, char* argv)
  *   return 0;
  *   Great success
  *   
- * }/
+ * }*/
+ 

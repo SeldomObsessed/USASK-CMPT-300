@@ -15,6 +15,11 @@ Error in procedure main: invalid parameter 1
 
 Param 1 (partA1)
 
+$ ./partA1 -1 2 3
+Got to procedure main
+Error in procedure main: Invalid parameter 1/3
+
+  Passed
 
 Param 2
 ./partA2 1 -2 3
@@ -23,10 +28,24 @@ Error in procedure main: invalid parameter 2
 
   Passed
 
+Param 2 (partA1)
+
+$ ./partA1 1 -2 3
+Got to procedure main
+Error in procedure main: Invalid parameter 2/3
+
 Param 3
 ./partA2 1 2 -3
 Got to procedure main
 Error in procedure main: invalid parameter 3
+
+  Passed
+
+Param 3
+
+$ ./partA1 1 2 -3
+Got to procedure main
+Error in procedure main: Invalid parameter 3/3
 
   Passed
 
@@ -39,6 +58,17 @@ Segmentation fault (core dumped)
 
   Failed
 
+$ ./partA1 1 2 200000000
+Got to procedure main
+Got to procedure CreateThread()
+Got to procedure invoke_square()
+Got to procedure CloseHandle()
+Thread 0 progress: 21922/200000000
+Thread executed for 0.201500 seconds
+square() invoked 240298003 times
+
+  Passed
+
 Testing Normal Conditions:
 
 ./partA2 4 3 200
@@ -48,13 +78,39 @@ Segmentation fault (core dumped)
 
   Failed
 
+$ ./partA1 4 3 200
+Got to procedure main
+Got to procedure CreateThread()
+Got to procedure CreateThread()
+Got to procedure CreateThread()
+Got to procedure CreateThread()
+Got to procedure invoke_square()
+Got to procedure invoke_square()
+Got to procedure invoke_square()
+Got to procedure invoke_square()
+Thread terminatedThread terminatedThread terminatedThread terminatedGot to procedure CloseHandle()
+Got to procedure CloseHandle()
+Got to procedure CloseHandle()
+Got to procedure CloseHandle()
+Thread 0 progress: 200/200
+Thread executed for 0.000000 seconds
+Thread 1 progress: 200/200
+Thread executed for 0.000000 seconds
+Thread 2 progress: 200/200
+Thread executed for 0.000000 seconds
+Thread 3 progress: 200/200
+Thread executed for 0.000000 seconds
+square() invoked 54895 times
+
+  Passed -> weird prints though, will fix before submission
+
 Testing Param Limits:
 
 Param 1
 ./partA2 1025 3 200
 Got to procedure main
 Error in procedure main: invalid parameter 1
-  
+
   Passed
 
 Param 2
@@ -74,18 +130,18 @@ Error in procedure main: invalid parameter 3
 
 Summary:
 
-It seems that the program can detect invalid parameters for the most part. 
-The only addition that needs to be done is to do a check for a large deadline 
+It seems that the program can detect invalid parameters for the most part.
+The only addition that needs to be done is to do a check for a large deadline
 parameter, as we dont want the user to be able to let execution sleep for an
-unreasonably long time. 
+unreasonably long time.
 
 The more concerning part is the seg fault that occurs when executing with valid
 parameters. Upon further investigation it would seem that the seg fault occurs
 when calling Sleep(deadline*100). Inspecting execution using gdb shows that the
 argument is valid, but there is a Macro defined function that returns a null
 pointer which when dereferenced causes the seg fault. No idea why this is
-happening as this is function and execution goes through an archived library 
-file for the UBC threads package. 
+happening as this is function and execution goes through an archived library
+file for the UBC threads package.
 
 Conclusion:
 
@@ -188,8 +244,9 @@ Conclusion:
 useful, but it is worth studying. The most disappointing part however, is the
 fact that the threads are executing too fast to relay a significant measurement
 of their speed. A more precise measurement tool would be useful in analyzing
-thread execution speed. When walking through the code in gdb, it has been 
+thread execution speed. When walking through the code in gdb, it has been
 witnessed that at lower Param 3 executions (0-1000), threads that are created
 in a loop will finish execution before the next thread is even created. It is
-entirely possible the actual limit of Parameter 3 to repeat this behaviour is 
-much higher. 
+entirely possible the actual limit of Parameter 3 to repeat this behaviour is
+much higher.
+
