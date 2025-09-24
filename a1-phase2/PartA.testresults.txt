@@ -147,10 +147,10 @@ file for the UBC threads package.
 Conclusion:
 
 The structure of partA1->partA4 fortunately uses the same function that detects
-invalid parameters. This would mean that testing each remaining part would yield
-the exact same results. It would be pointless to repeat certain tests due to
-this. Instead we can repeat the failed tests on partA1 and partA3, as they have
-been roughly fully implemented. partA4 is still skeleton code.
+invalid parameters. This would mean that testing each remaining part would
+yield the exact same results. It would be pointless to repeat certain tests
+due to this. Instead we can repeat the failed tests on partA1 and partA3,
+as they have been roughly fully implemented. partA4 is still skeleton code.
 
 Testing Stress:
 
