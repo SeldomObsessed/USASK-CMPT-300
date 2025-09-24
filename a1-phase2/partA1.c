@@ -118,7 +118,7 @@ int main (int argc, char *argv[])
   /* Wait until deadline */    
   Sleep((DWORD)(1000*deadline)); 
   running =0; 
-  Sleep((DWORD)(1000); 
+  Sleep((DWORD)(1000)); 
   /*Give em a chance to close*/
   /* Close thread handles */
   for (i=0; i<threads; i++)                                               
