@@ -25,8 +25,8 @@
 #define MAX_THREADS 1024                     
                                               
 DWORD WINAPI invoke_square(LPVOID);              
-                                               
-/* ThreadArg type to be passed into CreatThread */
+int running = 0;                                         
+/* ThreadArg type to be passed into CreateThread */
 typedef struct                                  
 {                                                
   int thread_id;                                  
@@ -148,13 +148,24 @@ DWORD WINAPI invoke_square(LPVOID param)
   int i;  
   ThreadArg *arg = (ThreadArg*)param;
   printf("Got to procedure invoke_square()\n");
+  while(!running)
+  {
+  } 
+  /* wait for flag I guess */
   for (i=0; i<arg->size; i++)
   {
-    arg->progress_count[arg->thread_id]++;
-    square(i);
-  }   
+    if(running)
+    {
+      arg->progress_count[arg->thread_id]++;
+      square(i);
+    }
+    else 
+    {
+      break;
+    }
+  }
   free(arg); 
-  printf("Got to end of invoke_square()");    
+  printf("Thread terminated");    
   return 0;
   /*Success*/
 }     
