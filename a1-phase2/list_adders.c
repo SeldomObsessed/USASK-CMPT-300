@@ -688,11 +688,23 @@ int ListConcat(LIST *list1, LIST *list2)
   }
 
   /* perform concatenation */
-  list1->last->next = list2->first;
-  list1->last = list2->last;
+  if (list1->last == NULL)
+  {
+    list1->first = list2->first;
+    list1->last = list2->last;
+  }
+  else
+  {
+    list1->last->next = list2->first;
+    if (list2->last != NULL)
+    {
+      list1->last = list2->last;
+    }
+  }
 
   /* "free" list2 (scrub lookup table entry, maybe half memory) */
-  flag = delete_list(list2);
+  /* flag = delete_list(list2); */
+  flag = 1;
   if (flag != 0)
   {
     /* this is actually okay, we have more memory than needed, but it will be

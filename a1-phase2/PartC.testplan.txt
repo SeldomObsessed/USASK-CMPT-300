@@ -110,14 +110,15 @@ ListRemove()
 - test a ListFree()'d list to see what happens with an invalid list
 
 ListConcat()
-- test NULL list1 arg
-- test NULL list2 arg
-- test list1 arg with no nodes and list2 arg with no nodes
-- test list1 arg with one node and list2 arg with no nodes
-- test list1 arg with no nodes and list2 arg with one node
-- test list1 arg with two nodes and list2 arg with two nodes
-- test a ListFree()'d list1 and list2 arg with one node
-- test list1 arg with one node and a ListFree()'d list2
+1 test NULL list1 arg
+2 test NULL list2 arg
+3 test list1 == list2
+4 test list1 arg with no nodes and list2 arg with no nodes
+5 test list1 arg with nodes and list2 arg with no nodes
+6 test list1 arg with no nodes and list2 arg with one node
+7 test list1 arg with two nodes and list2 arg with two nodes
+8 test a ListFree()'d list1 and list2 arg with one node
+9 test list1 arg with one node and a ListFree()'d list2
 
 ListFree()
 - test NULL list arg

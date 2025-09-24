@@ -1,5 +1,5 @@
 /*
- * filename.(c/h)
+ * square.h
  * Logan Fossenier & William Morris
  * hzv143 & wjm625
  * 11343891 & 11278140
