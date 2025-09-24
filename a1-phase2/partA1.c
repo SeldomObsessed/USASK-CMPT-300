@@ -52,8 +52,6 @@ int main (int argc, char *argv[])
   clock_t end_time[MAX_THREADS];
   double cpu_time;
                                     
-  printf("Got to procedure main\n");                        
-                                                             
   /* argc validation */              
   if (argc != 4)                    
   {                                
@@ -101,7 +99,6 @@ int main (int argc, char *argv[])
       arg->thread_id = i;                    
       arg->size = size;                     
       arg->progress_count = progress_count;
-      printf("Got to procedure CreateThread()\n");
       /*Record start time*/               
       start_time[i] = clock();      
       h_thread[i] = CreateThread(         
@@ -126,7 +123,6 @@ int main (int argc, char *argv[])
   {         
       /* Record end time */                  
       end_time[i] = clock();                               
-      printf("Got to procedure CloseHandle()\n"); 
       CloseHandle(h_thread[i]);
   }                           
   
@@ -135,7 +131,7 @@ int main (int argc, char *argv[])
   {                        
     cpu_time = ((double)(end_time[i]-start_time[i]))/(CLOCKS_PER_SEC*10); 
     printf("Thread %d progress: %d/%d\n",i,progress_count[i],size);
-    printf("Thread executed for %f seconds\n",cpu_time); 
+    printf("Thread %d executed for %f seconds\n",i,cpu_time); 
   }
   printf("square() invoked %d times\n",square_counter);
   return 0;
@@ -147,7 +143,6 @@ DWORD WINAPI invoke_square(LPVOID param)
 {                
   int i;  
   ThreadArg *arg = (ThreadArg*)param;
-  printf("Got to procedure invoke_square()\n");
   while(!running)
   {
   } 
