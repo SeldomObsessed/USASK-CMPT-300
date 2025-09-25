@@ -1,0 +1,148 @@
+PartC.testplan.txt
+Logan Fossenier & William Morris
+hzv143 & wjm625
+11343891 & 11278140
+CMPT332 Fall 2025
+
+Here is an overview of my test plan. I'll go function level tests to begin, what
+should be checked for each file, and then I'll go higher level things are
+interacting tests after that.
+
+ListCreate()
+1 test calling once on program start
+2 test calling three times (to exceed the LIST_MIN allocation and test realloc)
+
+ListCount()
+- test NULL list arg
+- test list arg with no nodes
+- test list arg with 1 node
+- test list arg with 2 nodes
+- test list arg after deletion from 2 -> 1
+- test list arg after deletion from 1 -> 0
+- test a ListFree()'d list to see what happens with an invalid list
+
+ListFirst()
+- test NULL list arg
+- test list arg with no nodes
+- test list arg with 1 node
+- test list arg with 2 nodes
+- test list arg after deletion of initial first node
+- test list arg after deletion from 1 -> 0
+- test a ListFree()'d list to see what happens with an invalid list
+
+ListLast()
+- test NULL list arg
+- test list arg with no nodes
+- test list arg with 1 node
+- test list arg with 2 nodes
+- test list arg after deletion of initial last node
+- test list arg after deletion from 1 -> 0
+- test a ListFree()'d list to see what happens with an invalid list
+
+ListNext()
+- test NULL list arg
+- test list arg with no nodes
+- test list arg with 2 nodes when curr==NULL
+- test list arg with 2 nodes when curr==first
+- test list arg with 2 nodes when curr==last
+- test a ListFree()'d list to see what happens with an invalid list
+
+ListPrev()
+- test NULL list arg
+- test list arg with no nodes
+- test list arg with 2 nodes when curr==NULL
+- test list arg with 2 nodes when curr==last
+- test list arg with 2 nodes when curr==first
+- test a ListFree()'d list to see what happens with an invalid list
+
+ListCurr()
+- test NULL list arg
+- test list arg with no nodes
+- test list arg with 2 nodes when curr==NULL
+- test list arg with 2 nodes when curr==first
+- test list arg with 2 nodes when curr==last
+- test list arg with 3 nodes when curr is neither first nor last
+- test a ListFree()'d list to see what happens with an invalid list
+
+ListAdd()
+1 test NULL list arg
+2 test NULL item arg
+3 test list arg with no nodes
+4 test list arg with one node
+5 test list arg with two nodes, and curr==first
+6 test list arg with two nodes, and curr==last
+7 test list arg with two nodes, and curr==NULL
+8 test a ListFree()'d list to see what happens with an invalid list
+
+ListInsert()
+1 test NULL list arg
+2 test NULL item arg
+3 test list arg with no nodes
+4 test list arg with one node
+5 test list arg with two nodes, and curr==first
+6 test list arg with two nodes, and curr==last
+7 test list arg with three nodes, and curr==NULL
+8 test a ListFree()'d list to see what happens with an invalid list
+
+ListAppend()
+1 test NULL list arg
+2 test NULL item arg
+3 test list arg with no nodes
+4 test list arg with one node
+5 test list arg after deletion from 1 -> 0
+6 test a ListFree()'d list to see what happens with an invalid list
+
+ListPrepend()
+1 test NULL list arg
+2 test NULL item arg
+3 test list arg with no nodes
+4 test list arg with one node
+5 test list arg with two nodes and curr==last
+6 test a ListFree()'d list to see what happens with an invalid list
+
+ListRemove()
+- test NULL list arg
+- test list arg with no nodes
+- test list arg with one node
+- test list arg with two nodes when curr==first
+- test list arg with two nodes when curr==last
+- test list arg with two nodes when curr==NULL
+- test a ListFree()'d list to see what happens with an invalid list
+
+ListConcat()
+1 test NULL list1 arg
+2 test NULL list2 arg
+3 test list1 == list2
+4 test list1 arg with no nodes and list2 arg with no nodes
+5 test list1 arg with nodes and list2 arg with no nodes
+6 test list1 arg with no nodes and list2 arg with one node
+7 test list1 arg with two nodes and list2 arg with two nodes
+8 test a ListFree()'d list1 and list2 arg with one node
+9 test list1 arg with one node and a ListFree()'d list2
+
+ListFree()
+- test NULL list arg
+- test NULL itemFree arg
+- test list arg with no nodes
+- test list arg with 3 nodes and curr==NULL
+- test list arg with 3 nodes and curr==last
+- test a ListFree()'d list to see what happens with an invalid list
+
+ListTrim()
+- test NULL list arg
+- test list arg with no nodes
+- test list arg with one node
+- test list arg with 3 nodes and curr==first
+- test a ListFree()'d list to see what happens with an invalid list
+
+ListSearch()
+- test NULL list arg
+- test NULL comparator arg
+- test NULL comparisonArg arg
+- test a list arg with no nodes
+- test a list arg with one node which is a match
+- test a list arg with one node which is not a match
+- test a list arg with 3 nodes where curr==2nd_node and first matches
+- test a list arg with 3 nodes where curr==first and there are no matches
+- test a ListFree()'d list to see what happens with an invalid list
+

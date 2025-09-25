@@ -1,0 +1,102 @@
+PartC.design.txt
+Logan Fossenier & William Morris
+hzv143 & wjm625
+11343891 & 11278140
+CMPT332 Fall 2025
+
+Per the specs this is a doubly linked list. Here are the considerations that I
+have made which go beyond the html spec doc.
+
+- main() will do all the error printing, the functions will error by return
+  but stay silent in the console
+
+- we are told to "...check that the correct type and range of parameter values,
+  as appropriate, have been passed between caller and calee...". As I understand
+  you can't really get a function to execute without providing the right number
+  of arguments. Every single parameter is a pointer for all the laid out
+  functions, and as such I will simply ensure that NULL is not being passed.
+  It is CRITICAL to the way I choose to implement dynamic memory in phase two,
+  as I will be treating NODE items with a NULL pointer to items as an unused
+  NODE. This is going to be very important for the functionality to grow/shrink.
+  One exception is going to be comparisonArg, I can't assume that NULL is an
+  invalid argument to comparator, and as such I will allow NULL to be passed.
+
+- also, the instructions say the LIST will have a homogenous data type which I
+  will document in the code, but that can't really be enforced other than
+  telling the caller with words not to do it
+
+- adders: ListCreate, ListAdd, ListInsert, ListAppend, ListPrepend, ListConcat
+- movers: ListCount, ListFirst, Listlast, ListNext, ListPrev, ListCurr,
+          ListSearch
+- removers: ListRemove, ListFree, ListTrim
+
+- the above choices prioritize "add" behaviour going in "adders", "remove"
+  behaviour going in "removers", and the rest going in "movers" (including
+  ListSearch and ListCurr per the spec). ListConcat and ListTrim do "move" the
+  current spot in the list, but their add/remove behaviour is chosen to take
+  precedence.
+
+- the below was put in the Canvas by me, but outlines my decision when it comes
+  to a few edge cases on return values (which might be a little "unexpected")
+
+void *ListFirst(list) -> empty list case -> NULL return is fine and means "error
+  no list"
+void *ListLast(list) -> empty list case -> NULL return is fine and means "error
+  no list"
+void *ListCurr(list) -> current point has been backed out the front or stepped
+  out the end of the list -> NULL return is fine and means
+  "error no current item"
+void *ListRemove(list) -> empty list case -> NULL return is fine and means
+  "error no list"
+void *ListRemove(list) -> current point has been backed out the front or stepped
+  out the end of the list -> NULL return is fine and
+  means "error no current item"
+void *ListTrim(list) -> empty list case -> NULL return is fine and means "error
+  no list"
+
+- here are some other behaviours and how I choose to address them
+
+LIST struct: item_count, pointer to head (first), pointer to tail (last),
+  pointer to current item
+
+NODE struct: pointer to item, pointer to next, pointer to prev
+
+ListCreate -> a global variable will hold all the lists just strung together
+  somewhere and this will be accessed. If NULL? no lists. Otherwise it will
+  procure one and initialize it empty.
+ListCount -> will access item_count
+ListFirst -> when empty curr == NULL
+ListLast -> when empty curr == NULL
+ListNext -> when advancing out curr == NULL
+ListPrev -> when backing out the front curr == NULL
+ListAdd -> when curr == NULL, perform an append
+ListInsert -> when curr == NULL, perform a prepend
+For add/insert/append/prepend the return of -1 will only occur when there are
+  no free nodes. These will be stored like lists, strung together in a global.
+ListRemove -> when curr == NULL, curr will be set to NULL
+ListConcat -> list2 will be reset as a struct and then prepended to the global
+ListFree -> The list will be reset as a struct and then prepended to the global
+ListTrim -> when empty, curr == NULL
+ListSearch -> curr will be set to the head and walked down the list. It just
+  gets left where it ends, and this is easier than creating a separate cursor
+
+- there's going to be a global which is a boolean to track whether the LIST and
+  NODE arrays have received their ONE initial malloc(). This will be checked by
+  ListCreate() such that when False and when calling ListCreate(), the initial
+  allocation will occur
+
+- phase1 is this doc and the skeleton of each function, which will just check
+  for NULL and then return to a main() function which will do fprintf() logs.
+  list.h, list_adders.c, list_movers.c, mytestlist.c, and the Makefile
+
+- phase2 I will create a test plan which covers many ways to break / validate
+  the robustness of each function. The adders need to be implemented, but not
+  the removers. I'm going to do the dynamic growth of the arrays. A counter will
+  exist which tracks how many nodes are in use, and how many have been allocated
+  which will be used in the get_node() and ListCreate() functions. When there
+  are no longer any nodes left, the expansion procedure will begin. Roughly:
+
+save ptr1 of the start of the current block given by the most recent malloc /
+realloc. realloc, and get ptr2 (the new start of this next block).
+
+case LIST: 
