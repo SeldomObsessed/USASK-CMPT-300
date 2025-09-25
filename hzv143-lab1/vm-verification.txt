@@ -1,7 +1,0 @@
-Logan Fossenier
-hzv143
-11343891
-
-hzv143@hzv143-VirtualBox:~/repo/hzv143-lab1$ uname -a
-Linux hzv143-VirtualBox 6.14.0-29-generic #29~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Thu Aug 14 16:52:50 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
-
