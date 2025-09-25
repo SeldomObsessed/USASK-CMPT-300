@@ -11,3 +11,8 @@ testlist
 
 *.swp
 
+a1-phase2/A1-P2.tar
+.gitignore
+test-a1phase2-untar/
+.DS_Store
+.gitignore
